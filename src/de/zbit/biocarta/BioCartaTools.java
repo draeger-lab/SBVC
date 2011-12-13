@@ -30,34 +30,34 @@ import org.biopax.paxtools.model.level3.Interaction;
 import org.biopax.paxtools.model.level3.Pathway;
 import org.biopax.paxtools.model.level3.PhysicalEntity;
 import org.biopax.paxtools.model.level3.Process;
-import org.biopax.paxtools.model.level3.Protein;
-import org.biopax.paxtools.model.level3.ProteinReference;
 import org.biopax.paxtools.model.level3.RelationshipXref;
-import org.biopax.paxtools.model.level3.SimplePhysicalEntity;
 import org.biopax.paxtools.model.level3.Stoichiometry;
-import org.biopax.paxtools.model.level3.XReferrable;
 import org.biopax.paxtools.model.level3.Xref;
 
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.logging.LogUtil;
 
-public class BioCartaFetcher {
+public class BioCartaTools {
 
-  public static final Logger log = Logger.getLogger(BioCartaFetcher.class
+  public static final Logger log = Logger.getLogger(BioCartaTools.class
       .getName());
 
-  public BioCartaFetcher() {
+  public BioCartaTools() {
   }
 
-  private Model getModel(String file) {
-    BioPAXIOHandler handler = new SimpleIOHandler(BioPAXLevel.L3); // auto-detects
-                                                                   // Level
+  public Model getModel(String file) {
     InputStream io = null;
     try {
       io = new FileInputStream(new File(file));
     } catch (FileNotFoundException e) {
       log.log(Level.SEVERE, "Could not parse file: " + file + ".", e);
     }
+    
+    return getModel(io);
+  }
+  
+  public Model getModel(InputStream io) {
+    BioPAXIOHandler handler = new SimpleIOHandler();//TODO: check level
     return handler.convertFromOWL(io);
   }
 
@@ -122,7 +122,7 @@ public class BioCartaFetcher {
 /**
  * This method maps to all gene symbols of the entered entities the corresponding gene id
  * It's an advantage to preprocess the entities to exclusively having entities with a name
- * call therefore the method {@link BioCartaFetcher#getEntitiesWithName(Entity)}  
+ * call therefore the method {@link BioCartaTools#getEntitiesWithName(Entity)}  
  *    
  * @param entities 
  * @param species
@@ -281,17 +281,16 @@ public class BioCartaFetcher {
    * This method returns a list of all biocarta pathways with the containing gene IDs
    * 
    * @param species
-   * @param bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
+   * @param model
    * @return
    */
-  public List<PathwayHelper> getPathwaysWithGeneID(String species, String bioCartafile){
-    Model m = getModel(bioCartafile); 
-    List<PathwayHelper> pathways = new ArrayList<PathwayHelper>();
+  public List<BioCartaPathwayHolder> getPathwaysWithGeneID(String species, Model m){    
+    List<BioCartaPathwayHolder> pathways = new ArrayList<BioCartaPathwayHolder>();
     
     for (Entity entity : m.getObjects(Entity.class)) {
       for (Interaction string : entity.getParticipantOf()) {
         for (Pathway pw : string.getPathwayComponentOf()){
-          PathwayHelper helper = new PathwayHelper(pw.getRDFId());
+          BioCartaPathwayHolder helper = new BioCartaPathwayHolder(pw.getRDFId());
           int index = pathways.indexOf(helper);
           if(index >-1){
             helper = pathways.get(index);
@@ -304,22 +303,22 @@ public class BioCartaFetcher {
     }
     
     Map<String, RelationshipXref> xrefs = getMapFromSet(m.getObjects(RelationshipXref.class));
-    for (PathwayHelper pw : pathways) {
-//      if (pw.getPathwayName().equals("http://pid.nci.nih.gov/biopaxpid_9796")) {
-        log.log(Level.INFO, "Pathway: " + pw.getPathwayName() + ": " + pw.getNoOfEntities());
+    for (BioCartaPathwayHolder pw : pathways) {
+      if (pw.getPathwayName().equals("http://pid.nci.nih.gov/biopaxpid_9796")) {
+        log.log(Level.FINER, "Pathway: " + pw.getPathwayName() + ": " + pw.getNoOfEntities());
         Set<Entity> pwEntities = new HashSet<Entity>();
         for (Entity entity : pw.entities) {
           pwEntities.addAll(getEntitiesWithName(entity));
           if(!(entity instanceof Pathway))
-            log.log(Level.INFO, "--Input: " + entity.getRDFId() + "\t" + entity.getModelInterface());
+            log.log(Level.FINER, "--Input: " + entity.getRDFId() + "\t" + entity.getModelInterface());
         }
 
         Map<Integer, Entity> geneIDs = getEntrezGeneIDs(pwEntities, species, xrefs);
         for (Entry<Integer, Entity> entity : geneIDs.entrySet()) {
-          log.log(Level.INFO, "----res: " + entity.getKey() + " " + entity.getValue());
+          log.log(Level.FINER, "----res: " + entity.getKey() + " " + entity.getValue());
           pw.addGeneID(entity.getKey());
         }        
-//      }
+      }
     }
     
     return pathways;
@@ -330,11 +329,16 @@ public class BioCartaFetcher {
    * @throws FileNotFoundException
    */
   public static void main(String[] args) throws FileNotFoundException {
-    String species = "human";
+    String species = "human";    
+    LogUtil.initializeLogging(Level.FINER);
     
-    LogUtil.initializeLogging(Level.INFO);
-    BioCartaFetcher bf = new BioCartaFetcher();    
-    bf.getPathwaysWithGeneID(species, "C:/Users/buechel/Downloads/BioCarta.bp3.owl");
+    BioCartaTools bf = new BioCartaTools();    
+    
+    
+    // test for pathway gene ids
+    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
+    Model m = bf.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
+    bf.getPathwaysWithGeneID(species, m);
    
   }
 

@@ -5,13 +5,13 @@ import java.util.Set;
 import org.biopax.paxtools.model.level3.Entity;
 
 
-public class PathwayHelper {
+public class BioCartaPathwayHolder {
 
   Set<Entity> entities = null;
   Set<Integer> geneIDs = null;
   String name;
   
-  PathwayHelper(String name){
+  BioCartaPathwayHolder(String name){
     this.name = name;
   }
   
@@ -47,8 +47,8 @@ public class PathwayHelper {
   
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof PathwayHelper){
-      if(((PathwayHelper) obj).getPathwayName().equals(this.getPathwayName())){
+    if (obj instanceof BioCartaPathwayHolder){
+      if(((BioCartaPathwayHolder) obj).getPathwayName().equals(this.getPathwayName())){
         return true;
       }
       else 
@@ -64,10 +64,7 @@ public class PathwayHelper {
 
   public boolean addGeneID(Integer key) {
     if(geneIDsIsSet()){
-      if (!geneIDs.contains(key)) {
-        geneIDs.add(key);
-        return true;
-      }
+      return geneIDs.add(key);
     }
     return false;
   }
@@ -82,5 +79,13 @@ public class PathwayHelper {
   private boolean createGeneIDs() {
     geneIDs = new HashSet<Integer>();
     return true;
+  }
+
+  public Set<Integer> getGeneIDs() {
+    return geneIDs;
+  }
+
+  public String getName() {    
+    return name;
   }
 }
