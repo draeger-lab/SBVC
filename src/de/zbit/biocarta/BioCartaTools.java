@@ -15,7 +15,6 @@
  * ---------------------------------------------------------------------
  */
 package de.zbit.biocarta;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,8 +26,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,13 +50,13 @@ import org.biopax.paxtools.model.level3.Stoichiometry;
 import org.biopax.paxtools.model.level3.Xref;
 
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
-import de.zbit.util.logging.LogUtil;
 
 /**
+ * This class works with PaxTools. It is used to fetch information out of a level 3 BioCarta file
+ * This file could be downloaded from http://pid.nci.nih.gov/download.shtml  
  * 
  * @author Finja B&uuml;chel
  * @version $Rev$
- * @since 1.1
  */
 public class BioCartaTools {
 
@@ -79,7 +78,8 @@ public class BioCartaTools {
   }
   
   public Model getModel(InputStream io) {
-    BioPAXIOHandler handler = new SimpleIOHandler();//TODO: check level
+    BioPAXIOHandler handler = new SimpleIOHandler();
+    //TODO: check if level is level 3 or higher, because this class is constructed to work for relations 
     return handler.convertFromOWL(io);
   }
 
@@ -345,24 +345,5 @@ public class BioCartaTools {
     
     return pathways;
   }
-
-  /**
-   * @param args
-   * @throws FileNotFoundException
-   */
-  public static void main(String[] args) throws FileNotFoundException {
-    String species = "human";    
-    LogUtil.initializeLogging(Level.FINER);
-    
-    BioCartaTools bf = new BioCartaTools();    
-    
-    
-    // test for pathway gene ids
-    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
-    Model m = bf.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
-    bf.getPathwaysWithGeneID(species, m);
-   
-  }
-
 
 }

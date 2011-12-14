@@ -14,18 +14,19 @@
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  * ---------------------------------------------------------------------
  */
-package de.zbit.biocarta;
 
+package de.zbit.biocarta;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.biopax.paxtools.model.level3.Entity;
 
 /**
+ * This class stores one BioCarta pathway, its BioCarta id, the standard name, 
+ * and the contained entities and gene ids in {@link Set} objects 
  * 
  * @author Finja B&uuml;chel
  * @version $Rev$
- * @since 1.1
  */
 public class BioCartaPathwayHolder {
 
