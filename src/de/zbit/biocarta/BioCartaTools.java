@@ -1,4 +1,21 @@
+/*
+ * $Id$
+ * $URL$
+ * ---------------------------------------------------------------------
+ * This file is part of the SysBio API library.
+ *
+ * Copyright (C) 2011 by the University of Tuebingen, Germany.
+ *
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation. A copy of the license
+ * agreement is provided in the file named "LICENSE.txt" included with
+ * this software distribution and also available online as
+ * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
+ * ---------------------------------------------------------------------
+ */
 package de.zbit.biocarta;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,15 +27,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.biopax.paxtools.io.BioPAXIOHandler;
 import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
-import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
 import org.biopax.paxtools.model.level2.ControlType;
 import org.biopax.paxtools.model.level3.Complex;
@@ -37,6 +53,12 @@ import org.biopax.paxtools.model.level3.Xref;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.logging.LogUtil;
 
+/**
+ * 
+ * @author Finja B&uuml;chel
+ * @version $Rev$
+ * @since 1.1
+ */
 public class BioCartaTools {
 
   public static final Logger log = Logger.getLogger(BioCartaTools.class
