@@ -17,10 +17,14 @@
 package de.zbit.biocarta;
 
 import java.io.FileNotFoundException;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level3.Complex;
+import org.biopax.paxtools.model.level3.PhysicalEntity;
 
+import de.zbit.parser.Species;
 import de.zbit.util.logging.LogUtil;
 
 /**
@@ -37,6 +41,23 @@ public class BioCartaToolsTest {
     bc = new BioCartaTools();
   }
   
+
+  private void testCreateKGMLsFromBioCartaModel(String file) {
+    Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
+    // test for pathway gene ids
+    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
+    Model m = bc.getModel(file);
+    bc.createKGMLsFromBioCartaModel(m, species);
+  }
+  
+  private void testCreateKGMLsFromBioPaxFile(String file) {
+    Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
+    // test for pathway gene ids
+    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
+    Model m = bc.getModel(file);
+    bc.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "Goldbeter2008_Somite_Segmentation_Clock_Notch_Wnt_FGF");
+  }
+  
   /**
    * method to test the {@link BioCartaTools#getPathwaysWithGeneID(String, Model)}
    * Be carefull this method uses a {@link BioCartaTools#getModel(String)} call where a local BioCarta file
@@ -47,7 +68,28 @@ public class BioCartaToolsTest {
     // test for pathway gene ids
     //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
     Model m = bc.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
-    bc.getPathwaysWithGeneID(species, m);
+    for (BioCartaPathwayHolder pw : bc.getPathwaysWithEntrezGeneID(species, m)) {
+      System.out.println(pw.getRDFid() + "\t" + pw.getName());
+    }
+  }
+  
+
+
+  private void getComplexContent() {
+    Model m = bc.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
+    int i=0;
+    for (Entry<String, Complex> com : BioCartaTools.getMapFromSet((m.getObjects(Complex.class))).entrySet()) {
+      System.out.println("---- Complex " + bc.getName(com.getValue()));
+     for (Complex ent : com.getValue().getComponentOf()) {
+      System.out.println("ComponentOf: " + ent.getModelInterface() + " " + bc.getName(ent));
+     } 
+     for (PhysicalEntity ent : com.getValue().getComponent()) {
+       System.out.println("Component: " +  ent.getModelInterface() + " " + bc.getName(ent));
+      }
+     if(i==10)
+     break;
+     else i++;
+    }
   }
   
   /**
@@ -55,13 +97,28 @@ public class BioCartaToolsTest {
    * @throws FileNotFoundException
    */
   public static void main(String[] args) throws FileNotFoundException {
-    LogUtil.initializeLogging(Level.FINER);
+    LogUtil.initializeLogging(Level.CONFIG);
     
     BioCartaToolsTest bft = new BioCartaToolsTest();
     
+    // Biocarta file with several pathways in one file
+    String file = "C:/Users/buechel/Downloads/BioCarta.bp3.owl";
+    bft.testCreateKGMLsFromBioCartaModel(file);
+   
+//    // Reactome file with several pathways in one file
+//    String file = "C:/Users/buechel/Downloads/ReactomePathways/Homo sapiens.owl";
+//    bft.testCreateKGMLsFromBioCartaModel(file);
+    
+//    // Singel Biomodels file of one pathway
+//    String file = "C:/Users/buechel/Dropbox/Uni/BioPax-SBML-Projekt/BIOMD0000000201-biopax3.owl";
+//    bft.testCreateKGMLsFromBioPaxFile("C:/Users/buechel/Dropbox/Uni/BioPax-SBML-Projekt/BIOMD0000000201-biopax3.owl");
+
+    if(true)return;
+
+    bft.getComplexContent();
+   
     bft.testGetPathwaysWithGeneID();
 
   }
 
-  
 }

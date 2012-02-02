@@ -32,12 +32,26 @@ public class BioCartaPathwayHolder {
 
   Set<Entity> entities = null;
   Set<Integer> geneIDs = null;
-  String name;
+  String biopaxRDFid;
+  String name = null;
   
-  BioCartaPathwayHolder(String name){
-    this.name = name;
+  public BioCartaPathwayHolder(String id){
+    this.biopaxRDFid = id;
   }
   
+  public BioCartaPathwayHolder(String id, String name){
+    this(id);
+    setPathwayName(name);
+  }
+  
+  private boolean setPathwayName(String name) {
+    if(name != null && !name.isEmpty()){
+      this.name = name;
+      return true;
+    }
+    return false;
+  }
+
   public boolean addEntity(Entity ent){
     if(entitiesIsSet()){
       if (!entities.contains(ent)) {
@@ -71,7 +85,7 @@ public class BioCartaPathwayHolder {
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof BioCartaPathwayHolder){
-      if(((BioCartaPathwayHolder) obj).getPathwayName().equals(this.getPathwayName())){
+      if(((BioCartaPathwayHolder) obj).getRDFid().equals(this.getRDFid())){
         return true;
       }
       else 
@@ -82,7 +96,7 @@ public class BioCartaPathwayHolder {
   
   @Override
   public int hashCode() {   
-    return getPathwayName().hashCode()*13;
+    return getRDFid().hashCode()*13;
   }
 
   public boolean addGeneID(Integer key) {
@@ -107,8 +121,16 @@ public class BioCartaPathwayHolder {
   public Set<Integer> getGeneIDs() {
     return geneIDs;
   }
+  
+  /**
+   * 
+   * @return an empty String if the name is null
+   */
+  public String getName(){
+    return name==null ? "" : name;
+  }
 
-  public String getName() {    
-    return name;
+  public String getRDFid() {    
+    return biopaxRDFid;
   }
 }
