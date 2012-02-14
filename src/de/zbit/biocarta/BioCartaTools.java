@@ -186,6 +186,35 @@ public class BioCartaTools {
           createKEGGReactionRelationForInteraction((Interaction) interaction, keggPW, m, species);
         }
 
+
+        ArrayList<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();
+        
+        int counter = 0;
+        int counterMacro = 0;
+        int counterMaps = 0;
+        for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
+//          System.out.println(entry.getName() + " - " + entry.getType());
+          if (entry.getType().equals(EntryType.group)) counter++;
+          if (entry.getType().equals(EntryType.map)) counterMaps++;
+          if (entry.getType().equals(EntryType.compound)) counterMacro++;
+        }
+        System.out.println("Entries.size(): " + entries.size() + " - " + counter + " are groups, "
+            + " " + counterMacro + " are marcromolecules, "
+            + " " + counterMaps + " are maps.");
+        
+        ArrayList<Reaction> reactions = keggPW.getReactions();
+        System.out.println("Reactions.size(): " + reactions.size());
+        
+        for (Reaction reaction : reactions) {
+          for (ReactionComponent r1 : reaction.getProducts()) {    
+            System.out.println(r1.getName());
+          }
+          for (ReactionComponent r2 : reaction.getSubstrates()) {
+            System.out.println("\t - " + r2.getName());
+          }
+          System.out.println();
+        }
+        System.out.println("Relations.size(): " + keggPW.getRelations().size());
         String fileName = keggPW.getName() + ".xml";
         fileName = fileName.replace(" ", "_");
 
@@ -417,10 +446,14 @@ public class BioCartaTools {
           EntryExtended e = (EntryExtended) entry;
           if (e.getGeneType() != null && e.getGeneType().equals(gType)
               && (e.getType() != null && e.getType().equals(eType))) {
-            // TODO: compounds test?
             if (keggname.equals(keggUndefinedName)) {
               if (e.isSetGraphics()
                   && e.getGraphics().getName().equals(graphName)) {
+                keggEntry = e;
+                alreadyAddedToPathway = true;
+                break;
+              }
+              if (e.getType().equals(EntryType.group) && keggEntry.getComponents().containsAll(e.getComponents())) {
                 keggEntry = e;
                 alreadyAddedToPathway = true;
                 break;
@@ -879,10 +912,10 @@ public class BioCartaTools {
               CatalysisDirectionType catType = catalysis
                   .getCatalysisDirection();
               if (catType == CatalysisDirectionType.LEFT_TO_RIGHT) {
-                // TODO:
+                // TODO: CatType
                 log.fine("Catalysis: left-to-right");
               } else if (catType == CatalysisDirectionType.RIGHT_TO_LEFT) {
-                // TODO:
+                // TODO: CatType
                 log.fine("Catalysis: right-to-left");
               } else {
                 // TODO: unknown catType???
@@ -1078,38 +1111,42 @@ public class BioCartaTools {
       products.add(rc);
     }
      
-    Reaction r = null;            
+    Reaction r = null;          
     boolean reactionExists = false;
-    for (Reaction react : keggPW.getReactions()) {
-      List<ReactionComponent> reactProds = react.getProducts();
-      List<ReactionComponent> reactSubs = react.getSubstrates();
+    for (Reaction existingReact : keggPW.getReactions()) {
+      List<ReactionComponent> existingProds = existingReact.getProducts();
+      List<ReactionComponent> extistingSubs = existingReact.getSubstrates();
       
-      if (react.getType().equals(rType) &&
-          reactProds.size() == products.size()
-          && reactSubs.size() == substrates.size()) {
-        boolean rcMissing = false;
-        for (ReactionComponent sub : substrates) {
-          if (!reactSubs.contains(sub)) { 
-            rcMissing = true;
+      if (existingReact.getType().equals(rType) &&
+          existingProds.size() == products.size()
+          && extistingSubs.size() == substrates.size()) {
+        boolean allReactantsIn = true;
+        
+        for (ReactionComponent prod : products) {
+          if (!existingProds.contains(prod)) {
+            allReactantsIn = false;
             break;
           }
         }
-        if (!rcMissing) { 
-          for (ReactionComponent prod : products) {
-            if (!reactProds.contains(prod)) {
-              rcMissing = true;
+                
+        if (allReactantsIn) { 
+          for (ReactionComponent sub : substrates) {
+            if (!extistingSubs.contains(sub)) { 
+              allReactantsIn = false;
               break;
             }
           }
-          if (!rcMissing) {
-            reactionExists = true;
-            break;
-          }
         }
         
-      }
+        if (allReactantsIn) {
+          reactionExists = true;
+          r = existingReact;
+          break;
+        }
+      }            
     }
     
+      
     if(!reactionExists){
       r = new Reaction(keggPW, rName, ReactionType.other);
       r.addProducts(products);
@@ -1207,7 +1244,6 @@ public class BioCartaTools {
    * @return
    */
   private int getKeggPathwayNumber(String rdfId) {
-    //TODO: Check if this is valid for all BioPax formats!!!
     int posUnderscore = rdfId.indexOf('_');
     if(posUnderscore>-1 && posUnderscore<=rdfId.length()){
       try{
