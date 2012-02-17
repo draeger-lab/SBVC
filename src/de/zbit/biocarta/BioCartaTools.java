@@ -529,9 +529,12 @@ public class BioCartaTools {
         if (graphName != null) {
           if  (eType.equals(EntryType.compound)){
             keggEntry.addGraphics(Graphics.createGraphicsForCompound(graphName));
-          } else 
+          } else {
             keggEntry.addGraphics(new Graphics(graphName));
+          }
         }
+        
+        keggPW.addEntry(keggEntry);
       }
 
       log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface()
@@ -625,6 +628,8 @@ public class BioCartaTools {
         keggEntry2 = createKEGGEntryForPhysicalEntity(physicalEntity, keggPW, m, species);          
         keggEntry.addComponent(keggEntry2.getId());        
       }
+      
+      keggPW.addEntry(keggEntry);
 //      if(graphName!=null)
 //        keggEntry.addGraphics(new Graphics(graphName));
     }
@@ -672,6 +677,7 @@ public class BioCartaTools {
     
     if(!alreadyAddedToPathway){
       keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, EntryType.gene);
+      keggPW.addEntry(keggEntry);
     }
     
     log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
@@ -718,8 +724,10 @@ public class BioCartaTools {
     
     if(!alreadyAddedToPathway){
       keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, EntryType.map);
-      if(graphName!=null)
+      if(graphName!=null) {
         keggEntry.addGraphics(Graphics.createGraphicsForPathwayReference(graphName));
+      }
+      keggPW.addEntry(keggEntry);
     }
     log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
     return keggEntry;
@@ -1186,13 +1194,13 @@ public class BioCartaTools {
       int keggEntry1Id, int keggEntry2Id, RelationType type, List<SubType> subTypes) {
     ArrayList<Relation> existingRels = keggPW.getRelations();
     Relation r = null; 
-    boolean relExists = true;
+    
+    // Check if it already exists and only create novel relations.
     if(existingRels.size()>0){
       for (Relation rel : existingRels) {
+        boolean relExists = true;
         if((rel.getEntry1() == keggEntry1Id &&
-            rel.getEntry2() == keggEntry2Id) ||
-            (rel.getEntry1() == keggEntry2Id &&
-                rel.getEntry2() == keggEntry1Id)){
+            rel.getEntry2() == keggEntry2Id)){
           
           relExists &= rel.isSetType()== (type!=null);
           if(relExists && type!=null)
@@ -1204,16 +1212,18 @@ public class BioCartaTools {
           
           if (relExists) {
             r = rel;
-            return rel;
+            return r;
           }
         }
       }
-      if(!relExists){
-        return new Relation(keggPW, keggEntry1Id, keggEntry2Id, type);
-      }
+      
+      r = new Relation(keggEntry1Id, keggEntry2Id, type);
     } else {
-      return new Relation(keggPW, keggEntry1Id, keggEntry2Id, type);
+      r = new Relation(keggEntry1Id, keggEntry2Id, type);
     }
+    
+    // Add the relation to the pathway
+    keggPW.addRelation(r);
     
     return r;
   }
@@ -1295,9 +1305,10 @@ public class BioCartaTools {
     
       
     if(!reactionExists){
-      r = new Reaction(keggPW, getReactionName(), ReactionType.other);
+      Reaction r = new Reaction(keggPW, getReactionName(), ReactionType.other);
       r.addProducts(products);
       r.addSubstrates(substrates);
+      keggPW.addReaction(r);
     }
     
     for (ReactionComponent reactionComponent : products) {
