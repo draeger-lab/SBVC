@@ -109,8 +109,7 @@ public class BioCartaTools {
     allSpecies.add( new Species("Mus musculus", "_MOUSE", "Mouse", "mmu", 10090) );
     allSpecies.add( new Species("Rattus norvegicus", "_RAT", "Rat", "rno", 10116) );
   }
-  
-  
+    
   /**
    * number which is used to determine a pathway id, if it is not possible
    * to exclude the id from the BioCarta file
@@ -192,7 +191,7 @@ public class BioCartaTools {
     int i = 0;
     for (Pathway pathway : pathways) {
             
-//      if (++i == 3) {
+      if (++i == 3) {
         // try {
         // writePathwayOwlFile(pathway, m, species);
         // } catch (IOException e) {
@@ -263,8 +262,8 @@ public class BioCartaTools {
           fileName = fileName.replace(" ", "_");  
           writeKGML(keggPW, "pws/" + StringUtil.removeAllNonFileSystemCharacters(fileName));
         }
-//        break;
-//      }
+        break;
+      }
     }
   }  
   
@@ -406,15 +405,14 @@ public class BioCartaTools {
   private EntryExtended createKEGGEntryReactionRelation(Entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
     EntryExtended keggEntry = null;    
-//    log.config(" 1 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
     if (PhysicalEntity.class.isAssignableFrom(entity.getClass())){
       keggEntry = createKEGGEntryForPhysicalEntity((PhysicalEntity)entity, keggPW, m, species);      
     } else if (Interaction.class.isAssignableFrom(entity.getClass())){
       createKEGGReactionRelationForInteraction((Interaction) entity, keggPW, m, species);
     } else if (Pathway.class.isAssignableFrom(entity.getClass())){
-      keggEntry = createKEGGEntryForPathway((Pathway)entity, keggPW, m, species);      
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null);      
     } else if (Gene.class.isAssignableFrom(entity.getClass())){
-      keggEntry = createKEGGEntryForGene((Gene)entity, keggPW, m, species);
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, null, ",", null);
     } else {
       log.severe("Unknonw entity type: " + entity.getModelInterface() + "-" + entity.getRDFId());
       System.exit(1);
@@ -436,116 +434,49 @@ public class BioCartaTools {
       Model m, Species species) {
     de.zbit.kegg.parser.pathway.ext.EntryExtended keggEntry = null;
     
-    String graphName = null;
-    String keggname = null;
-    GeneType gType = null;
-    EntryType eType = null;
     if (Complex.class.isAssignableFrom(entity.getClass())){
-      // Here it is controlled if the complex already exists
-      
-      log.finer("Complex: " + entity.getModelInterface());
-      keggEntry = createKEGGEntryForComplex((Complex)entity, keggPW, m, species);
+      List<Integer> components = createComponentsList(((Complex)entity).getComponent(),
+          keggPW, m, species);      
+      keggEntry = createKEGGEntry((Entity)entity, keggPW, m, species, EntryType.group, null, 
+          "/", components);
+    } else if (Dna.class.isAssignableFrom(entity.getClass())) {
+        keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.dna, 
+            ",", null);
+    } else if (DnaRegion.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.dna_region,
+          ",", null);
+    } else if (Protein.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.protein,
+          ",", null);
+    } else if (Rna.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.rna, ",",
+          null);
+    } else if (RnaRegion.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.rna_region,
+          ",", null);
+    } else if (SmallMolecule.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, GeneType.unknown,
+          ",", null);
     } else {
-      Set<String> names = entity.getName();
-      StringBuffer name = new StringBuffer(); 
-      if (names != null && names.size() > 0) {
-        for (String n : names) {
-          n = n.trim();
-          n = n.replace(" ", "_");
-          name.append(n);
-          name.append(", ");
-        }
-        name.delete(name.length()-2, name.length()-1);
-      }      
-      graphName = name.toString().trim();
-      Integer geneID = getEntrezGeneID(entity, getMapFromSet(m.getObjects(RelationshipXref.class)));      
-      if (geneID != -1) {
-        keggname = mapGeneIDToKEGGID(geneID, species);
-      } else {
-        
-        keggname = getKEGGUnkownName();
-      }
-      
-      Class<?> entityClass = entity.getClass();
-      if (Dna.class.isAssignableFrom(entityClass)) {
-        log.finer("Dna: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.gene;
-        gType = GeneType.dna;
-      } else if (DnaRegion.class.isAssignableFrom(entityClass)) {
-        log.finer("DnaRegion: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.gene;
-        gType = GeneType.dna_region;
-      } else if (Protein.class.isAssignableFrom(entityClass)) {
-        log.finer("Protein: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.gene;
-        gType = GeneType.protein;
-      } else if (Rna.class.isAssignableFrom(entityClass)) {
-        log.finer("Rna: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.gene;
-        gType = GeneType.rna;
-      } else if (RnaRegion.class.isAssignableFrom(entityClass)) {
-        log.finer("RnaRegion: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.gene;
-        gType = GeneType.rna_region;
-      } else if (SmallMolecule.class.isAssignableFrom(entityClass)) {
-        log.finer("SmallMolecule: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.compound;
-        gType = GeneType.unknown;
-      } else {     
-        log.finer("GenericPhysicalEntity: " + entity.getModelInterface() + " " + keggname);
-        eType = EntryType.other;
-        gType = GeneType.unknown;
-      }     
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, GeneType.unknown,
+          ",", null);
+    }  
 
-      Collection<de.zbit.kegg.parser.pathway.Entry> entries;
-      if(keggname.startsWith(keggUnknownName))
-        entries = keggPW.getEntries();
-      else {
-        entries = keggPW.getEntriesForName(keggname);
-      }
-      boolean alreadyAddedToPathway = false;
-      if (entries != null && entries.size() > 0) {
-        for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
-          EntryExtended e = (EntryExtended) entry;
-          if (e.getGeneType() != null && e.getGeneType().equals(gType)
-              && (e.getType() != null && e.getType().equals(eType))
-              ) {
-            if (e.isSetGraphics() && e.getGraphics().getName().equals(graphName)) {
-              keggEntry = e;
-              alreadyAddedToPathway = true;
-              break;
-            }
-//            if (!keggname.equals(keggUnknownName)) {              
-//              keggEntry = e;
-//              alreadyAddedToPathway = true;
-//              break;
-//            }
-          }
-        }
-      }
-
-      if (!alreadyAddedToPathway) {
-        keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, gType);
-        if (graphName != null) {
-          if  (eType.equals(EntryType.compound)){
-            keggEntry.addGraphics(Graphics.createGraphicsForCompound(graphName));
-          } else {
-            keggEntry.addGraphics(new Graphics(graphName));
-          }
-        }
-        
-        keggPW.addEntry(keggEntry);
-      }
-
-      log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface()
-          + " : " + keggEntry.getId() + "-" + keggEntry.getName());
-    }
-
-    log.finer("Entity: " + entity.getRDFId() + " - keggEntryID: "
-        + keggEntry.getId() + ".");
     return keggEntry;
   }
   
+  private List<Integer> createComponentsList(Set<PhysicalEntity> complexEntries, 
+      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
+    List<Integer> components = new ArrayList<Integer>();
+    
+    for (PhysicalEntity physicalEntity : complexEntries) {         
+      EntryExtended keggEntry = createKEGGEntryForPhysicalEntity(physicalEntity, keggPW, m, species);          
+      components.add(keggEntry.getId());        
+    }
+    
+    return components;
+  }
+
   /**
    * mapps an entered gene id to a kegg id, if this is not possible the species abbreviation:geneID is returned
    * @param mapper
@@ -568,78 +499,6 @@ public class BioCartaTools {
   }
 
   /**
-   * creates an {@link EntryExtended} but does NOT add it to the {@link de.zbit.kegg.parser.pathway.Pathway}
-   * 
-   * @param complex
-   * @param keggPW
-   * @param mapper
-   * @param m
-   * @param species
-   * @return
-   */
-  private de.zbit.kegg.parser.pathway.ext.EntryExtended createKEGGEntryForComplex(Complex complex,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
-    
-    de.zbit.kegg.parser.pathway.ext.EntryExtended keggEntry = null, keggEntry2 = null;    
-    Set<PhysicalEntity> components = complex.getComponent();
-    Set<String> names = complex.getName();
-    StringBuffer name = new StringBuffer(); 
-    if (names != null && names.size() > 0) {
-      for (String n : names) {
-        n = n.trim();
-        n = n.replace(" ", "_");
-        name.append(n);
-        name.append("/ ");
-      }
-      name.delete(name.length()-2, name.length()-1);
-    }      
-    String graphName = name.toString().trim();
-    
-    boolean alreadyAddedToPathway = false;
-    Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(graphName);
-    if (entries !=null && entries.size()>0) {      
-      for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
-        EntryExtended entryExtended = (EntryExtended)entry;
-        
-        if (entryExtended.getType()!=null && entryExtended.getType().equals(EntryType.group)){
-          List<Integer> eComponents = entryExtended.getComponents();
-          if(eComponents.size()==components.size()){
-            boolean allFound = true;
-            for (Integer id : eComponents) {
-              if(keggPW.getEntryForId(id.intValue())==null){
-                allFound = false;
-                break;
-              }
-            }
-            
-            if (allFound) {
-              alreadyAddedToPathway = true;
-              keggEntry = entryExtended;
-              break;
-            }
-          }
-        }
-      }      
-    }
-    
-    if(!alreadyAddedToPathway){
-      keggEntry = new EntryExtended(keggPW, getKeggEntryID(), graphName, EntryType.group);
-      for (PhysicalEntity physicalEntity : components) {         
-        keggEntry2 = createKEGGEntryForPhysicalEntity(physicalEntity, keggPW, m, species);          
-        keggEntry.addComponent(keggEntry2.getId());        
-      }
-      
-      keggPW.addEntry(keggEntry);
-//      if(graphName!=null)
-//        keggEntry.addGraphics(new Graphics(graphName));
-    }
-    
-    log.config(" 2 " + complex.getRDFId() + "-" + complex.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
-    return keggEntry;
-  }
-
-  
-  /**
    * Adds the created {@link EntryExtended} to the {@link BioCartaTools#bc2KeggEntry} map and
    * to the {@link de.zbit.kegg.parser.pathway.Pathway}
    * 
@@ -649,89 +508,76 @@ public class BioCartaTools {
    * @param m
    * @return 
    */
-  private EntryExtended createKEGGEntryForGene(Gene entity, de.zbit.kegg.parser.pathway.Pathway keggPW, 
-      Model m, Species species) {
-    de.zbit.kegg.parser.pathway.ext.EntryExtended keggEntry = null; 
+  private EntryExtended createKEGGEntry(Entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW, 
+      Model m, Species species, EntryType eType, GeneType gType, String graphNameSeparator,
+      List<Integer> components) {
+    de.zbit.kegg.parser.pathway.ext.EntryExtended keggEntry; 
     
-    String keggname = null;
-    
+    // creating new KEGG entry
+    String keggname = null;    
     Integer geneID = getEntrezGeneID(entity, getMapFromSet(m.getObjects(RelationshipXref.class)));
     if(geneID != -1){  
       keggname = mapGeneIDToKEGGID(geneID, species);
     } else {
       keggname = getKEGGUnkownName();
     }
-          
-    Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(keggname);
-    boolean alreadyAddedToPathway = false;
+    
+    String graphName = "";
+    Set<String> names = entity.getName();
+    StringBuffer name = new StringBuffer(); 
+    if (names != null && names.size() > 0) {
+      for (String n : names) {
+        n = n.trim();
+        n = n.replace(" ", "_");
+        name.append(n);
+        name.append(graphNameSeparator);
+        name.append(" ");
+      }
+      name.delete(name.length()-2, name.length()-1);
+    }      
+    graphName = name.toString().trim();
+    
+    Graphics graphics = null;
+    if(eType.equals(EntryType.map))
+      graphics = Graphics.createGraphicsForPathwayReference(graphName);
+    else if (eType.equals(EntryType.compound))
+      graphics = Graphics.createGraphicsForCompound(graphName);
+    else 
+      graphics = new Graphics(graphName);
+    
+    
+    
+    if(components != null){
+      keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, graphics);
+      keggEntry.addComponents(components);
+    } else {
+      keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, gType, graphics);  
+    }
+      
+    
+    
+    // checking if entry already exists
+    Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();    
     if (entries !=null && entries.size()>0) {
       for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
         EntryExtended e = (EntryExtended)entry;
-        if(e.getType()!=null && e.getType().equals(EntryType.gene)){
+        if(e.equalsWithoutIDNameReactionComparison(keggEntry)){
+          if (e.isSetReaction()){
+            e.appendReaction(keggEntry.getReactionString());
+          }
           keggEntry = e;
-          alreadyAddedToPathway = true;          
-          break;
+          System.out.println("entry already exists");
+          return keggEntry;
         } 
       }      
     }
     
-    if(!alreadyAddedToPathway){
-      keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, EntryType.gene);
-      keggPW.addEntry(keggEntry);
-    }
+    // add entry to pathway
+    keggPW.addEntry(keggEntry);
     
-    log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
     return keggEntry;
-  }
-  
-
-  /**
-   * 
-   * Creates an {@link EntryExtended} and adds it to the {@link BioCartaTools#bc2KeggEntry} map
-   * and to the {@link de.zbit.kegg.parser.pathway.Pathway}
-   * 
-   * @param entity
-   * @param keggPW
-   * @param mapper
-   * @param m
-   */
-  private de.zbit.kegg.parser.pathway.ext.EntryExtended createKEGGEntryForPathway(Pathway entity,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
+  }  
     
-    String keggname = getKEGGUnkownName();
-    String graphName = getPathwayName(entity);
-   
-    EntryExtended keggEntry = null;
-    
-    Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(keggname);
-    boolean alreadyAddedToPathway = false;
-    if (entries !=null && entries.size()>0) {
-      for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
-        EntryExtended e = (EntryExtended)entry;
-        if(e.getType()!=null && e.getType().equals(EntryType.map)){
-          if(e.isSetGraphics() && e.getGraphics().getName().equals(graphName)){
-            keggEntry = e;
-            alreadyAddedToPathway = true;          
-            break;
-          } else if (!e.isSetGraphics()) {
-            keggEntry = e;
-            alreadyAddedToPathway = true;          
-            break;
-          }            
-        }
-      }      
-    }
-    
-    if(!alreadyAddedToPathway){
-      keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, EntryType.map);
-      if(graphName!=null) {
-        keggEntry.addGraphics(Graphics.createGraphicsForPathwayReference(graphName));
-      }
-      keggPW.addEntry(keggEntry);
-    }
-    log.config(" 2 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " + keggEntry.getId() + "-" + keggEntry.getName());
-    return keggEntry;
-  }
   
   public int controls=0;
   /**
@@ -779,8 +625,10 @@ public class BioCartaTools {
     // Participant (2 or more)
     for (int i=0; i<=participants.size()-1; i++){ 
       for (int j=i+1; j<=participants.size(); j++){
-        EntryExtended keggEntry1 = createKEGGEntryForGene((Gene)participants.get(i), keggPW, m, species);
-        EntryExtended keggEntry2 = createKEGGEntryForGene((Gene)participants.get(j), keggPW, m, species);
+        EntryExtended keggEntry1 = createKEGGEntry((Gene)participants.get(i), keggPW, m, species, 
+            EntryType.gene, null, ",", null);
+        EntryExtended keggEntry2 = createKEGGEntry((Gene)participants.get(j), keggPW, m, species, 
+            EntryType.gene, null, ",", null);
         
         createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other, null);
         
@@ -810,8 +658,10 @@ public class BioCartaTools {
    // Participant (2 or more)
    for (int i=0; i<=participants.size()-1; i++){ 
      for (int j=i+1; j<=participants.size(); j++){
-       EntryExtended keggEntry1 = createKEGGEntryForGene((Gene)participants.get(i), keggPW, m, species);
-       EntryExtended keggEntry2 = createKEGGEntryForGene((Gene)participants.get(j), keggPW, m, species);
+       EntryExtended keggEntry1 = createKEGGEntry((Gene)participants.get(i), keggPW, m, species, 
+           EntryType.gene, null, ",", null);
+       EntryExtended keggEntry2 = createKEGGEntry((Gene)participants.get(j), keggPW, m, species, 
+           EntryType.gene, null, ",", null);
        
        createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.PPrel, null);
        log.config(" 3 " + entity.getRDFId() + "-" + entity.getModelInterface() + " : " 
@@ -884,7 +734,8 @@ public class BioCartaTools {
           keggEntry1 = createKEGGEntryForPhysicalEntity((PhysicalEntity)controller, keggPW, m, species);
           relType = RelationType.ECrel;
         } else if (Pathway.class.isAssignableFrom(controller.getClass())){
-          keggEntry1 = createKEGGEntryForPathway((Pathway)controller, keggPW, m, species);
+          keggEntry1 = createKEGGEntry((Entity)controller, keggPW, m, species, EntryType.map,
+              null, ",", null);
           relType = RelationType.maplink;
         } else {
           log.severe("Controller: " + controller.getModelInterface() + "-This should not happen!");
@@ -908,8 +759,10 @@ public class BioCartaTools {
                 }                
               }
             } else if (Pathway.class.isAssignableFrom(process.getClass())){
-              keggEntry2 = createKEGGEntryForPathway((Pathway)process, keggPW, m, species);
-              createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other, getSubtypes(control.getControlType()));              
+              keggEntry2 = createKEGGEntry((Entity)process, keggPW, m, species, EntryType.map,
+                  null, ",", null);
+              createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other, 
+                  getSubtypes(control.getControlType()));              
             } else if (TemplateReaction.class.isAssignableFrom(process.getClass())){
               Relation rel = createKEGGRelationForTemplateReaction((TemplateReaction) process, keggPW, m, species);
               if (rel != null) {
@@ -997,7 +850,8 @@ public class BioCartaTools {
           keggEntry1 = createKEGGEntryForPhysicalEntity((PhysicalEntity)controller, keggPW, m, species);
           relType = RelationType.ECrel;
         } else if (Pathway.class.isAssignableFrom(controller.getClass())) {
-          keggEntry1 = createKEGGEntryForPathway((Pathway)controller, keggPW, m, species);
+          keggEntry1 = createKEGGEntry((Entity)controller, keggPW, m, species, EntryType.map,
+              null, ",", null);
           relType = RelationType.maplink;
         } else {
           log.severe("Controller: " + controller.getModelInterface() + "-This should not happen!");
@@ -1305,7 +1159,7 @@ public class BioCartaTools {
     
       
     if(!reactionExists){
-      Reaction r = new Reaction(keggPW, getReactionName(), ReactionType.other);
+      r = new Reaction(keggPW, getReactionName(), ReactionType.other);
       r.addProducts(products);
       r.addSubstrates(substrates);
       keggPW.addReaction(r);
