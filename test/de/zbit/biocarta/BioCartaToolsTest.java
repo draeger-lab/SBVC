@@ -43,11 +43,10 @@ public class BioCartaToolsTest {
   
 
   private void testCreateKGMLsFromBioCartaModel(String file) {
-    Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
     // test for pathway gene ids
     //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
     Model m = bc.getModel(file);
-    bc.createKGMLsFromBioCartaModel(m, species);
+    bc.createKGMLsFromBioCartaModel(m);
   }
   
   private void testCreateKGMLsFromBioPaxFile(String file) {
@@ -73,25 +72,6 @@ public class BioCartaToolsTest {
     }
   }
   
-
-
-  private void getComplexContent() {
-    Model m = bc.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
-    int i=0;
-    for (Entry<String, Complex> com : BioCartaTools.getMapFromSet((m.getObjects(Complex.class))).entrySet()) {
-      System.out.println("---- Complex " + bc.getName(com.getValue()));
-     for (Complex ent : com.getValue().getComponentOf()) {
-      System.out.println("ComponentOf: " + ent.getModelInterface() + " " + bc.getName(ent));
-     } 
-     for (PhysicalEntity ent : com.getValue().getComponent()) {
-       System.out.println("Component: " +  ent.getModelInterface() + " " + bc.getName(ent));
-      }
-     if(i==10)
-     break;
-     else i++;
-    }
-  }
-  
   /**
    * @param args
    * @throws FileNotFoundException
@@ -114,8 +94,6 @@ public class BioCartaToolsTest {
 //    bft.testCreateKGMLsFromBioPaxFile("C:/Users/buechel/Dropbox/Uni/BioPax-SBML-Projekt/BIOMD0000000201-biopax3.owl");
 
     if(true)return;
-
-    bft.getComplexContent();
    
     bft.testGetPathwaysWithGeneID();
 
