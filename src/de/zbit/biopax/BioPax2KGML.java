@@ -141,6 +141,7 @@ public class BioPax2KGML extends BioPaxConverter {
    * @param m
    */
   public void createKGMLsFromModel(Model m) {
+    log.info("Creating for each pathway a KGML file.");
     Set<Pathway> pathways = m.getObjects(Pathway.class);
     Map<String, UnificationXref> xrefs = getMapFromSet(m.getObjects(UnificationXref.class));
 
@@ -157,7 +158,8 @@ public class BioPax2KGML extends BioPaxConverter {
         // } catch (IOException e) {
         // log.log(Level.WARNING, "File writing was not successful!", e);
         // }
-
+        System.out.println(i);
+        
         // create the pathway
         int number = getKeggPathwayNumber(pathway.getRDFId());
         de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
@@ -545,11 +547,11 @@ public class BioPax2KGML extends BioPaxConverter {
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
           Utils.getListOfCollection(((GeneticInteraction) entity).getParticipant()), keggPW, m,
-          species);
+          species, RelationType.GErel, new SubType(SubType.ASSOCIATION));
     } else if (MolecularInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
           Utils.getListOfCollection(((MolecularInteraction) entity).getParticipant()), keggPW, m,
-          species);
+          species, RelationType.PPrel, new SubType(SubType.BINDING_ASSOCIATION));
     } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForTemplateReaction((TemplateReaction) entity, keggPW, m, species);
     } else {
@@ -567,7 +569,8 @@ public class BioPax2KGML extends BioPaxConverter {
    * @param species
    */
   private void createKEGGRelationForParticipantList(List<Entity> participants,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
+      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, RelationType relType,
+      SubType subType) {
     // interactionType (0 or 1)
 
     // Participant (2 or more)
@@ -578,7 +581,7 @@ public class BioPax2KGML extends BioPaxConverter {
         EntryExtended keggEntry2 = createKEGGEntry((Gene) participants.get(j), keggPW, m, species,
             EntryType.gene, null, ",", null);
 
-        createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other, null);
+        createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), relType, subType);
       }
     }
 
@@ -603,7 +606,7 @@ public class BioPax2KGML extends BioPaxConverter {
       // to itself
       EntryExtended keggEntry = parsePhysicalEntity(product, keggPW, m, species);
       rel = createKEGGRelation(keggPW, keggEntry.getId(), keggEntry.getId(), RelationType.GErel,
-          null);
+          new SubType(SubType.EXPRESSION));
     }
 
     return rel;
@@ -622,74 +625,58 @@ public class BioPax2KGML extends BioPaxConverter {
       Species species) {
     if (Catalysis.class.isAssignableFrom(entity.getClass())) {
       createKEGGReactionRelation(((Catalysis) entity).getController(),
-          ((Catalysis) entity).getControlled(), getSubtypes(((Catalysis) entity).getControlType()),
+          ((Catalysis) entity).getControlled(), getSubtype(((Catalysis) entity).getControlType()),
           keggPW, m, species);
     } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGReactionRelation(((TemplateReactionRegulation) entity).getController(),
           ((TemplateReactionRegulation) entity).getControlled(),
-          getSubtypes(((TemplateReactionRegulation) entity).getControlType()), keggPW, m, species);
+          getSubtype(((TemplateReactionRegulation) entity).getControlType()), keggPW, m, species);
     } else if (Modulation.class.isAssignableFrom(entity.getClass())) {
       createKEGGReactionRelation(((Modulation) entity).getController(),
           ((Modulation) entity).getControlled(),
-          getSubtypes(((Modulation) entity).getControlType()), keggPW, m, species);
+          getSubtype(((Modulation) entity).getControlType()), keggPW, m, species);
     } else {
       createKEGGReactionRelation(((Control) entity).getController(),
-          ((Control) entity).getControlled(), getSubtypes(((Control) entity).getControlType()),
+          ((Control) entity).getControlled(), getSubtype(((Control) entity).getControlType()),
           keggPW, m, species);
     }
   }
 
   /**
-   * Returns a list of all subtypes for a specific ControlType
+   * Returns the subtypes for a specific ControlType
    * 
    * @param cType
    * @return
    */
-  private List<SubType> getSubtypes(ControlType cType) {
-    List<SubType> types = new ArrayList<SubType>();
-
+  private SubType getSubtype(ControlType cType) {   
     switch (cType) {
       case ACTIVATION:
-        types.add(new SubType(SubType.ACTIVATION));
-        break;
+        return (new SubType(SubType.ACTIVATION));
       case ACTIVATION_ALLOSTERIC:
-        types.add(new SubType(SubType.ACTIVATION));
-        break;
+        return (new SubType(SubType.ACTIVATION));
       case ACTIVATION_NONALLOSTERIC:
-        types.add(new SubType(SubType.ACTIVATION));
-        break;
+        return (new SubType(SubType.ACTIVATION));
       case ACTIVATION_UNKMECH:
-        types.add(new SubType(SubType.ACTIVATION));
-        break;
+        return (new SubType(SubType.ACTIVATION));
       case INHIBITION:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_ALLOSTERIC:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_COMPETITIVE:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_IRREVERSIBLE:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_NONCOMPETITIVE:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_OTHER:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_UNCOMPETITIVE:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       case INHIBITION_UNKMECH:
-        types.add(new SubType(SubType.INHIBITION));
-        break;
+        return (new SubType(SubType.INHIBITION));
       default:
-        types.add(new SubType(SubType.INDIRECT_EFFECT));
+        return (new SubType(SubType.INDIRECT_EFFECT));
     }
-
-    return types;
   }
 
   /**
@@ -705,7 +692,7 @@ public class BioPax2KGML extends BioPaxConverter {
    * @return
    */
   private EntryExtended createKEGGReactionRelation(Set<Controller> controllers,
-      Set<org.biopax.paxtools.model.level3.Process> controlleds, List<SubType> subtypes,
+      Set<org.biopax.paxtools.model.level3.Process> controlleds, SubType subtype,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     EntryExtended keggEntry1 = null;
     RelationType relType = null;
@@ -747,7 +734,7 @@ public class BioPax2KGML extends BioPaxConverter {
 
                 if (relType.equals(RelationType.maplink)) {
                   for (ReactionComponent rc : r.getSubstrates()) {
-                    createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtypes);
+                    createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtype);
                   }
                 } else if (relType.equals(RelationType.ECrel)) {
                   keggEntry1.appendReaction(r.getName());
@@ -756,7 +743,7 @@ public class BioPax2KGML extends BioPaxConverter {
                 List<Relation> rels = createKEGGRelations(((Transport) con).getLeft(),
                     ((Transport) con).getRight(), keggPW, m, species, RelationType.other);
                 for (Relation rel : rels) {
-                  createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtypes);
+                  createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype);
                 }
               } else {
                 log.severe("Not programmed case: controlled interface '" + con.getModelInterface()
@@ -773,7 +760,7 @@ public class BioPax2KGML extends BioPaxConverter {
                   keggPW, m, species);
               if (rel != null) {
                 createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), RelationType.other,
-                    subtypes);
+                    subtype);
               }
             } else {
               log.severe("Process: " + process.getModelInterface() + "-This should not happen!");
@@ -875,7 +862,7 @@ public class BioPax2KGML extends BioPaxConverter {
    * @return
    */
   private Relation createKEGGRelation(de.zbit.kegg.parser.pathway.Pathway keggPW, int keggEntry1Id,
-      int keggEntry2Id, RelationType type, List<SubType> subTypes) {
+      int keggEntry2Id, RelationType type, SubType subType) {
     ArrayList<Relation> existingRels = keggPW.getRelations();
     Relation r = null;
 
@@ -888,21 +875,18 @@ public class BioPax2KGML extends BioPaxConverter {
           relExists &= rel.isSetType() == (type != null);
           if (relExists && type != null)
             relExists &= (rel.getType().equals(type));
-
-          relExists &= rel.isSetSubTypes() == (subTypes != null);
-          if (relExists && (subTypes != null))
-            relExists &= (rel.getSubtypes().equals(subTypes));
-
+          
           if (relExists) {
             r = rel;
+            r.addSubtype(subType);
             return r;
-          }
+          }          
         }
       }
 
-      r = new Relation(keggEntry1Id, keggEntry2Id, type);
+      r = new Relation(keggEntry1Id, keggEntry2Id, type, subType);
     } else {
-      r = new Relation(keggEntry1Id, keggEntry2Id, type);
+      r = new Relation(keggEntry1Id, keggEntry2Id, type, subType);
     }
 
     // Add the relation to the pathway
