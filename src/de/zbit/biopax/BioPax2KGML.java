@@ -38,6 +38,7 @@ import org.biopax.paxtools.model.level3.Control;
 import org.biopax.paxtools.model.level3.ControlType;
 import org.biopax.paxtools.model.level3.Controller;
 import org.biopax.paxtools.model.level3.Conversion;
+import org.biopax.paxtools.model.level3.ConversionDirectionType;
 import org.biopax.paxtools.model.level3.Degradation;
 import org.biopax.paxtools.model.level3.Dna;
 import org.biopax.paxtools.model.level3.DnaRegion;
@@ -152,7 +153,7 @@ public class BioPax2KGML extends BioPaxConverter {
     int i = 0;
     for (Pathway pathway : pathways) {
 
-      if (++i == 3) {
+//      if (++i == 3) {
         // try {
         // writePathwayOwlFile(pathway, m, species);
         // } catch (IOException e) {
@@ -189,8 +190,8 @@ public class BioPax2KGML extends BioPaxConverter {
         }
 
         writeKGML(keggPW);
-        break;
-      }
+//        break;
+//      }
     }
   }
 
@@ -251,7 +252,6 @@ public class BioPax2KGML extends BioPaxConverter {
    */
   private String getPathwayLinkName(Entity pathway) {
     Set<String> names = pathway.getName();
-
     String link = "";
 
     if (names != null && names.size() > 0) {
@@ -289,7 +289,7 @@ public class BioPax2KGML extends BioPaxConverter {
         fileName += ".xml";
       }
 
-      // TODO: delete this line after publishing
+      // TODO: delete this line for publishing
       fileName = "pws/" + fileName;
 
       writeKGML(keggPW, fileName);
@@ -551,7 +551,7 @@ public class BioPax2KGML extends BioPaxConverter {
     } else if (MolecularInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
           Utils.getListOfCollection(((MolecularInteraction) entity).getParticipant()), keggPW, m,
-          species, RelationType.PPrel, new SubType(SubType.BINDING_ASSOCIATION));
+          species, RelationType.PPrel, new SubType(SubType.INDIRECT_EFFECT));
     } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForTemplateReaction((TemplateReaction) entity, keggPW, m, species);
     } else {
@@ -675,7 +675,9 @@ public class BioPax2KGML extends BioPaxConverter {
       case INHIBITION_UNKMECH:
         return (new SubType(SubType.INHIBITION));
       default:
-        return (new SubType(SubType.INDIRECT_EFFECT));
+        log.log(Level.SEVERE, "Unkown ControlType: '" + cType.toString() + "'.");
+        System.exit(1);
+        return null;
     }
   }
 
@@ -722,14 +724,15 @@ public class BioPax2KGML extends BioPaxConverter {
                   r = createKEGGReaction(((BiochemicalReaction) con).getLeft(),
                       ((BiochemicalReaction) con).getRight(),
                       Utils.getListOfCollection(((BiochemicalReaction) con)
-                          .getParticipantStoichiometry()), keggPW, m, species);
+                          .getParticipantStoichiometry()), keggPW, m, species,
+                          getReactionType(con.getConversionDirection()));
 
                 } catch (ClassCastException e) {
                   r = createKEGGReaction(((ComplexAssembly) con).getLeft(),
                       ((ComplexAssembly) con).getRight(),
                       Utils.getListOfCollection(((ComplexAssembly) con)
-                          .getParticipantStoichiometry()), keggPW, m, species);
-
+                          .getParticipantStoichiometry()), keggPW, m, species,
+                          getReactionType(con.getConversionDirection()));
                 }
 
                 if (relType.equals(RelationType.maplink)) {
@@ -741,7 +744,8 @@ public class BioPax2KGML extends BioPaxConverter {
                 }
               } else if (Transport.class.isAssignableFrom(con.getClass())) {
                 List<Relation> rels = createKEGGRelations(((Transport) con).getLeft(),
-                    ((Transport) con).getRight(), keggPW, m, species, RelationType.other);
+                    ((Transport) con).getRight(), keggPW, m, species, RelationType.PPrel, 
+                    new SubType(SubType.STATE_CHANGE));
                 for (Relation rel : rels) {
                   createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype);
                 }
@@ -754,12 +758,12 @@ public class BioPax2KGML extends BioPaxConverter {
               EntryExtended keggEntry2 = createKEGGEntry((Pathway) process, keggPW, m, species,
                   EntryType.map, null, ",", null);
               createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
-                  RelationType.other, null);
+                  relType, subtype);
             } else if (TemplateReaction.class.isAssignableFrom(process.getClass())) {
               Relation rel = createKEGGRelationForTemplateReaction((TemplateReaction) process,
                   keggPW, m, species);
               if (rel != null) {
-                createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), RelationType.other,
+                createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType,
                     subtype);
               }
             } else {
@@ -782,6 +786,27 @@ public class BioPax2KGML extends BioPaxConverter {
   }
 
   /**
+   * returns teh appropriate KEGG ReactionType to the ConverstionDirectionType
+   * @param conversionDirection
+   * @return
+   */
+  private ReactionType getReactionType(ConversionDirectionType conversionDirection) {
+    if (conversionDirection != null){
+      switch (conversionDirection) {
+        case LEFT_TO_RIGHT:
+          return ReactionType.irreversible;
+        case RIGHT_TO_LEFT:
+          return ReactionType.irreversible;
+        case REVERSIBLE:
+          return ReactionType.reversible;
+        default:
+          return ReactionType.other;
+      }  
+    }
+    return ReactionType.other;
+  }
+
+  /**
    * parse a BioPax Conversion element
    * 
    * @param entity
@@ -795,25 +820,25 @@ public class BioPax2KGML extends BioPaxConverter {
       createKEGGReaction(((ComplexAssembly) entity).getLeft(),
           ((ComplexAssembly) entity).getRight(),
           Utils.getListOfCollection(((ComplexAssembly) entity).getParticipantStoichiometry()),
-          keggPW, m, species);
+          keggPW, m, species, getReactionType(((ComplexAssembly) entity).getConversionDirection()));
     } else if (BiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
           ((BiochemicalReaction) entity).getRight(),
           Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
-          keggPW, m, species);
+          keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
     } else if (Degradation.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelations(((Degradation) entity).getLeft(), ((Degradation) entity).getRight(),
-          keggPW, m, species, RelationType.other);
+          keggPW, m, species, RelationType.PPrel, new SubType(SubType.STATE_CHANGE));
     } else if (Transport.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelations(((Transport) entity).getLeft(), ((Transport) entity).getRight(), keggPW,
-          m, species, RelationType.other);
+          m, species, RelationType.PPrel, new SubType(SubType.STATE_CHANGE));
     } else if (TransportWithBiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       // BiochemicalReaction br = (TransportWithBiochemicalReaction) entity;
       // deltaG, deltaH, deltaS, ec, and KEQ are ignored
       createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
           ((BiochemicalReaction) entity).getRight(),
           Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
-          keggPW, m, species);
+          keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
     } else {
       log.warning("Unknown kind of Conversion: " + entity.getModelInterface() + "-"
           + entity.getRDFId());
@@ -832,7 +857,8 @@ public class BioPax2KGML extends BioPaxConverter {
    * @return
    */
   private List<Relation> createKEGGRelations(Set<PhysicalEntity> lefts, Set<PhysicalEntity> rights,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, RelationType type) {
+      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, RelationType type, 
+      SubType subType) {
 
     List<Relation> relations = new ArrayList<Relation>();
 
@@ -840,7 +866,7 @@ public class BioPax2KGML extends BioPaxConverter {
       EntryExtended keggEntry1 = parsePhysicalEntity(left, keggPW, m, species);
       for (PhysicalEntity right : rights) {
         EntryExtended keggEntry2 = parsePhysicalEntity(right, keggPW, m, species);
-        Relation r = createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), type, null);
+        Relation r = createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), type, subType);
         if (!relations.contains(r))
           relations.add(r);
       }
@@ -907,12 +933,9 @@ public class BioPax2KGML extends BioPaxConverter {
    */
   private Reaction createKEGGReaction(Set<PhysicalEntity> lefts, Set<PhysicalEntity> rights,
       List<Stoichiometry> stoichiometry, de.zbit.kegg.parser.pathway.Pathway keggPW, Model m,
-      Species species) {
+      Species species, ReactionType rType) {
     List<ReactionComponent> products = new ArrayList<ReactionComponent>();
     List<ReactionComponent> substrates = new ArrayList<ReactionComponent>();
-    ReactionType rType = ReactionType.other;
-    // TODO: Reaction type must be set!!! How to distinguish between
-    // irreversible or reversible
 
     for (PhysicalEntity left : lefts) {
       EntryExtended keggEntry = parsePhysicalEntity(left, keggPW, m, species);
