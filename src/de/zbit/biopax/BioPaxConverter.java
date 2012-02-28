@@ -464,7 +464,7 @@ public class BioPaxConverter {
    * @param io
    * @return
    */
-  public Model getModel(InputStream io) {
+  public static Model getModel(InputStream io) {
     BioPAXIOHandler handler = new SimpleIOHandler();
     // TODO: check if level is level 3 or higher, because this class is
     // constructed to work for relations
@@ -478,7 +478,7 @@ public class BioPaxConverter {
    * @param file
    * @return
    */
-  public Model getModel(String file) {
+  public static Model getModel(String file) {
     InputStream io = null;
     try {
       io = new FileInputStream(new File(file));
@@ -486,7 +486,7 @@ public class BioPaxConverter {
       log.log(Level.SEVERE, "Could not parse file: " + file + ".", e);
     }
 
-    log.log(Level.INFO, "Model sucessfully created");
+    log.log(Level.CONFIG, "Model sucessfully created");
     return getModel(io);
   }
 
@@ -519,4 +519,5 @@ public class BioPaxConverter {
 
     return pathways;
   }
+  
 }
