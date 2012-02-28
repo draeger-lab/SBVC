@@ -904,9 +904,6 @@ public class BioPax2KGML extends BioPaxConverter {
       for (Relation rel : existingRels) {
         boolean relExists = true;
         if ((rel.getEntry1() == keggEntry1Id && rel.getEntry2() == keggEntry2Id)) {
-          relExists &= rel.isSetType() == (type != null);
-          if (relExists && type != null)
-            relExists &= (rel.getType().equals(type));
           
           if (relExists) {
             r = rel;
