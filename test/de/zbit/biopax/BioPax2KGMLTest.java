@@ -138,7 +138,7 @@ public class BioPax2KGMLTest {
     String bioCartaFile = System.getenv("BIOCARTA_FILE");
     
     List<String> fileList = new ArrayList<String>();
-    fileList.add(keggFolder + "hsa05014.xml");
+    fileList.add(keggFolder + "/hsa05014.xml");
     fileList.add(keggFolder + "/hsa04115.xml");
     fileList.add(keggFolder + "/hsa05210.xml");
     fileList.add(keggFolder + "/hsa05215.xml");
