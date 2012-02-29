@@ -699,7 +699,7 @@ public class BioPax2KGML extends BioPaxConverter {
       for (Controller controller : controllers) {
         if (PhysicalEntity.class.isAssignableFrom(controller.getClass())) {
           keggEntry1 = parsePhysicalEntity((PhysicalEntity) controller, keggPW, m, species);
-          relType = RelationType.ECrel;
+          relType = RelationType.PPrel;
         } else if (Pathway.class.isAssignableFrom(controller.getClass())) {
           keggEntry1 = createKEGGEntry((Entity) controller, keggPW, m, species, EntryType.map,
               null, ",", null);
@@ -736,7 +736,7 @@ public class BioPax2KGML extends BioPaxConverter {
                     for (ReactionComponent rc : r.getSubstrates()) {
                       createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtype);
                     }
-                  } else if (relType.equals(RelationType.ECrel) && r!=null) {
+                  } else if (relType.equals(RelationType.PPrel) && r!=null) {
                     keggEntry1.appendReaction(r.getName());
                   }  
                 }
@@ -904,7 +904,10 @@ public class BioPax2KGML extends BioPaxConverter {
       for (Relation rel : existingRels) {
         boolean relExists = true;
         if ((rel.getEntry1() == keggEntry1Id && rel.getEntry2() == keggEntry2Id)) {
-          
+          relExists &= rel.isSetType() == (type != null);
+          if (relExists && type != null)
+            relExists &= (rel.getType().equals(type));
+         
           if (relExists) {
             r = rel;
             boolean added = r.addSubtype(subType);

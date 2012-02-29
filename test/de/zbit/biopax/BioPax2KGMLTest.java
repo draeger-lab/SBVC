@@ -16,6 +16,7 @@
  */
 package de.zbit.biopax;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ import de.zbit.util.logging.OneLineFormatter;
 public class BioPax2KGMLTest {
   
   public static final Logger log = Logger.getLogger(BioPax2KGMLTest.class.getName());
-  
+  // Biocarta file with several pathways in one file
+  // bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
   private BioPax2KGML bc = null;
   
   public BioPax2KGMLTest(){
@@ -61,8 +63,7 @@ public class BioPax2KGMLTest {
   
   private void testCreateKGMLsFromBioPaxFile(String file) {
     Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
-    // test for pathway gene ids
-    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
+    // test for pathway gene ids    
     Model m = BioPaxConverter.getModel(file);
     bc.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "Goldbeter2008_Somite_Segmentation_Clock_Notch_Wnt_FGF");
   }
@@ -72,17 +73,17 @@ public class BioPax2KGMLTest {
    * Be carefull this method uses a {@link BioPax2KGML#getModel(String)} call where a local BioCarta file
    * of level 3 is needed. The file could be downloaded from http://pid.nci.nih.gov/download.shtml
    */
-  private void testGetPathwaysWithGeneID() {
+  private void testGetPathwaysWithGeneID(String file) {
     String species = "human";    
     // test for pathway gene ids
     //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
-    Model m = BioPaxConverter.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
+    Model m = BioPaxConverter.getModel(file);
     for (BioPaxPathwayHolder pw : bc.getPathwaysWithEntrezGeneID(species, m)) {
       System.out.println(pw.getRDFid() + "\t" + pw.getName());
     }
   }
   
-  private static void createExtendedKGML() {
+  private static void createExtendedKGML(List<String> fileList, String file) {
     FileHandler h = null;
     try {
       h = new FileHandler("relationsAdded.txt");
@@ -108,28 +109,7 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
 
-    Model m = BioPaxConverter.getModel("C:/Users/buechel/Downloads/BioCarta.bp3.owl");
-    List<String> fileList = new ArrayList<String>();
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05014.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa04115.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05210.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05215.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05152.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa04210.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa04110.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05219.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05222.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05200.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05016.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa04722.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05010.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05220.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05416.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05223.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05145.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05212.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa04380.xml");
-    fileList.add("C:/Users/buechel/Desktop/KGML_hsa/non-metabolic/hsa/hsa05160.xml");
+    Model m = BioPaxConverter.getModel(file);    
 
     for (String filename : fileList) {
       List<Pathway> pathways = null;
@@ -153,28 +133,41 @@ public class BioPax2KGMLTest {
    */
   public static void main(String[] args) throws FileNotFoundException {
     LogUtil.initializeLogging(Level.INFO);
+
+    String keggFolder = System.getenv("KEGG_FOLDER");
+    String bioCartaFile = System.getenv("BIOCARTA_FILE");
     
-    createExtendedKGML();
+    List<String> fileList = new ArrayList<String>();
+    fileList.add(keggFolder + "hsa05014.xml");
+    fileList.add(keggFolder + "/hsa04115.xml");
+    fileList.add(keggFolder + "/hsa05210.xml");
+    fileList.add(keggFolder + "/hsa05215.xml");
+    fileList.add(keggFolder + "/hsa05152.xml");
+    fileList.add(keggFolder + "/hsa04210.xml");
+    fileList.add(keggFolder + "/hsa04110.xml");
+    fileList.add(keggFolder + "/hsa05219.xml");
+    fileList.add(keggFolder + "/hsa05222.xml");
+    fileList.add(keggFolder + "/hsa05200.xml");
+    fileList.add(keggFolder + "/hsa05016.xml");
+    fileList.add(keggFolder + "/hsa04722.xml");
+    fileList.add(keggFolder + "/hsa05010.xml");
+    fileList.add(keggFolder + "/hsa05220.xml");
+    fileList.add(keggFolder + "/hsa05416.xml");
+    fileList.add(keggFolder + "/hsa05223.xml");
+    fileList.add(keggFolder + "/hsa05145.xml");
+    fileList.add(keggFolder + "/hsa05212.xml");
+    fileList.add(keggFolder + "/hsa04380.xml");
+    fileList.add(keggFolder + "/hsa05160.xml");
+    createExtendedKGML(fileList, bioCartaFile);
     
     if(true)return;
     
-    BioPax2KGMLTest bft = new BioPax2KGMLTest();
-
-    // Biocarta file with several pathways in one file
-    String file = "C:/Users/buechel/Downloads/BioCarta.bp3.owl";
-    bft.testCreateKGMLsFromBioCartaModel(file);
-   
-//    // Reactome file with several pathways in one file
-//    String file = "C:/Users/buechel/Downloads/ReactomePathways/Homo sapiens.owl";
-//    bft.testCreateKGMLsFromBioCartaModel(file);
-    
-//    // Singel Biomodels file of one pathway
-//    String file = "C:/Users/buechel/Dropbox/Uni/BioPax-SBML-Projekt/BIOMD0000000201-biopax3.owl";
-//    bft.testCreateKGMLsFromBioPaxFile("C:/Users/buechel/Dropbox/Uni/BioPax-SBML-Projekt/BIOMD0000000201-biopax3.owl");
+    BioPax2KGMLTest bft = new BioPax2KGMLTest();    
+    bft.testCreateKGMLsFromBioCartaModel(bioCartaFile);
 
     if(true)return;
    
-    bft.testGetPathwaysWithGeneID();
+    bft.testGetPathwaysWithGeneID(bioCartaFile);
 
   }  
 
