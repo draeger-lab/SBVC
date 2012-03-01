@@ -95,7 +95,9 @@ public class BioPax2KGMLTest {
     h.setFormatter(new OneLineFormatter());
     h.setFilter(new Filter() {
 
-      @Override
+      /* (non-Javadoc)
+       * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
+       */
       public boolean isLoggable(LogRecord record) {
         if ((record.getSourceClassName().equals(BioPax2KGML.class.getName()) || record
             .getLoggerName().equals(BioPax2KGML.class.getName()))
