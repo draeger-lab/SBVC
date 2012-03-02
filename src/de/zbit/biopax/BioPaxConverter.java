@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import org.biopax.paxtools.io.BioPAXIOHandler;
 import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
+import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
 import org.biopax.paxtools.model.level3.Complex;
 import org.biopax.paxtools.model.level3.ComplexAssembly;
@@ -63,6 +64,7 @@ public class BioPaxConverter {
 
   public static final Logger log = Logger.getLogger(BioPaxConverter.class.getName());
 
+
   /**
    * mapper to map gene symbols to gene ids
    */
@@ -76,10 +78,10 @@ public class BioPaxConverter {
   /**
    * This method maps the gene id to the gene symbol of the entered entity. This
    * method is not able to map complexes call for that the method
-   * {@link BioPax2KGML#getEntrezGeneIDsOfComplex(Complex, Map)} It's an
+   * {@link BioPaxL32KGML#getEntrezGeneIDsOfComplex(Complex, Map)} It's an
    * advantage to preprocess the entities to exclusively having entities with a
    * name call therefore the method
-   * {@link BioPax2KGML#getEntitiesWithName(Entity)}
+   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)}
    * 
    * The default for a gene id which is not found is -1
    * 
@@ -121,7 +123,7 @@ public class BioPaxConverter {
    * This method maps to all gene symbols of the entered entities the
    * corresponding gene id It's an advantage to preprocess the entities to
    * exclusively having entities with a name call therefore the method
-   * {@link BioPax2KGML#getEntitiesWithName(Entity)} This method also considers
+   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)} This method also considers
    * 
    * @link {@link Complex} classes. NOTE: the method is not so clean and should
    *       be rewritten!!
@@ -331,7 +333,7 @@ public class BioPaxConverter {
    * deteremines the gene ids of the elements in a pathway
    * 
    * This method is not so clean should be rewritten, becuase in the method
-   * {@link BioPax2KGML#getEntrezGeneIDsForPathways(List, String, Model)}
+   * {@link BioPaxL32KGML#getEntrezGeneIDsForPathways(List, String, Model)}
    * complexes are not treated right
    * 
    * @param pathways
@@ -466,13 +468,21 @@ public class BioPaxConverter {
    */
   public static Model getModel(InputStream io) {
     BioPAXIOHandler handler = new SimpleIOHandler();
-    // TODO: check if level is level 3 or higher, because this class is
-    // constructed to work for relations
     return handler.convertFromOWL(io);
   }
 
+  
   /**
-   * Calls the method {@link BioPax2KGML#getModel(InputStream) for an entered
+   * 
+   * @param m
+   * @return 
+   */
+  private static BioPAXLevel getBioPaxLevel(Model m) {    
+    return m.getLevel();
+  }
+
+  /**
+   * Calls the method {@link BioPaxL32KGML#getModel(InputStream) for an entered
    * owl file}
    * 
    * @param file
