@@ -19,48 +19,44 @@ package de.zbit.biopax;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.Model;
-import org.biopax.paxtools.model.level3.BioSource;
-import org.biopax.paxtools.model.level3.BiochemicalReaction;
-import org.biopax.paxtools.model.level3.Catalysis;
-import org.biopax.paxtools.model.level3.Complex;
-import org.biopax.paxtools.model.level3.ComplexAssembly;
-import org.biopax.paxtools.model.level3.Control;
-import org.biopax.paxtools.model.level3.ControlType;
-import org.biopax.paxtools.model.level3.Controller;
-import org.biopax.paxtools.model.level3.Conversion;
-import org.biopax.paxtools.model.level3.ConversionDirectionType;
-import org.biopax.paxtools.model.level3.Degradation;
-import org.biopax.paxtools.model.level3.Dna;
-import org.biopax.paxtools.model.level3.DnaRegion;
-import org.biopax.paxtools.model.level3.Entity;
-import org.biopax.paxtools.model.level3.Gene;
-import org.biopax.paxtools.model.level3.GeneticInteraction;
-import org.biopax.paxtools.model.level3.Interaction;
-import org.biopax.paxtools.model.level3.Modulation;
-import org.biopax.paxtools.model.level3.MolecularInteraction;
-import org.biopax.paxtools.model.level3.Pathway;
-import org.biopax.paxtools.model.level3.PhysicalEntity;
-import org.biopax.paxtools.model.level3.Protein;
-import org.biopax.paxtools.model.level3.RelationshipXref;
-import org.biopax.paxtools.model.level3.Rna;
-import org.biopax.paxtools.model.level3.RnaRegion;
-import org.biopax.paxtools.model.level3.SmallMolecule;
-import org.biopax.paxtools.model.level3.Stoichiometry;
-import org.biopax.paxtools.model.level3.TemplateReaction;
-import org.biopax.paxtools.model.level3.TemplateReactionRegulation;
-import org.biopax.paxtools.model.level3.Transport;
-import org.biopax.paxtools.model.level3.TransportWithBiochemicalReaction;
+import org.biopax.paxtools.model.level2.ControlType;
+import org.biopax.paxtools.model.level2.bioSource;
+import org.biopax.paxtools.model.level2.biochemicalReaction;
+import org.biopax.paxtools.model.level2.catalysis;
+import org.biopax.paxtools.model.level2.complex;
+import org.biopax.paxtools.model.level2.complexAssembly;
+import org.biopax.paxtools.model.level2.control;
+import org.biopax.paxtools.model.level2.conversion;
+import org.biopax.paxtools.model.level2.entity;
+import org.biopax.paxtools.model.level2.interaction;
+import org.biopax.paxtools.model.level2.modulation;
+import org.biopax.paxtools.model.level2.pathway;
+import org.biopax.paxtools.model.level2.pathwayComponent;
+import org.biopax.paxtools.model.level2.physicalEntity;
+import org.biopax.paxtools.model.level2.physicalEntityParticipant;
+import org.biopax.paxtools.model.level2.process;
+import org.biopax.paxtools.model.level2.protein;
+import org.biopax.paxtools.model.level2.relationshipXref;
+import org.biopax.paxtools.model.level2.rna;
+import org.biopax.paxtools.model.level2.sequenceEntity;
+import org.biopax.paxtools.model.level2.smallMolecule;
+import org.biopax.paxtools.model.level2.transport;
+import org.biopax.paxtools.model.level2.transportWithBiochemicalReaction;
 
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Graphics;
+import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.Reaction;
 import de.zbit.kegg.parser.pathway.ReactionComponent;
 import de.zbit.kegg.parser.pathway.ReactionType;
@@ -71,7 +67,6 @@ import de.zbit.kegg.parser.pathway.ext.GeneType;
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.parser.Species;
-import de.zbit.util.Utils;
 
 /**
  * This class works with PaxTools. It is used to fetch information out of a
@@ -81,9 +76,9 @@ import de.zbit.util.Utils;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public class BioPaxL32KGML extends BioPaxConverter {
+public class BioPaxL22KGML extends BioPaxConverter {
   
-  public static final Logger log = Logger.getLogger(BioPaxL32KGML.class.getName());
+  public static final Logger log = Logger.getLogger(BioPaxL22KGML.class.getName());
 
   static List<Species> allSpecies = null;
 
@@ -149,14 +144,14 @@ public class BioPaxL32KGML extends BioPaxConverter {
    */
   public void createKGMLsFromModel(Model m) {
     log.info("Creating for each pathway a KGML file.");
-    Set<Pathway> pathways = m.getObjects(Pathway.class);
+    Set<pathway> pathways = m.getObjects(pathway.class);
 
     String oldSpecies = "Homo sapiens", newSpecies = oldSpecies;
     Species species = new Species(oldSpecies, "_HUMAN", "human", "hsa", 9606);
     initalizeMappers(species);
 
-    int i = 0;
-    for (Pathway pathway : pathways) {
+//    int i = 0;
+    for (pathway pathway : pathways) {
 
 //      if (++i == 3) {
         // try {
@@ -169,14 +164,14 @@ public class BioPaxL32KGML extends BioPaxConverter {
         // create the pathway
         int number = getKeggPathwayNumber(pathway.getRDFId());
         de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-            "biocarta:" + number, getKEGGOrganism(pathway.getOrganism()), number,
-            pathway.getStandardName());
+            "biocarta:" + number, getKEGGOrganism(pathway.getORGANISM()), number,
+            pathway.getNAME());
 
         // determine the pathway organism
-        BioSource pwOrg = pathway.getOrganism();
+        bioSource pwOrg = pathway.getORGANISM();
         if (pwOrg != null) {          
-          if (pwOrg.getName() != null){
-            newSpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
+          if (pwOrg.getNAME() != null){
+            newSpecies = pwOrg.getNAME();
             if (!newSpecies.equals(oldSpecies)){
               species = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
               initalizeMappers(species);
@@ -187,8 +182,8 @@ public class BioPaxL32KGML extends BioPaxConverter {
 
         addImageLinkToKEGGpathway(species, pathway, keggPW);
 
-        for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
-          parseInteraction((Interaction) interaction, keggPW, m, species);
+        for (pathwayComponent interaction : pathway.getPATHWAY_COMPONENTS()) {
+          parseInteraction((interaction) interaction, keggPW, m, species);
         }
 
 
@@ -201,7 +196,7 @@ public class BioPaxL32KGML extends BioPaxConverter {
 
 
   /**
-   * firstly set {@link BioPaxL32KGML#augmentOriginalKEGGpathway} to true, 
+   * firstly set {@link BioPaxL22KGML#augmentOriginalKEGGpathway} to true, 
    * secondly a model from biocarta is created, and
    * thirdly all relations are added to p if entry1 and entry2 of the relation are in p too. 
    * 
@@ -215,20 +210,20 @@ public class BioPaxL32KGML extends BioPaxConverter {
     newAddedRelations = 0;
     selfRelation = 0;
     addedSubTypes = 0;
-    Set<Pathway> pathways = m.getObjects(Pathway.class);
+    Set<pathway> pathways = m.getObjects(pathway.class);
     Species species = Species.search(allSpecies, p.getOrg(), Species.KEGG_ABBR);
     if(species != null){
       initalizeMappers(species);
       
-      for (Pathway pathway : pathways) {    
+      for (pathway pathway : pathways) {    
         // determine the pathway organism
-        BioSource pwOrg = pathway.getOrganism();  
+        bioSource pwOrg = pathway.getORGANISM();  
         if (pwOrg != null) {
-          if (pwOrg.getName() != null) {
-            String pathwaySpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
+          if (pwOrg.getNAME() != null) {
+            String pathwaySpecies = pwOrg.getNAME();
             if (pathwaySpecies.equals(species.getScientificName())) {
-              for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
-                parseInteraction((Interaction) interaction, p, m, species);
+              for (pathwayComponent interaction : pathway.getPATHWAY_COMPONENTS()) {
+                parseInteraction((interaction) interaction, p, m, species);
               }      
             } else {
               log.log(Level.WARNING, "No additional information available for species '" + 
@@ -258,9 +253,9 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param pathway
    * @param keggPW
    */
-  public void addImageLinkToKEGGpathway(Species species, Pathway pathway,
+  public void addImageLinkToKEGGpathway(Species species, pathway pathway,
       de.zbit.kegg.parser.pathway.Pathway keggPW) {
-    String linkName = getNameWithoutBlanks(pathway.getName());
+    String linkName = pathway.getNAME();
     if (!linkName.equals("") && linkName.contains("pathway")) {
       linkName = linkName.replace("pathway", "Pathway");
 
@@ -293,37 +288,12 @@ public class BioPaxL32KGML extends BioPaxConverter {
     de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
         pathwayName, species.getKeggAbbr(), pathNo, pathwayStandardName);
 
-    for (Entity entity : m.getObjects(Entity.class)) {
+    for (entity entity : m.getObjects(entity.class)) {
       parseEntity(entity, keggPW, m, species);
     }
 
     KGMLWriter.writeKGML(keggPW);
   }
-
-  /**
-   * returns name of the set without blanks 
-   * 
-   * @param 
-   * @return name
-   */
-  private String getNameWithoutBlanks(Set<String> names) {
-    String link = "";
-
-    if (names != null && names.size() > 0) {
-      List<String> names2 = Utils.getListOfCollection(names);
-      for (int i = names2.size() - 1; i > 0; i--) {
-        link = names2.get(i);
-        if (link.length()>0 && !link.contains(" "))
-          return link;
-      }
-    }
-
-    return link;
-  }
-
-
-
-  
 
   /**
    * parse a BioPax entity element
@@ -335,17 +305,13 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param species
    * @return
    */
-  private Entry parseEntity(Entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
+  private Entry parseEntity(entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
     Entry keggEntry = null;
-    if (PhysicalEntity.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = parsePhysicalEntity((PhysicalEntity) entity, keggPW, m, species);
-    } else if (Interaction.class.isAssignableFrom(entity.getClass())) {
-      parseInteraction((Interaction) entity, keggPW, m, species);
-    } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
+    if (physicalEntity.class.isAssignableFrom(entity.getClass())) {
+      keggEntry = parsePhysicalEntity((physicalEntity) entity, keggPW, m, species);
+    } else if (pathway.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null);
-    } else if (Gene.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, null, ",", null);
     } else {
       log.severe("Unknonw entity type: " + entity.getModelInterface() + "-" + entity.getRDFId());
       System.exit(1);
@@ -363,31 +329,25 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param species
    * @return
    */
-  private Entry parsePhysicalEntity(PhysicalEntity entity,
+  private Entry parsePhysicalEntity(physicalEntity entity,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     Entry keggEntry = null;
 
-    if (Gene.class.isAssignableFrom(Complex.class)) {
-      List<Integer> components = createComplexComponentList(((Complex) entity).getComponent(),
+    if (complex.class.isAssignableFrom(entity.getClass())) {
+      List<Integer> components = createComplexComponentList(((complex) entity).getCOMPONENTS(),
           keggPW, m, species);
-      keggEntry = createKEGGEntry((Entity) entity, keggPW, m, species, EntryType.group, null, "/",
+      keggEntry = createKEGGEntry((entity) entity, keggPW, m, species, EntryType.group, null, "/",
           components);
-    } else if (Dna.class.isAssignableFrom(entity.getClass())) {
+    } else if (sequenceEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.dna, ",",
           null);
-    } else if (DnaRegion.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.dna_region,
-          ",", null);
-    } else if (Protein.class.isAssignableFrom(entity.getClass())) {
+    } else if (protein.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.protein,
           ",", null);
-    } else if (Rna.class.isAssignableFrom(entity.getClass())) {
+    } else if (rna.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.rna, ",",
           null);
-    } else if (RnaRegion.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.rna_region,
-          ",", null);
-    } else if (SmallMolecule.class.isAssignableFrom(entity.getClass())) {
+    } else if (smallMolecule.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, GeneType.unknown,
           ",", null);
     } else {
@@ -402,18 +362,18 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * Creates a list of all complex entities. Each entity is checked if it
    * already exists in the KEGG pathway and if not it is created. to
    * 
-   * @param complexEntries
+   * @param set
    * @param keggPW
    * @param m
    * @param species
    * @return
    */
-  private List<Integer> createComplexComponentList(Set<PhysicalEntity> complexEntries,
+  private List<Integer> createComplexComponentList(Set<physicalEntityParticipant> set,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     List<Integer> components = new ArrayList<Integer>();
 
-    for (PhysicalEntity physicalEntity : complexEntries) {
-      Entry keggEntry = parsePhysicalEntity(physicalEntity, keggPW, m, species);
+    for (physicalEntityParticipant physicalEntity : set) {
+      Entry keggEntry = parsePhysicalEntity(physicalEntity.getPHYSICAL_ENTITY(), keggPW, m, species);
       if (keggEntry != null)
         components.add(keggEntry.getId());
     }
@@ -445,8 +405,113 @@ public class BioPaxL32KGML extends BioPaxConverter {
   }
 
   /**
+   * This method maps the gene id to the gene symbol of the entered entity. This
+   * method is not able to map complexes call for that the method
+   * {@link BioPaxL32KGML#getEntrezGeneIDsOfComplex(Complex, Map)} It's an
+   * advantage to preprocess the entities to exclusively having entities with a
+   * name call therefore the method
+   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)}
+   * 
+   * The default for a gene id which is not found is -1
+   * 
+   * @param entity
+   * @param xrefs
+   * @return
+   */
+  protected static int getEntrezGeneID(entity entity, Map<String, relationshipXref> xrefs) {
+    Integer geneID = -1;
+    String id = entity.getRDFId();
+
+    // gene id in xrefs?
+    if (xrefs.containsKey(id)) {
+      geneID = getEntrezGeneIDFromDBxref(xrefs.get(id));
+    }
+
+    if (geneID != -1) {
+      // gene id found directly
+      log.log(Level.FINER, "found: " + entity.getRDFId() + " " + geneID);
+      return geneID;
+    } else {
+      // we have to search the gene id with the gene symbol, adding symbol to
+      // the gene symbol set
+      String name = entity.getNAME();
+      if (name != null) {
+        Map<String, entity> geneSymbols = new HashMap<String, entity>();
+        
+          geneSymbols.put(name, entity);
+
+        if (getEntrezGeneIDOverGeneSymbol(geneSymbols).get(entity) != null)
+          geneID = getEntrezGeneIDOverGeneSymbol(geneSymbols).get(entity).intValue();
+      }
+    }
+
+    return geneID;
+  }
+  
+  /**
+   * 
+   * @param xref
+   * @return Integer of the entered xref or null
+   */
+  public static Integer getEntrezGeneIDFromDBxref(relationshipXref xref) {
+    if (xref.getDB().equals("LL")) {
+      log.info(xref.getRDFId() + "|" + xref.getID());
+      return Integer.parseInt(xref.getID());
+    } else {
+      return null;
+    }
+  }  
+
+  /**
+   * Maps the entered gene symbol names to a geneID
+   * 
+   * @param geneSymbolMapper
+   *          {@link GeneSymbol2GeneIDMapper}
+   * @param nameSet
+   *          with names of one {@link BioPAXElement} element
+   * @return the gene id o
+   */
+  private static Map<entity, Integer> getEntrezGeneIDOverGeneSymbol(Map<String, entity> nameSet) {
+    log.finest("getGeneIDOverGeneSymbol");
+    Map<entity, Integer> geneIDs = new HashMap<entity, Integer>();
+    Integer geneID = null;
+
+    for (java.util.Map.Entry<String, entity> symbol : nameSet.entrySet()) {
+      try {
+        geneID = geneSymbolMapper.map(symbol.getKey());
+      } catch (Exception e) {
+        log.log(Level.WARNING, "Error while mapping name: " + symbol.getKey() + ".", e);
+      }
+
+      if (geneID != null) {
+        log.log(Level.FINER, "----- found! Geneid: " + geneID + " " + symbol.getValue().getRDFId()
+            + " " + symbol.getKey());
+        geneIDs.put(symbol.getValue(), geneID);
+        break;
+      } else if (symbol.getKey().contains("-")) {
+        log.log(Level.FINER,
+            "recall for symbol: " + symbol.getValue().getRDFId() + " " + symbol.getKey());
+        Map<String, entity> set = new HashMap<String, entity>();
+        set.put(symbol.getKey().replace("-", ""), symbol.getValue());
+        geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(set));
+      } else if (symbol.getKey().contains(" ")) {
+        log.log(Level.FINER,
+            "recall for symbol: " + symbol.getValue().getRDFId() + " " + symbol.getKey());
+        Map<String, entity> set = new HashMap<String, entity>();
+        set.put(symbol.getKey().replace(" ", "_"), symbol.getValue());
+        geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(set));
+      } else {
+        log.log(Level.FINER,
+            "----- not found " + symbol.getValue().getRDFId() + " " + symbol.getKey());
+      }
+    }
+
+    return geneIDs;
+  }
+  
+  /**
    * Adds the created {@link Entry} to the
-   * {@link BioPaxL32KGML#bc2KeggEntry} map and to the
+   * {@link BioPaxL22KGML#bc2KeggEntry} map and to the
    * {@link de.zbit.kegg.parser.pathway.Pathway}
    * 
    * @param entity
@@ -455,14 +520,14 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param m
    * @return
    */
-  private Entry createKEGGEntry(Entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
+  private Entry createKEGGEntry(entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species, EntryType eType, GeneType gType, String graphNameSeparator,
       List<Integer> components) {
     Entry keggEntry;
 
     // creating new KEGG entry
     String keggname = null;
-    Integer geneID = getEntrezGeneID(entity, getMapFromSet(m.getObjects(RelationshipXref.class)));
+    Integer geneID = getEntrezGeneID(entity, getMapFromSet(m.getObjects(relationshipXref.class)));
     if (geneID != -1) {
       keggname = mapGeneIDToKEGGID(geneID, species);
     } else {
@@ -470,19 +535,14 @@ public class BioPaxL32KGML extends BioPaxConverter {
     }
 
     String graphName = "";
-    Set<String> names = entity.getName();
-    StringBuffer name = new StringBuffer();
-    if (names != null && names.size() > 0) {
-      for (String n : names) {
-        n = n.trim();
-        n = n.replace(" ", "_");
-        name.append(n);
-        name.append(graphNameSeparator);
-        name.append(" ");
-      }
-      name.delete(name.length() - 2, name.length() - 1);
+    String names = entity.getNAME();
+    if (names != null) {
+      
+      names = names.trim();
+      names = names.replace(" ", "_");
+
     }
-    graphName = name.toString().trim();
+    graphName = names;
 
     Graphics graphics = null;
     if (eType.equals(EntryType.map))
@@ -533,80 +593,16 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param m
    * @param species
    */
-  private void parseInteraction(Interaction entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
+  private void parseInteraction(interaction entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
-    if (Control.class.isAssignableFrom(entity.getClass())) {
-      parseControl((Control) entity, keggPW, m, species);
-    } else if (Conversion.class.isAssignableFrom(entity.getClass())) {
-      parseConversion((Conversion) entity, keggPW, m, species);
-    } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelationForParticipantList(
-          Utils.getListOfCollection(((GeneticInteraction) entity).getParticipant()), keggPW, m,
-          species, RelationType.GErel, new SubType(SubType.ASSOCIATION));
-    } else if (MolecularInteraction.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelationForParticipantList(
-          Utils.getListOfCollection(((MolecularInteraction) entity).getParticipant()), keggPW, m,
-          species, RelationType.PPrel, new SubType(SubType.INDIRECT_EFFECT));
-    } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelationForTemplateReaction((TemplateReaction) entity, keggPW, m, species);
-    } else {
+    if (control.class.isAssignableFrom(entity.getClass())) {
+      parseControl((control) entity, keggPW, m, species);
+    } else if (conversion.class.isAssignableFrom(entity.getClass())) {
+      parseConversion((conversion) entity, keggPW, m, species);
+    } else {      
       log.log(Level.SEVERE, "Unknown interaction type: " + entity.getModelInterface() + ".");
-      System.exit(1);
+//      System.exit(1); 
     }
-  }
-
-  /**
-   * defines the interaction between two or more genes
-   * 
-   * @param entity
-   * @param keggPW
-   * @param m
-   * @param species
-   */
-  private void createKEGGRelationForParticipantList(List<Entity> participants,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, RelationType relType,
-      SubType subType) {
-    // interactionType (0 or 1)
-
-    // Participant (2 or more)
-    for (int i = 0; i <= participants.size() - 1; i++) {
-      for (int j = i + 1; j <= participants.size(); j++) {
-        Entry keggEntry1 = createKEGGEntry((Gene) participants.get(i), keggPW, m, species,
-            EntryType.gene, null, ",", null);
-        Entry keggEntry2 = createKEGGEntry((Gene) participants.get(j), keggPW, m, species,
-            EntryType.gene, null, ",", null);
-        if (keggEntry1!=null && keggEntry2!=null)
-          createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), relType, subType);
-      }
-    }
-
-    // interactionScore (0 or more) - up to now ignored
-
-    // phenotype (1) - up to now ignored
-  }
-
-  /**
-   * describes the production of a protein, mRNA, DNA
-   * 
-   * @param entity
-   * @param keggPW
-   * @param m
-   * @param species
-   */
-  private Relation createKEGGRelationForTemplateReaction(TemplateReaction entity,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
-    Relation rel = null;
-    for (PhysicalEntity product : entity.getProduct()) {
-      // XXX: Not sure if this is completely right to model this as an relation
-      // to itself
-      Entry keggEntry = parsePhysicalEntity(product, keggPW, m, species);
-      
-      if (keggEntry !=null)
-        rel = createKEGGRelation(keggPW, keggEntry.getId(), keggEntry.getId(), RelationType.GErel,
-          new SubType(SubType.EXPRESSION));
-    }
-
-    return rel;
   }
 
   /**
@@ -618,25 +614,21 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param m
    * @param species
    */
-  private void parseControl(Control entity, de.zbit.kegg.parser.pathway.Pathway keggPW, Model m,
+  private void parseControl(control entity, de.zbit.kegg.parser.pathway.Pathway keggPW, Model m,
       Species species) {
-    if (Catalysis.class.isAssignableFrom(entity.getClass())) {
-      createKEGGReactionRelation(((Catalysis) entity).getController(),
-          ((Catalysis) entity).getControlled(), getSubtype(((Catalysis) entity).getControlType()),
+    if (catalysis.class.isAssignableFrom(entity.getClass())) {
+      createKEGGReactionRelation(((catalysis) entity).getCONTROLLER(),
+          ((catalysis) entity).getCONTROLLED(), getSubtype(((catalysis) entity).getCONTROL_TYPE()),
           keggPW, m, species);
-    } else if (TemplateReactionRegulation.class.isAssignableFrom(entity.getClass())) {
-      createKEGGReactionRelation(((TemplateReactionRegulation) entity).getController(),
-          ((TemplateReactionRegulation) entity).getControlled(),
-          getSubtype(((TemplateReactionRegulation) entity).getControlType()), keggPW, m, species);
-    } else if (Modulation.class.isAssignableFrom(entity.getClass())) {
-      createKEGGReactionRelation(((Modulation) entity).getController(),
-          ((Modulation) entity).getControlled(),
-          getSubtype(((Modulation) entity).getControlType()), keggPW, m, species);
+    } else if (modulation.class.isAssignableFrom(entity.getClass())) {
+      createKEGGReactionRelation(((modulation) entity).getCONTROLLER(),
+          ((modulation) entity).getCONTROLLED(),
+          getSubtype(((modulation) entity).getCONTROL_TYPE()), keggPW, m, species);
     } else {
-      createKEGGReactionRelation(((Control) entity).getController(),
-          ((Control) entity).getControlled(), getSubtype(((Control) entity).getControlType()),
+      createKEGGReactionRelation(((control) entity).getCONTROLLER(),
+          ((control) entity).getCONTROLLED(), getSubtype(((control) entity).getCONTROL_TYPE()),
           keggPW, m, species);
-    }
+    } 
   }
 
   /**
@@ -690,55 +682,42 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param species
    * @return
    */
-  private Entry createKEGGReactionRelation(Set<Controller> controllers,
-      Set<org.biopax.paxtools.model.level3.Process> controlleds, SubType subtype,
+  private Entry createKEGGReactionRelation(Set<physicalEntityParticipant> controllers,
+      Set<process> controlleds, SubType subtype,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     Entry keggEntry1 = null;
     RelationType relType = null;
 
     if (controllers.size() >= 1) {
-      for (Controller controller : controllers) {
-        if (PhysicalEntity.class.isAssignableFrom(controller.getClass())) {
-          keggEntry1 = parsePhysicalEntity((PhysicalEntity) controller, keggPW, m, species);
-          relType = RelationType.PPrel;
-        } else if (Pathway.class.isAssignableFrom(controller.getClass())) {
-          keggEntry1 = createKEGGEntry((Entity) controller, keggPW, m, species, EntryType.map,
-              null, ",", null);
+      for (physicalEntityParticipant controller : controllers) {
+        keggEntry1 = parseEntity(controller.getPHYSICAL_ENTITY(), keggPW, m, species);
+        
+        if(keggEntry1.getType().equals(EntryType.map)){
           relType = RelationType.maplink;
         } else {
-          log.severe("Controller: " + controller.getModelInterface() + "-This should not happen!");
-          System.exit(1);
+          relType = RelationType.PPrel;
         }
 
         if (keggEntry1 != null && controlleds.size() > 0) {
-          for (org.biopax.paxtools.model.level3.Process process : controlleds) {
-            if (Conversion.class.isAssignableFrom(process.getClass())) {
-              Conversion con = (Conversion) process;
-              if (BiochemicalReaction.class.isAssignableFrom(con.getClass())
-                  || ComplexAssembly.class.isAssignableFrom(con.getClass()) 
-                  || TransportWithBiochemicalReaction.class.isAssignableFrom(con.getClass())) {
+          for (process process : controlleds) {
+            if (conversion.class.isAssignableFrom(process.getClass())) {
+              conversion con = (conversion) process;
+              if (biochemicalReaction.class.isAssignableFrom(con.getClass())
+                  || complexAssembly.class.isAssignableFrom(con.getClass())
+                  || transportWithBiochemicalReaction.class.isAssignableFrom(con.getClass())) {
                 if (!augmentOriginalKEGGpathway) {
                   Reaction r = null;
                   try {
-                    r = createKEGGReaction(((BiochemicalReaction) con).getLeft(),
-                        ((BiochemicalReaction) con).getRight(),
-                        Utils.getListOfCollection(((BiochemicalReaction) con)
-                            .getParticipantStoichiometry()), keggPW, m, species,
-                            getReactionType(con.getConversionDirection()));
+                    r = createKEGGReaction(((biochemicalReaction) con).getLEFT(),
+                        ((biochemicalReaction) con).getRIGHT(), keggPW, m, species);
 
                   } catch (ClassCastException e) {
                     try {
-                      r = createKEGGReaction(((ComplexAssembly) con).getLeft(),
-                          ((ComplexAssembly) con).getRight(),
-                          Utils.getListOfCollection(((ComplexAssembly) con)
-                              .getParticipantStoichiometry()), keggPW, m, species,
-                              getReactionType(con.getConversionDirection()));
+                      r = createKEGGReaction(((complexAssembly) con).getLEFT(),
+                          ((complexAssembly) con).getRIGHT(), keggPW, m, species);
                     } catch (ClassCastException e2) {
-                      r = createKEGGReaction(((TransportWithBiochemicalReaction) con).getLeft(),
-                          ((TransportWithBiochemicalReaction) con).getRight(),
-                          Utils.getListOfCollection(((TransportWithBiochemicalReaction) con)
-                              .getParticipantStoichiometry()), keggPW, m, species,
-                              getReactionType(con.getConversionDirection()));
+                      r = createKEGGReaction(((transportWithBiochemicalReaction) con).getLEFT(),
+                          ((transportWithBiochemicalReaction) con).getRIGHT(), keggPW, m, species);
                     }
                   }
 
@@ -750,17 +729,9 @@ public class BioPaxL32KGML extends BioPaxConverter {
                     keggEntry1.appendReaction(r.getName());
                   }  
                 }
-              } else if (Transport.class.isAssignableFrom(con.getClass())) {
-                List<Relation> rels = createKEGGRelations(((Transport) con).getLeft(),
-                    ((Transport) con).getRight(), keggPW, m, species, RelationType.PPrel, 
-                    new SubType(SubType.STATE_CHANGE));                
-                for (Relation rel : rels) {
-                  if (rel !=null)
-                    createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype);
-                }
-              } else if (Degradation.class.isAssignableFrom(con.getClass())) {
-                List<Relation> rels = createKEGGRelations(((Degradation) con).getLeft(),
-                    ((Transport) con).getRight(), keggPW, m, species, RelationType.PPrel, 
+              } else if (transport.class.isAssignableFrom(con.getClass())) {
+                List<Relation> rels = createKEGGRelations(((transport) con).getLEFT(),
+                    ((transport) con).getRIGHT(), keggPW, m, species, RelationType.PPrel, 
                     new SubType(SubType.STATE_CHANGE));                
                 for (Relation rel : rels) {
                   if (rel !=null)
@@ -771,18 +742,25 @@ public class BioPaxL32KGML extends BioPaxConverter {
                     + "'");
                 System.exit(1);
               }
-            } else if (Pathway.class.isAssignableFrom(process.getClass())) {
-              Entry keggEntry2 = createKEGGEntry((Pathway) process, keggPW, m, species,
+            } else if (pathway.class.isAssignableFrom(process.getClass())) {
+              Entry keggEntry2 = createKEGGEntry((pathway) process, keggPW, m, species,
                   EntryType.map, null, ",", null);
               if (keggEntry2 !=null)
                 createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
                   relType, subtype);
-            } else if (TemplateReaction.class.isAssignableFrom(process.getClass())) {
-              Relation rel = createKEGGRelationForTemplateReaction((TemplateReaction) process,
-                  keggPW, m, species);
-              if (rel != null) {
-                createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType,
-                    subtype);
+            } else if (interaction.class.isAssignableFrom(process.getClass())) {
+              interaction inter = ((interaction)process); 
+              if (inter.getPARTICIPANTS().size() == 0 && !inter.getNAME().isEmpty()){
+                
+                Entry keggEntry2 = new Entry(keggPW, getKeggEntryID(), getKEGGUnkownName(), 
+                    EntryType.map, Graphics.createGraphicsForPathwayReference(inter.getNAME()));
+                keggPW.addEntry(keggEntry2); //TODO: check if it exists
+                if (keggEntry2 !=null)
+                  createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
+                    relType, subtype);
+              } else {
+                System.out.println("interaction from reaction relation creation: " +
+                inter.getPARTICIPANTS().size() + " " + inter.getNAME());
               }
             } else {
               log.severe("Process: " + process.getModelInterface() + "-This should not happen!");
@@ -804,27 +782,6 @@ public class BioPaxL32KGML extends BioPaxConverter {
   }
 
   /**
-   * returns teh appropriate KEGG ReactionType to the ConverstionDirectionType
-   * @param conversionDirection
-   * @return
-   */
-  private ReactionType getReactionType(ConversionDirectionType conversionDirection) {
-    if (conversionDirection != null){
-      switch (conversionDirection) {
-        case LEFT_TO_RIGHT:
-          return ReactionType.irreversible;
-        case RIGHT_TO_LEFT:
-          return ReactionType.irreversible;
-        case REVERSIBLE:
-          return ReactionType.reversible;
-        default:
-          return ReactionType.other;
-      }  
-    }
-    return ReactionType.other;
-  }
-
-  /**
    * parse a BioPax Conversion element
    * 
    * @param entity
@@ -832,34 +789,25 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * @param species
    * @param m
    */
-  private void parseConversion(Interaction entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
+  private void parseConversion(interaction entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
-    if (ComplexAssembly.class.isAssignableFrom(entity.getClass())) {
+    if (complexAssembly.class.isAssignableFrom(entity.getClass())) {
       if  (!augmentOriginalKEGGpathway)
-        createKEGGReaction(((ComplexAssembly) entity).getLeft(),
-          ((ComplexAssembly) entity).getRight(),
-          Utils.getListOfCollection(((ComplexAssembly) entity).getParticipantStoichiometry()),
-          keggPW, m, species, getReactionType(((ComplexAssembly) entity).getConversionDirection()));
-    } else if (BiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
+        createKEGGReaction(((complexAssembly) entity).getLEFT(),
+          ((complexAssembly) entity).getRIGHT(), keggPW, m, species);
+    } else if (biochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       if  (!augmentOriginalKEGGpathway)
-        createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
-          ((BiochemicalReaction) entity).getRight(),
-          Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
-          keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
-    } else if (Degradation.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelations(((Degradation) entity).getLeft(), ((Degradation) entity).getRight(),
-          keggPW, m, species, RelationType.PPrel, new SubType(SubType.STATE_CHANGE));
-    } else if (Transport.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelations(((Transport) entity).getLeft(), ((Transport) entity).getRight(), keggPW,
+        createKEGGReaction(((biochemicalReaction) entity).getLEFT(),
+          ((biochemicalReaction) entity).getRIGHT(), keggPW, m, species);
+    } else if (transport.class.isAssignableFrom(entity.getClass())) {
+      createKEGGRelations(((transport) entity).getLEFT(), ((transport) entity).getRIGHT(), keggPW,
           m, species, RelationType.PPrel, new SubType(SubType.STATE_CHANGE));
-    } else if (TransportWithBiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
+    } else if (transportWithBiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       if  (!augmentOriginalKEGGpathway)
         // BiochemicalReaction br = (TransportWithBiochemicalReaction) entity;
         // deltaG, deltaH, deltaS, ec, and KEQ are ignored
-        createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
-          ((BiochemicalReaction) entity).getRight(),
-          Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
-          keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
+        createKEGGReaction(((biochemicalReaction) entity).getLEFT(),
+          ((biochemicalReaction) entity).getRIGHT(), keggPW, m, species);
     } else {
       log.warning("Unknown kind of Conversion: " + entity.getModelInterface() + "-"
           + entity.getRDFId());
@@ -869,32 +817,33 @@ public class BioPaxL32KGML extends BioPaxConverter {
   /**
    * This method is called to create for two PhysicalEntitiy sets relations
    * 
-   * @param lefts
-   * @param rights
+   * @param set
+   * @param set2
    * @param keggPW
    * @param m
    * @param species
    * @param type
    * @return
    */
-  private List<Relation> createKEGGRelations(Set<PhysicalEntity> lefts, Set<PhysicalEntity> rights,
+  private List<Relation> createKEGGRelations(Set<physicalEntityParticipant> set, Set<physicalEntityParticipant> set2,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, RelationType type, 
       SubType subType) {
 
     List<Relation> relations = new ArrayList<Relation>();
 
-    for (PhysicalEntity left : lefts) {
-      Entry keggEntry1 = parsePhysicalEntity(left, keggPW, m, species);
+    for (physicalEntityParticipant left : set) {     
+      Entry keggEntry1 = parseEntity(left.getPHYSICAL_ENTITY(), keggPW, m, species);
+      
       if (keggEntry1 !=null){
-        for (PhysicalEntity right : rights) {
-          Entry keggEntry2 = parsePhysicalEntity(right, keggPW, m, species);
+        for (physicalEntityParticipant right : set2) {
+          Entry keggEntry2 = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, species);
           if (keggEntry1 !=null){
             Relation r = createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), type, subType);
             if (!relations.contains(r))
               relations.add(r);  
           }          
         }  
-      }      
+      }    
     }
 
     return relations;
@@ -967,43 +916,29 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * added to the pathway
    * 
    * @param entity
+   * @param list
    * @param keggPW
    * @param m
-   * @param species
    */
-  private Reaction createKEGGReaction(Set<PhysicalEntity> lefts, Set<PhysicalEntity> rights,
-      List<Stoichiometry> stoichiometry, de.zbit.kegg.parser.pathway.Pathway keggPW, Model m,
-      Species species, ReactionType rType) {
+  private Reaction createKEGGReaction(Set<physicalEntityParticipant> set, Set<physicalEntityParticipant> set2,
+      Pathway keggPW, Model m, Species species) {
     List<ReactionComponent> products = new ArrayList<ReactionComponent>();
     List<ReactionComponent> substrates = new ArrayList<ReactionComponent>();
 
-    for (PhysicalEntity left : lefts) {
-      Entry keggEntry = parsePhysicalEntity(left, keggPW, m, species);
+    for (physicalEntityParticipant left : set) {
+      Entry keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, species);
+         
       if (keggEntry != null) {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
-
-        for (Stoichiometry stoichi : stoichiometry) {
-          if (stoichi.getPhysicalEntity().equals(left)) {
-            rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
-            break;
-          }
-        }
         substrates.add(rc);
   
       }
     }
-
-    for (PhysicalEntity right : rights) {
-      Entry keggEntry = parsePhysicalEntity(right, keggPW, m, species);
+    
+    for (physicalEntityParticipant right : set2) {
+      Entry keggEntry = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, species);
       if (keggEntry != null) {
-        ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
-
-        for (Stoichiometry stoichi : stoichiometry) {
-          if (stoichi.getPhysicalEntity().equals(right)) {
-            rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
-            break;
-          }
-        }
+        ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());        
         products.add(rc);
   
       }
@@ -1015,7 +950,7 @@ public class BioPaxL32KGML extends BioPaxConverter {
       List<ReactionComponent> existingProds = existingReact.getProducts();
       List<ReactionComponent> extistingSubs = existingReact.getSubstrates();
 
-      if (existingReact.getType().equals(rType) && existingProds.size() == products.size()
+      if (existingReact.getType().equals(species) && existingProds.size() == products.size()
           && extistingSubs.size() == substrates.size()) {
         boolean allReactantsIn = true;
 
@@ -1056,8 +991,8 @@ public class BioPaxL32KGML extends BioPaxConverter {
   /**
    * 
    * @return the new KEGG reaction name "rn:unknownx", whereas x is set to the
-   *         {@link BioPaxL32KGML#keggReactionID}.
-   *         {@link BioPaxL32KGML#keggReactionID} is augmented after this step
+   *         {@link BioPaxL22KGML#keggReactionID}.
+   *         {@link BioPaxL22KGML#keggReactionID} is augmented after this step
    */
   private String getReactionName() {
     return "rn:unknown" + String.valueOf(++keggReactionID);
@@ -1066,7 +1001,7 @@ public class BioPaxL32KGML extends BioPaxConverter {
   /**
    * 
    * @return the new KEGG unknonw "unknownx", whereas x is set to the
-   *         {@link BioPaxL32KGML#keggUnknownNo}.{@link BioPaxL32KGML#keggUnknownNo}
+   *         {@link BioPaxL22KGML#keggUnknownNo}.{@link BioPaxL22KGML#keggUnknownNo}
    *         is incremented after this step
    */
   private String getKEGGUnkownName() {
@@ -1077,7 +1012,7 @@ public class BioPaxL32KGML extends BioPaxConverter {
    * The rdfID is in the format: http://pid.nci.nih.gov/biopaxpid_9717
    * 
    * From this id the number is excluded and used as pathway number, if this is
-   * not possible the {@link BioPaxL32KGML#keggPathwayNumberCounter} is used and
+   * not possible the {@link BioPaxL22KGML#keggPathwayNumberCounter} is used and
    * incremented
    * 
    * @param rdfId
@@ -1098,7 +1033,7 @@ public class BioPaxL32KGML extends BioPaxConverter {
 
   /**
    * 
-   * @return a unique {@link BioPaxL32KGML#keggEntryID}.
+   * @return a unique {@link BioPaxL22KGML#keggEntryID}.
    */
   private int getKeggEntryID() {
     keggEntryID++;
@@ -1108,16 +1043,16 @@ public class BioPaxL32KGML extends BioPaxConverter {
   /**
    * returns for a given species the KEGG abbreviation, up to now exclusively
    * homo sapiens and mus musculus are encoded. The default value is
-   * {@link BioPaxL32KGML#organism}
+   * {@link BioPaxL22KGML#organism}
    * 
    * @param org
    * @return
    */
-  private String getKEGGOrganism(BioSource org) {
-    if (org != null && org.getStandardName() != null) {
-      if (org.getStandardName().equals("Homo sapiens")) {
+  private String getKEGGOrganism(bioSource org) {
+    if (org != null && org.getNAME() != null) {
+      if (org.getNAME().equals("Homo sapiens")) {
         return "hsa";
-      } else if (org.getStandardName().equals("Mus musculus")) {
+      } else if (org.getNAME().equals("Mus musculus")) {
         return "mmu";
       }
     }
@@ -1125,8 +1060,8 @@ public class BioPaxL32KGML extends BioPaxConverter {
   }
 
   /**
-   * The {@link BioPaxL32KGML}{@link #geneSymbolMapper} and
-   * {@link BioPaxL32KGML#geneIDKEGGmapper} are initalized for the entered species
+   * The {@link BioPaxL22KGML}{@link #geneSymbolMapper} and
+   * {@link BioPaxL22KGML#geneIDKEGGmapper} are initalized for the entered species
    * 
    * @param species
    */
