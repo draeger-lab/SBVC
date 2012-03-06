@@ -55,7 +55,7 @@ public class BioPax2KGMLTest {
   
 
   private void testCreateKGMLsFromBioCartaModel(String file) {
-    Model m = BioPaxConverter.getModel(file);
+    Model m = BioPax2KGML.getModel(file);
     if (m.getLevel().equals(BioPAXLevel.L2)) {
       bc2.createKGMLsFromModel(m);
     } else if (m.getLevel().equals(BioPAXLevel.L3)){
@@ -66,11 +66,12 @@ public class BioPax2KGMLTest {
   private void testCreateKGMLsFromBioPaxFile(String file) {
     Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
     // test for pathway gene ids    
-    Model m = BioPaxConverter.getModel(file);
-    System.out.println(m.getLevel());
-//    bc.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
-    BioPaxL22KGML bbc = new BioPaxL22KGML();
-    bbc.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
+    Model m = BioPax2KGML.getModel(file);
+    if (m.getLevel().equals(BioPAXLevel.L2)) {
+      bc2.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
+    } else if (m.getLevel().equals(BioPAXLevel.L3)){
+      bc3.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
+    }
   }
   
   /**
@@ -80,12 +81,18 @@ public class BioPax2KGMLTest {
    */
   private void testGetPathwaysWithGeneID(String file) {
     String species = "human";    
-    // test for pathway gene ids
-    //    bioCartafile Level 3(can be downloaded from http://pid.nci.nih.gov/download.shtml)
-    Model m = BioPaxConverter.getModel(file);
-    for (BioPaxPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
-      System.out.println(pw.getRDFid() + "\t" + pw.getName());
+    Model m = BioPax2KGML.getModel(file);
+    if (m.getLevel().equals(BioPAXLevel.L2)) {
+//      for (BioPaxPathwayHolder pw : bc2.getPathwaysWithEntrezGeneID(species, m)) {
+//        System.out.println(pw.getRDFid() + "\t" + pw.getName());
+//      }
+      System.out.println("up to known not implemented for level2");
+    } else if (m.getLevel().equals(BioPAXLevel.L3)){
+      for (BioPaxPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
+        System.out.println(pw.getRDFid() + "\t" + pw.getName());
+      }
     }
+    
   }
   
   private static void createExtendedKGML(List<String> fileList, String file) {
@@ -116,7 +123,7 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
 
-    Model m = BioPaxConverter.getModel(file);    
+    Model m = BioPax2KGML.getModel(file);    
 
     for (String filename : fileList) {
       List<Pathway> pathways = null;

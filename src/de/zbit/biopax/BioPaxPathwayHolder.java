@@ -19,6 +19,7 @@ package de.zbit.biopax;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.level3.Entity;
 
 /**
@@ -30,7 +31,7 @@ import org.biopax.paxtools.model.level3.Entity;
  */
 public class BioPaxPathwayHolder {
 
-  Set<Entity> entities = null;
+  Set<BioPAXElement> entities = null;
   Set<Integer> geneIDs = null;
   String biopaxRDFid;
   String name = null;
@@ -70,7 +71,7 @@ public class BioPaxPathwayHolder {
   }
 
   private boolean createEntities() {
-    entities = new HashSet<Entity>();
+    entities = new HashSet<BioPAXElement>();
     return true;
   }
   
