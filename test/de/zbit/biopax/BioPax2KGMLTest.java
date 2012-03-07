@@ -46,8 +46,8 @@ public class BioPax2KGMLTest {
   public static final Logger log = Logger.getLogger(BioPax2KGMLTest.class.getName());
   
 
-  private void testCreateKGMLsFromBioCartaModel(String file) {   
-    BioPax2KGML.createKGMLsFromModel(file);    
+  private void testCreateKGMLsFromBioCartaModel(String file, boolean singleMode) {   
+    BioPax2KGML.createKGMLsFromModel(file, singleMode);    
   }  
   
   /**
@@ -130,8 +130,10 @@ public class BioPax2KGMLTest {
     String fileFolder = System.getenv("FILE_FOLDER");
     
     BioPax2KGMLTest bft = new BioPax2KGMLTest();    
-//    bft.testCreateKGMLsFromBioPaxFile(fileFolder + "alk1_2pathway_changed.owl");
-    bft.testCreateKGMLsFromBioCartaModel(fileFolder + "BioCarta.bp2.owl");
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + "alk1_2pathway_changed.owl", true);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + 
+        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", true);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + "BioCarta.bp3.owl", false);
     
     if(true) return;
     
@@ -161,7 +163,7 @@ public class BioPax2KGMLTest {
     if(true)return;
     
    
-    bft.testCreateKGMLsFromBioCartaModel(bioCartaFile);
+    bft.testCreateKGMLsFromBioCartaModel(bioCartaFile, false);
 
     if(true)return;
    

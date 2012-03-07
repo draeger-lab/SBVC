@@ -207,6 +207,16 @@ public abstract class BioPax2KGML {
 
     return keggPathwayNumberCounter++;
   }
+  
+  /**
+   * creates out of the pathwayName the KEGG no which is need to describe the pathway
+   * @param pathwayName
+   * @return
+   */
+  protected int determineKEGGPathwayNumber(String pathwayName) {
+    //TODO: better idea instead of using hashCode???
+    return pathwayName.hashCode();
+  }
 
   /**
    * Converts the inputStream of an owl file containing BioPAX entries
@@ -315,14 +325,15 @@ public abstract class BioPax2KGML {
    * Creates for an entered {@link Model} the corresponding KEGG pathways
    * @param m
    */
-  public static void createKGMLsFromModel(String fileName) {
+  public static void createKGMLsFromModel(String fileName, boolean singleMode) {
     Model m = BioPax2KGML.getModel(fileName);
     File f = new File(fileName);
     
     if (m.getLevel().equals(BioPAXLevel.L2)){
       BioPaxL22KGML bp = new BioPaxL22KGML();
       Set<pathway> pathways = m.getObjects(pathway.class);
-      if (pathways!=null && pathways.size()>0) {
+//      if (pathways!=null && pathways.size()>0) {
+      if (!singleMode){
         bp.createKGMLsForPathways(m, pathways);  
       } else {
         bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));
@@ -330,7 +341,8 @@ public abstract class BioPax2KGML {
     } else if (m.getLevel().equals(BioPAXLevel.L3)){
       BioPaxL32KGML bp = new BioPaxL32KGML();
       Set<Pathway> pathways = m.getObjects(Pathway.class);
-      if (pathways!=null && pathways.size()>0) {
+//      if (pathways!=null && pathways.size()>0) {
+      if (!singleMode){
         bp.createKGMLsForPathways(m, pathways);  
       } else {
         bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));

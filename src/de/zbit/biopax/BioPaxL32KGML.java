@@ -113,51 +113,70 @@ public class BioPaxL32KGML extends BioPax2KGML {
   public void createKGMLsForPathways(Model m, String folder, Set<Pathway> pathways) {
     log.info("Creating for each pathway a KGML file.");
 
+    Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = parsePathways(m, pathways);
+
+    for (de.zbit.kegg.parser.pathway.Pathway keggPW : keggPWs) {
+      String fileName = folder + KGMLWriter.createFileName(keggPW);
+      KGMLWriter.writeKGML(keggPW, fileName);
+    }
+  }
+  
+  /**
+   * this method parses the biopax pathway by firstly determining the pathway species and
+   * then parsing the single pathway
+   * @param m
+   * @param pathways
+   * @return
+   */
+  private Collection<de.zbit.kegg.parser.pathway.Pathway> parsePathways(Model m, Set<Pathway> pathways) {
     String oldSpecies = "Homo sapiens", newSpecies = oldSpecies;
     Species species = new Species(oldSpecies, "_HUMAN", "human", "hsa", 9606);
     initalizeMappers(species);
 
-//    int i = 0;
-    for (Pathway pathway : pathways) {
+    Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
+      new ArrayList<de.zbit.kegg.parser.pathway.Pathway>();
 
-//      if (++i == 3) {
-        // try {
-        // writePathwayOwlFile(pathway, m, species);
-        // } catch (IOException e) {
-        // log.log(Level.WARNING, "File writing was not successful!", e);
-        // }
-//        System.out.println(i);
-        // determine the pathway organism
-        BioSource pwOrg = pathway.getOrganism();
-        if (pwOrg != null) {          
-          if (pwOrg.getName() != null){
-            newSpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
-            if (!newSpecies.equals(oldSpecies)){
-              species = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
-              initalizeMappers(species);
-              oldSpecies = newSpecies;
-            }
+    for (Pathway pathway : pathways) {
+      // determine the pathway organism
+      BioSource pwOrg = pathway.getOrganism();
+      if (pwOrg != null) {
+        if (pwOrg.getName() != null) {
+          newSpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
+          if (!newSpecies.equals(oldSpecies)) {
+            species = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
+            initalizeMappers(species);
+            oldSpecies = newSpecies;
           }
         }
-        
-        // create the pathway
-        int number = getKeggPathwayNumber(pathway.getRDFId());
-        de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-            "biocarta:" + number, species.getKeggAbbr(), number,
-            pathway.getStandardName());
+      }
 
-        addImageLinkToKEGGpathway(species, getNameWithoutBlanks(pathway.getName()), keggPW);
-
-        for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
-          parseInteraction((Interaction) interaction, keggPW, m, species);
-        }
-
-        String fileName = folder + KGMLWriter.createFileName(keggPW);
-        KGMLWriter.writeKGML(keggPW, fileName);
-
-//        break;
-//      }
+      keggPWs.add(parsePathway(m, pathway, species));
     }
+    
+    return keggPWs;
+  }
+  
+  /**
+   * parses the biopax pathway
+   * @param m
+   * @param pathway
+   * @param species
+   * @return
+   */
+  private de.zbit.kegg.parser.pathway.Pathway parsePathway(Model m, Pathway pathway, Species species) {
+    //create the pathway
+    int number = getKeggPathwayNumber(pathway.getRDFId());
+    de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
+        "biocarta:" + number, species.getKeggAbbr(), number,
+        pathway.getStandardName());
+
+    addImageLinkToKEGGpathway(species, getNameWithoutBlanks(pathway.getName()), keggPW);
+
+    for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
+      parseInteraction((Interaction) interaction, keggPW, m, species);
+    }
+    
+    return keggPW;
   }
 
   /**
@@ -231,20 +250,38 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param fileName used as pathway name and title 
    * @param folder where the KGML is saved
    */
-  public void createKGMLForBioPaxFile(Model m, String fileName, String folder) {
-    //TODO: change!!!
-//    initalizeMappers(species);
-//
-//    de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-//        pathwayName, species.getKeggAbbr(), pathNo, pathwayStandardName);
-//
-//    for (Entity entity : m.getObjects(Entity.class)) {
-//      parseEntity(entity, keggPW, m, species);
-//    }
-//
-//    String fileName = "pws" + m.getLevel().toString() + "/" + KGMLWriter.createFileName(keggPW);
-//    
-//    KGMLWriter.writeKGML(keggPW, fileName);
+  public void createKGMLForBioPaxFile(Model m, String pathwayName, String folder) {
+    // determine the organism
+    String defaultSpecies = "Homo sapiens", newSpecies = defaultSpecies;
+    Species species = new Species(defaultSpecies, "_HUMAN", "human", "hsa", 9606);
+    
+    Set<BioSource> orgs = m.getObjects(BioSource.class);
+    if (orgs != null && orgs.size() > 0) {
+      BioSource org = orgs.iterator().next();
+      if (org != null && org.getName() != null) {
+        newSpecies = Utils.getListOfCollection(org.getName()).get(0);
+        if (!newSpecies.equals(defaultSpecies)) {
+          species = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
+        }
+      }
+      log.info("Determined pathway species '" + species.getCommonName() + "'.");
+    } else {
+      log.info("No pathway species could be determined, default species '" 
+          + species.getCommonName() + "' is used.");
+    }
+    
+    initalizeMappers(species);    
+    
+    int pathNo = determineKEGGPathwayNumber(pathwayName);
+    de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
+        pathwayName, species.getKeggAbbr(), pathNo, pathwayName);
+
+    for (Entity entity : m.getObjects(Entity.class)) {
+      parseEntity(entity, keggPW, m, species);
+    }
+
+    String fileName = folder + KGMLWriter.createFileName(keggPW);
+    KGMLWriter.writeKGML(keggPW, fileName);
   }
 
   /**
@@ -289,7 +326,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     Entry keggEntry = null;
 
-    if (Gene.class.isAssignableFrom(Complex.class)) {
+    if (Complex.class.isAssignableFrom(entity.getClass())) {
       List<Integer> components = createComplexComponentList(((Complex) entity).getComponent(),
           keggPW, m, species);
       keggEntry = createKEGGEntry((Entity) entity, keggPW, m, species, EntryType.group, null, "/",
@@ -599,7 +636,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
       graphics = new Graphics(graphName);
 
     keggEntry = new Entry(keggPW, getKeggEntryID(), keggname, eType, graphics);
-    if (components != null) {      
+    if (components != null) {         
       keggEntry.addComponents(components);
     } 
 
