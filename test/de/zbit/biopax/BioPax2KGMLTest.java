@@ -32,7 +32,6 @@ import org.biopax.paxtools.model.Model;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.KeggParser;
 import de.zbit.kegg.parser.pathway.Pathway;
-import de.zbit.parser.Species;
 import de.zbit.util.logging.LogUtil;
 import de.zbit.util.logging.OneLineFormatter;
 
@@ -45,34 +44,11 @@ import de.zbit.util.logging.OneLineFormatter;
 public class BioPax2KGMLTest {
   
   public static final Logger log = Logger.getLogger(BioPax2KGMLTest.class.getName());
-  private BioPaxL32KGML bc3 = null;
-  private BioPaxL22KGML bc2 = null;
-  
-  public BioPax2KGMLTest(){
-    bc3 = new BioPaxL32KGML();
-    bc2 = new BioPaxL22KGML();
-  }
   
 
-  private void testCreateKGMLsFromBioCartaModel(String file) {
-    Model m = BioPax2KGML.getModel(file);
-    if (m.getLevel().equals(BioPAXLevel.L2)) {
-      bc2.createKGMLsFromModel(m);
-    } else if (m.getLevel().equals(BioPAXLevel.L3)){
-      bc3.createKGMLsFromModel(m);
-    }
-  }
-  
-  private void testCreateKGMLsFromBioPaxFile(String file) {
-    Species species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);    
-    // test for pathway gene ids    
-    Model m = BioPax2KGML.getModel(file);
-    if (m.getLevel().equals(BioPAXLevel.L2)) {
-      bc2.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
-    } else if (m.getLevel().equals(BioPAXLevel.L3)){
-      bc3.createKGMLsFromBioPaxFile(m, species, "BIOMD0000000201", 201, "alk1_2pathway");
-    }
-  }
+  private void testCreateKGMLsFromBioCartaModel(String file) {   
+    BioPax2KGML.createKGMLsFromModel(file);    
+  }  
   
   /**
    * method to test the {@link BioPaxL32KGML#getPathwaysWithGeneID(String, Model)}
@@ -88,6 +64,7 @@ public class BioPax2KGMLTest {
 //      }
       System.out.println("up to known not implemented for level2");
     } else if (m.getLevel().equals(BioPAXLevel.L3)){
+      BioPaxL32KGML bc3 = new BioPaxL32KGML();
       for (BioPaxPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
         System.out.println(pw.getRDFid() + "\t" + pw.getName());
       }

@@ -34,13 +34,18 @@ import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.pathway;
+import org.biopax.paxtools.model.level3.Pathway;
 
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.parser.Species;
+import de.zbit.util.FileTools;
+import de.zbit.util.Utils;
 
 /**
- * This class is a base class to convert BioPax elements
+ * This class is a base class to convert BioPax files and contains all methods
+ * which are use for LEVEL 2 and LEVEL 3 converting
  * 
  * @author Finja B&uuml;chel
  * @version $Rev$
@@ -49,6 +54,10 @@ public abstract class BioPax2KGML {
 
   public static final Logger log = Logger.getLogger(BioPax2KGML.class.getName());
 
+  /**
+   * default folder name for the KGMLs "pws"
+   */
+  String defaultFolderName = "pws";
   static List<Species> allSpecies = null;
   
   static {
@@ -72,10 +81,6 @@ public abstract class BioPax2KGML {
   int newAddedRelations = 0;
   int selfRelation = 0;
   int addedSubTypes = 0;
-  
-
-
-
 
   /**
    * number which is used to determine a pathway id, if it is not possible to
@@ -108,7 +113,6 @@ public abstract class BioPax2KGML {
    * this name
    */
   String keggUnknownName = "unknown";
-
   
   /**
    * mapper to map gene symbols to gene ids
@@ -137,6 +141,72 @@ public abstract class BioPax2KGML {
 
     return map;
   }
+  
+  /**
+   * 
+   * @return the new KEGG unknown "unknownx", whereas x is set to the
+   *         {@link BioPax2KGML#keggUnknownNo}.{@link BioPax2KGML#keggUnknownNo}
+   *         is incremented after this step
+   */
+  protected String getKEGGUnkownName() {
+    return keggUnknownName + String.valueOf(++keggUnknownNo);
+  }
+  
+  /**
+   * 
+   * @return the new KEGG reaction name "rn:unknownx", whereas x is set to the
+   *         {@link BioPax2KGML#keggReactionID}.
+   *         {@link BioPax2KGML#keggReactionID} is augmented after this step
+   */
+  protected String getReactionName() {
+    return "rn:unknown" + String.valueOf(++keggReactionID);
+  }  
+
+  /**
+   * mapps an entered gene id to a kegg id, if this is not possible the species
+   * abbreviation:geneID is returned
+   * 
+   * @param mapper
+   * @return
+   */
+  protected String mapGeneIDToKEGGID(Integer geneID, Species species) {
+    String keggName = null;
+    try {
+      keggName = geneIDKEGGmapper.map(geneID);
+    } catch (Exception e) {
+      log.log(Level.WARNING, "Could not map geneid: '" + geneID.toString() + "' to a KEGG id, "
+          + "'speciesAbbreviation:geneID will be used instead.", e);
+    }
+
+    if (keggName == null) {
+      keggName = species.getKeggAbbr() + ":" + geneID.toString();
+    }
+
+    return keggName;
+  }
+  
+  /**
+   * The rdfID is in the format: http://pid.nci.nih.gov/biopaxpid_9717
+   * 
+   * From this id the number is excluded and used as pathway number, if this is
+   * not possible the {@link BioPaxL22KGML#keggPathwayNumberCounter} is used and
+   * incremented
+   * 
+   * @param rdfId
+   * @return
+   */
+  protected int getKeggPathwayNumber(String rdfId) {
+    int posUnderscore = rdfId.indexOf('_');
+    if (posUnderscore > -1 && posUnderscore <= rdfId.length()) {
+      try {
+        return Integer.parseInt(rdfId.substring(posUnderscore + 1));
+      } catch (Exception e) {
+        return keggPathwayNumberCounter++;
+      }
+    }
+
+    return keggPathwayNumberCounter++;
+  }
 
   /**
    * Converts the inputStream of an owl file containing BioPAX entries
@@ -147,12 +217,11 @@ public abstract class BioPax2KGML {
   public static Model getModel(InputStream io) {
     BioPAXIOHandler handler = new SimpleIOHandler();
     return handler.convertFromOWL(io);
-  }  
-  
+  }    
   
   /**
-   * The {@link BioPaxL32KGML}{@link #geneSymbolMapper} and
-   * {@link BioPaxL32KGML#geneIDKEGGmapper} are initalized for the entered species
+   * The {@link BioPax2KGML}{@link #geneSymbolMapper} and
+   * {@link BioPax2KGML#geneIDKEGGmapper} are initialized for the entered species
    * 
    * @param species
    */
@@ -175,7 +244,6 @@ public abstract class BioPax2KGML {
   }
   
   /**
-   * 
    * @return a unique {@link BioPaxL22KGML#keggEntryID}.
    */
   protected int getKeggEntryID() {
@@ -184,11 +252,52 @@ public abstract class BioPax2KGML {
   }
   
   /**
-   * Calls the method {@link BioPaxL32KGML#getModel(InputStream) for an entered
-   * owl file}
+   * determines the link for the pathway image
+   * 
+   * @param species
+   * @param pathway
+   * @param keggPW
+   */
+  public void addImageLinkToKEGGpathway(Species species, String pathwayName,
+      de.zbit.kegg.parser.pathway.Pathway keggPW) {
+    String linkName = pathwayName;
+    if (!linkName.equals("") && linkName.contains("pathway")) {
+      linkName = linkName.replace("pathway", "Pathway");
+
+      if (species.getKeggAbbr().equals("hsa")) {
+        keggPW.setLink("http://www.biocarta.com/pathfiles/h_" + linkName + ".asp");
+        keggPW.setImage("http://www.biocarta.com/pathfiles/h_" + linkName + ".gif");
+      } else if (species.getKeggAbbr().equals("mmu")) {
+        keggPW.setLink("http://www.biocarta.com/pathfiles/m_" + linkName + ".asp");
+        keggPW.setImage("http://www.biocarta.com/pathfiles/m_" + linkName + ".gif");
+      }
+    }
+  }
+  
+  /**
+   * Creates a folder depending on the {@link BioPax2KGML#defaultFolderName} and the
+   * {@link BioPAXLevel}
+   * @param level
+   * @return the folderName
+   */
+  protected String createDefaultFolder(BioPAXLevel level){
+    String folderName = defaultFolderName + level.toString() + "/";
+    if (!new File(folderName).exists()){
+      boolean success = (new File(folderName)).mkdir();
+      if (success) {
+        log.log(Level.SEVERE, "Could not create directory '" + folderName + "'");
+        System.exit(1);
+      }
+    }
+    
+    return folderName;
+  }
+  
+  /**
+   * Calls the method {@link BioPax2KGML#getModel(InputStream) for an entered owl file}
    * 
    * @param file
-   * @return
+   * @return Model
    */
   public static Model getModel(String file) {
     InputStream io = null;
@@ -202,25 +311,53 @@ public abstract class BioPax2KGML {
     return getModel(io);
   }
 
-  public void createKGMLsFromModel(Model m) {
-    String folder = "pws" + m.getLevel().toString() + "/";
+  /**
+   * Creates for an entered {@link Model} the corresponding KEGG pathways
+   * @param m
+   */
+  public static void createKGMLsFromModel(String fileName) {
+    Model m = BioPax2KGML.getModel(fileName);
+    File f = new File(fileName);
+    
     if (m.getLevel().equals(BioPAXLevel.L2)){
       BioPaxL22KGML bp = new BioPaxL22KGML();
-      bp.createKGMLsFromModel(m, folder);
+      Set<pathway> pathways = m.getObjects(pathway.class);
+      if (pathways!=null && pathways.size()>0) {
+        bp.createKGMLsForPathways(m, pathways);  
+      } else {
+        bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));
+      }      
     } else if (m.getLevel().equals(BioPAXLevel.L3)){
       BioPaxL32KGML bp = new BioPaxL32KGML();
-      bp.createKGMLsFromModel(m, folder);
-    }  
-  }
-  
-
+      Set<Pathway> pathways = m.getObjects(Pathway.class);
+      if (pathways!=null && pathways.size()>0) {
+        bp.createKGMLsForPathways(m, pathways);  
+      } else {
+        bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));
+      }
+    } else {
+      log.log(Level.SEVERE, "Unkown BioPax Level '" + m.getLevel().toString() + 
+          "' is not supported.");
+      System.exit(1);
+    }
+  }  
   
   /**
-   * methods for model and file parsing
-   * 
+   * @param 
+   * @return name of the set without blanks
    */
-  
-  abstract public void createKGMLsFromModel(Model m, String folder);
+  protected String getNameWithoutBlanks(Set<String> names) {
+    String name = "";
 
-  
+    if (names != null && names.size() > 0) {
+      List<String> names2 = Utils.getListOfCollection(names);
+      for (int i = names2.size() - 1; i > 0; i--) {
+        name = names2.get(i);
+        if (name.length()>0 && !name.contains(" "))
+          return name;
+      }
+    }
+
+    return name;
+  }
 }

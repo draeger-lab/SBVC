@@ -71,7 +71,7 @@ import de.zbit.util.ProgressBar;
 
 /**
  * This class works with PaxTools. It is used to fetch information out of a
- * level 3 BioCarta file This file could be downloaded from
+ * level 2 BioCarta files. Example files could be downloaded from
  * http://pid.nci.nih.gov/download.shtml
  * 
  * @author Finja B&uuml;chel
@@ -81,20 +81,81 @@ public class BioPaxL22KGML extends BioPax2KGML {
   
   public static final Logger log = Logger.getLogger(BioPaxL22KGML.class.getName());
 
+  /**
+   * parse an BioPax file by calling 
+   * {@link BioPaxL22KGML#createKGMLForBioPaxFile(Model, String, String)}
+   * the folder is determined with 
+   * {@link BioPax2KGML#createDefaultFolder(org.biopax.paxtools.model.BioPAXLevel)}
+   * @param m
+   * @param fileName
+   */
+  public void createKGMLForBioPaxFile(Model m, String fileName) {
+    String folder = createDefaultFolder(m.getLevel());
+    createKGMLForBioPaxFile(m, fileName, folder);
+  }
+  /**
+   * The methods parse a BioPax file which contains no <bp>Pathway: ....</bp> tag
+   * 
+   * @param m
+   * @param fileName used as pathway name and title 
+   * @param folder where the KGML is saved
+   */
+  public void createKGMLForBioPaxFile(Model m, String fileName, String folder) {
+    // determine the organism
+    String defaultSpecies = "Homo sapiens", newSpecies = defaultSpecies;
+    Species species = new Species(defaultSpecies, "_HUMAN", "human", "hsa", 9606);
+    
+    Set<bioSource> orgs = m.getObjects(bioSource.class);
+    if (orgs != null && orgs.size() > 0) {
+      bioSource org = orgs.iterator().next();
+      if (org != null && org.getNAME() != null) {
+        newSpecies = org.getNAME();
+        if (!newSpecies.equals(defaultSpecies)) {
+          species = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
+        }
+      }
+      log.info("Determined pathway species '" + species.getCommonName() + "'.");
+    } else {
+      log.info("No pathway species could be determined, default species '" 
+          + species.getCommonName() + "' is used.");
+    }
+    
+    initalizeMappers(species);    
+    //TODO:
+//    de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
+//        pathwayName, species.getKeggAbbr(), pathNo, pathwayStandardName);
+//
+//    for (entity entity : m.getObjects(entity.class)) {
+//      parseEntity(entity, keggPW, m, species);
+//    }
+//
+//    String fileName = "pws" + m.getLevel().toString() + "/" + KGMLWriter.createFileName(keggPW);
+//    KGMLWriter.writeKGML(keggPW, fileName);
+  } 
 
+  /**
+   * This method creates for each pathway in the model a KGML file with the
+   * pathway name and saves the pathways in an default folder see 
+   * {@link BioPax2KGML#createDefaultFolder(org.biopax.paxtools.model.BioPAXLevel)}
+   * 
+   * @param m
+   */
+  public void createKGMLsForPathways(Model m, Set<pathway> pathways) {
+    String folder = createDefaultFolder(m.getLevel());
+    createKGMLsForPathways(m, folder, pathways);
+  }
+  
   /**
    * This method creates for each pathway in the model a KGML file with the
    * pathway name
    * 
    * @param m
    */
-  public void createKGMLsFromModel(Model m, String folder) {
-    log.info("Creating for each pathway a KGML file.");
-    Set<pathway> pathways = m.getObjects(pathway.class);
-
+  public void createKGMLsForPathways(Model m, String folder, Set<pathway> pathways) {
+    log.info("Creating KGML files for pathways.");
+    
     String oldSpecies = "Homo sapiens", newSpecies = oldSpecies;
     Species species = new Species(oldSpecies, "_HUMAN", "human", "hsa", 9606);
-    initalizeMappers(species);
 
 //    int i = 0;
     for (pathway pathway : pathways) {
@@ -107,12 +168,6 @@ public class BioPaxL22KGML extends BioPax2KGML {
         // }
 //        System.out.println(i);
         
-        // create the pathway
-        int number = getKeggPathwayNumber(pathway.getRDFId());
-        de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-            "biocarta:" + number, getKEGGOrganism(pathway.getORGANISM()), number,
-            pathway.getNAME());
-
         // determine the pathway organism
         bioSource pwOrg = pathway.getORGANISM();
         if (pwOrg != null) {          
@@ -125,14 +180,22 @@ public class BioPaxL22KGML extends BioPax2KGML {
             }
           }
         }
+      
+        // create the pathway
+        int number = getKeggPathwayNumber(pathway.getRDFId());
+        de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
+            "biocarta:" + number, species.getKeggAbbr(), number,
+            pathway.getNAME());
 
-        addImageLinkToKEGGpathway(species, pathway, keggPW);
+        
+
+        addImageLinkToKEGGpathway(species, pathway.getNAME(), keggPW);
 
         for (pathwayComponent interaction : pathway.getPATHWAY_COMPONENTS()) {
           parseInteraction((interaction) interaction, keggPW, m, species);
         }
 
-        String fileName = "pws" + m.getLevel().toString() + "/" + KGMLWriter.createFileName(keggPW);
+        String fileName = folder + KGMLWriter.createFileName(keggPW);
         KGMLWriter.writeKGML(keggPW, fileName);
 
 //        break;
@@ -328,56 +391,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
     
     return p;
   }
-  
-  /**
-   * determine the link for the pathway
-   * 
-   * @param species
-   * @param pathway
-   * @param keggPW
-   */
-  public void addImageLinkToKEGGpathway(Species species, pathway pathway,
-      de.zbit.kegg.parser.pathway.Pathway keggPW) {
-    String linkName = pathway.getNAME();
-    if (!linkName.equals("") && linkName.contains("pathway")) {
-      linkName = linkName.replace("pathway", "Pathway");
 
-      if (species.getKeggAbbr().equals("hsa")) {
-        keggPW.setLink("http://www.biocarta.com/pathfiles/h_" + linkName + ".asp");
-        keggPW.setImage("http://www.biocarta.com/pathfiles/h_" + linkName + ".gif");
-      } else if (species.getKeggAbbr().equals("mmu")) {
-        keggPW.setLink("http://www.biocarta.com/pathfiles/m_" + linkName + ".asp");
-        keggPW.setImage("http://www.biocarta.com/pathfiles/m_" + linkName + ".gif");
-      }
-    }
-  }
-
-  
-  /**
-   * The methods should be used if the owl file exclusively contains one pathway
-   * and the elements in the BioPax file are not explicitly denoted to the
-   * pathway (i.e. the file does not contain <bp>Pathway: ....</bp> parts
-   * 
-   * @param m
-   * @param species
-   * @param pathwayName
-   * @param pathNo
-   * @param pathwayStandardName
-   */
-  public void createKGMLsFromBioPaxFile(Model m, Species species, String pathwayName, int pathNo,
-      String pathwayStandardName) {
-    initalizeMappers(species);
-
-    de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-        pathwayName, species.getKeggAbbr(), pathNo, pathwayStandardName);
-
-    for (entity entity : m.getObjects(entity.class)) {
-      parseEntity(entity, keggPW, m, species);
-    }
-
-    String fileName = "pws" + m.getLevel().toString() + "/" + KGMLWriter.createFileName(keggPW);
-    KGMLWriter.writeKGML(keggPW, fileName);
-  }
 
   /**
    * parse a BioPax entity element
@@ -465,28 +479,6 @@ public class BioPaxL22KGML extends BioPax2KGML {
     return components;
   }
 
-  /**
-   * mapps an entered gene id to a kegg id, if this is not possible the species
-   * abbreviation:geneID is returned
-   * 
-   * @param mapper
-   * @return
-   */
-  private String mapGeneIDToKEGGID(Integer geneID, Species species) {
-    String keggName = null;
-    try {
-      keggName = geneIDKEGGmapper.map(geneID);
-    } catch (Exception e) {
-      log.log(Level.WARNING, "Could not map geneid: '" + geneID.toString() + "' to a KEGG id, "
-          + "'speciesAbbreviation:geneID will be used instead.", e);
-    }
-
-    if (keggName == null) {
-      keggName = species.getKeggAbbr() + ":" + geneID.toString();
-    }
-
-    return keggName;
-  }
 
   /**
    * This method maps the gene id to the gene symbol of the entered entity. This
@@ -1124,69 +1116,4 @@ public class BioPaxL22KGML extends BioPax2KGML {
 
     return r;
   }
-
-  /**
-   * 
-   * @return the new KEGG reaction name "rn:unknownx", whereas x is set to the
-   *         {@link BioPaxL22KGML#keggReactionID}.
-   *         {@link BioPaxL22KGML#keggReactionID} is augmented after this step
-   */
-  private String getReactionName() {
-    return "rn:unknown" + String.valueOf(++keggReactionID);
-  }
-
-  /**
-   * 
-   * @return the new KEGG unknonw "unknownx", whereas x is set to the
-   *         {@link BioPaxL22KGML#keggUnknownNo}.{@link BioPaxL22KGML#keggUnknownNo}
-   *         is incremented after this step
-   */
-  private String getKEGGUnkownName() {
-    return keggUnknownName + String.valueOf(++keggUnknownNo);
-  }
-
-  /**
-   * The rdfID is in the format: http://pid.nci.nih.gov/biopaxpid_9717
-   * 
-   * From this id the number is excluded and used as pathway number, if this is
-   * not possible the {@link BioPaxL22KGML#keggPathwayNumberCounter} is used and
-   * incremented
-   * 
-   * @param rdfId
-   * @return
-   */
-  private int getKeggPathwayNumber(String rdfId) {
-    int posUnderscore = rdfId.indexOf('_');
-    if (posUnderscore > -1 && posUnderscore <= rdfId.length()) {
-      try {
-        return Integer.parseInt(rdfId.substring(posUnderscore + 1));
-      } catch (Exception e) {
-        return keggPathwayNumberCounter++;
-      }
-    }
-
-    return keggPathwayNumberCounter++;
-  }
-
-
-
-  /**
-   * returns for a given species the KEGG abbreviation, up to now exclusively
-   * homo sapiens and mus musculus are encoded. The default value is
-   * {@link BioPaxL22KGML#organism}
-   * 
-   * @param org
-   * @return
-   */
-  private String getKEGGOrganism(bioSource org) {
-    if (org != null && org.getNAME() != null) {
-      if (org.getNAME().equals("Homo sapiens")) {
-        return "hsa";
-      } else if (org.getNAME().equals("Mus musculus")) {
-        return "mmu";
-      }
-    }
-    return organism;
-  }
-
 }
