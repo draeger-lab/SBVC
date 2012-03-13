@@ -16,10 +16,11 @@
  */
 package de.zbit.biopax;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Filter;
 import java.util.logging.Level;
@@ -28,6 +29,9 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.pathway;
+import org.biopax.paxtools.model.level2.unificationXref;
+import org.biopax.paxtools.model.level3.UnificationXref;
 
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.KeggParser;
@@ -46,9 +50,21 @@ public class BioPax2KGMLTest {
   public static final Logger log = Logger.getLogger(BioPax2KGMLTest.class.getName());
   
 
-  private void testCreateKGMLsFromBioCartaModel(String file, boolean singleMode) {   
-    BioPax2KGML.createKGMLsFromModel(file, singleMode);    
+  private void testCreateKGMLsFromBioCartaModel(String file, String destinationFolder, 
+      boolean singleMode, boolean writeEntryExtended) {   
+    BioPax2KGML.createKGMLsFromModel(file, destinationFolder, singleMode, writeEntryExtended);    
   }  
+  
+  private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
+      boolean singleMode, boolean writeEntryExtended) {
+    File f = new File(fileFolder);
+    if (f.isDirectory()) {
+      String[] files = f.list();
+      for (String file : files) {
+        BioPax2KGML.createKGMLsFromModel(fileFolder + file, destinationFolder, singleMode, writeEntryExtended);    
+      }      
+    }       
+  }
   
   /**
    * method to test the {@link BioPaxL32KGML#getPathwaysWithGeneID(String, Model)}
@@ -58,21 +74,29 @@ public class BioPax2KGMLTest {
   private void testGetPathwaysWithGeneID(String file) {
     String species = "human";    
     Model m = BioPax2KGML.getModel(file);
-    if (m.getLevel().equals(BioPAXLevel.L2)) {
+    if (m!=null && m.getLevel().equals(BioPAXLevel.L2)) {
 //      for (BioPaxPathwayHolder pw : bc2.getPathwaysWithEntrezGeneID(species, m)) {
 //        System.out.println(pw.getRDFid() + "\t" + pw.getName());
 //      }
       System.out.println("up to known not implemented for level2");
-    } else if (m.getLevel().equals(BioPAXLevel.L3)){
+    } else if (m!=null && m.getLevel().equals(BioPAXLevel.L3)){
       BioPaxL32KGML bc3 = new BioPaxL32KGML();
       for (BioPaxPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
         System.out.println(pw.getRDFid() + "\t" + pw.getName());
       }
+    } else if (m==null){
+      log.log(Level.SEVERE,"Model = null.");
     }
     
   }
   
-  private static void createExtendedKGML(List<String> fileList, String file) {
+  /**
+   * for extending existing KGML files with further information for the relations
+   * @param fileList
+   * @param file
+   * @param writeEntryExtended
+   */
+  private static void createExtendedKGML(List<String> fileList, String file, boolean writeEntryExtended) {
     FileHandler h = null;
     try {
       h = new FileHandler("relationsAdded.txt");
@@ -101,22 +125,99 @@ public class BioPax2KGMLTest {
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
 
     Model m = BioPax2KGML.getModel(file);    
+    if(m!=null){
+      for (String filename : fileList) {
+        List<Pathway> pathways = null;
+        try {
+          pathways = KeggParser.parse(filename);
+        } catch (Exception e) {
+          log.log(Level.SEVERE, "Doof.");
+        }
+        BioPaxL32KGML bp2k = new BioPaxL32KGML();
+        for (Pathway p : pathways) {
+          bp2k.addRelationsToPathway(p, m);
+          String fn = filename.replace(".xml", "_extended.xml");
+          KGMLWriter.writeKGML(p, fn, false);  
+        }    
+      }  
+    } else {
+      log.log(Level.SEVERE, "Could not continue, because the model is null.");
+    }
 
-    for (String filename : fileList) {
-      List<Pathway> pathways = null;
-      try {
-        pathways = KeggParser.parse(filename);
-      } catch (Exception e) {
-        log.log(Level.SEVERE, "Doof.");
-      }
-      BioPaxL32KGML bp2k = new BioPaxL32KGML();
-      for (Pathway p : pathways) {
-        bp2k.addRelationsToPathway(p, m);
-        String fn = filename.replace(".xml", "_extended.xml");
-        KGMLWriter.writeKGML(p, fn);  
-      }    
-    }    
+      
   }
+  
+
+  private void parseAndWritePathway(String file, String destinationFolder, String pwName) {
+    Model m = BioPax2KGML.getModel(file);
+    if (m!=null){
+      Pathway keggPW = null;
+      if(m.getLevel().equals(BioPAXLevel.L2)){
+        BioPaxL22KGML b22 = new BioPaxL22KGML();
+        pathway pw = b22.getPathwayByName(m, pwName);      
+        if(pw!=null)
+          keggPW = b22.parsePathway(m, pw, b22.determineSpecies(pw.getORGANISM()));
+      } else if(m.getLevel().equals(BioPAXLevel.L3)){
+        BioPaxL32KGML b23 = new BioPaxL32KGML();
+        org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
+        if(pw!=null)
+          keggPW = b23.parsePathway(m, pw, b23.determineSpecies(pw.getOrganism()));
+      }
+      
+      if(keggPW != null){
+        KGMLWriter.writeKGML(keggPW, destinationFolder + KGMLWriter.createFileName(keggPW), false);
+      } else {
+        System.out.println("keggPW is null.");
+      }
+    } else {
+      log.log(Level.SEVERE, "Could not continue, because the model is null.");
+    }
+  }
+
+  /**
+   * print the pathwy list of a model
+   * @param file
+   */
+  private void printPathwayList(String file) {
+    Model m = BioPax2KGML.getModel(file);
+    List<String> pws = null;
+    if(m.getLevel().equals(BioPAXLevel.L2)){
+      BioPaxL22KGML b22 = new BioPaxL22KGML();
+      pws = b22.getListOfPathways(m);
+    } else if(m.getLevel().equals(BioPAXLevel.L3)){
+      BioPaxL32KGML b23 = new BioPaxL32KGML();
+      pws = b23.getPathways(m);
+    }
+    
+    if(pws!=null && pws.size()>0){
+      for (String string : pws) {
+        System.out.println(string);
+      }
+    }
+    
+  }  
+  
+/**
+ * simple check to find out which database abbreviations are used
+ * @param file
+ */
+  private void logUnificationXRefs(String file) {
+   Model m = BioPax2KGML.getModel(file);
+    if (m != null && m.getLevel().equals(BioPAXLevel.L2)) {
+      Set<unificationXref> refs = m.getObjects(unificationXref.class);
+      for (unificationXref ur : refs) {
+        log.info(ur.getDB() + " - " + ur.getID());
+      }
+    } else if (m != null && m.getLevel().equals(BioPAXLevel.L3)) {
+      Set<UnificationXref> refs = m.getObjects(UnificationXref.class);
+      for (UnificationXref ur : refs) {
+        log.info(ur.getDb() + " - " + ur.getId());
+      }
+    }
+   
+    
+  }
+
   
   /**
    * @param args
@@ -124,51 +225,141 @@ public class BioPax2KGMLTest {
    */
   public static void main(String[] args) throws FileNotFoundException {
     LogUtil.initializeLogging(Level.INFO);
+    FileHandler h = null;
+    try {
+      h = new FileHandler("log.txt");
+    } catch (SecurityException e1) {
+      e1.printStackTrace();
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+    h.setFormatter(new OneLineFormatter());    
+    LogUtil.addHandler(h, LogUtil.getInitializedPackages());
+    
+    FileHandler h2 = null;
+    try {
+      h2 = new FileHandler("unificationRefs.txt");
+    } catch (SecurityException e1) {
+      e1.printStackTrace();
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+    h2.setFormatter(new OneLineFormatter());
+    h2.setFilter(new Filter() {
 
-    String keggFolder = System.getenv("KEGG_FOLDER");
-    String bioCartaFile = System.getenv("BIOCARTA_FILE");
+      /* (non-Javadoc)
+       * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
+       */
+      public boolean isLoggable(LogRecord record) {
+        if ((record.getSourceClassName().equals(BioPax2KGMLTest.class.getName()) || record
+            .getLoggerName().equals(BioPax2KGMLTest.class.getName()))
+            && record.getLevel().equals(Level.INFO)) {
+
+          return true;
+        }
+        return false;
+      }
+    });
+    LogUtil.addHandler(h, LogUtil.getInitializedPackages());
+    
     String fileFolder = System.getenv("FILE_FOLDER");
     
-    BioPax2KGMLTest bft = new BioPax2KGMLTest();    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + "alk1_2pathway_changed.owl", true);
-    bft.testCreateKGMLsFromBioCartaModel(fileFolder + 
-        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", true);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + "BioCarta.bp3.owl", false);
+    BioPax2KGMLTest bft = new BioPax2KGMLTest();
     
-    if(true) return;
+//    bft.logUnificationXRefs("");
     
-    List<String> fileList = new ArrayList<String>();
-    fileList.add(keggFolder + "hsa05014.xml");
-    fileList.add(keggFolder + "hsa04115.xml");
-    fileList.add(keggFolder + "hsa05210.xml");
-    fileList.add(keggFolder + "hsa05215.xml");
-    fileList.add(keggFolder + "hsa05152.xml");
-    fileList.add(keggFolder + "hsa04210.xml");
-    fileList.add(keggFolder + "hsa04110.xml");
-    fileList.add(keggFolder + "hsa05219.xml");
-    fileList.add(keggFolder + "hsa05222.xml");
-    fileList.add(keggFolder + "hsa05200.xml");
-    fileList.add(keggFolder + "hsa05016.xml");
-    fileList.add(keggFolder + "hsa04722.xml");
-    fileList.add(keggFolder + "hsa05010.xml");
-    fileList.add(keggFolder + "hsa05220.xml");
-    fileList.add(keggFolder + "hsa05416.xml");
-    fileList.add(keggFolder + "hsa05223.xml");
-    fileList.add(keggFolder + "hsa05145.xml");
-    fileList.add(keggFolder + "hsa05212.xml");
-    fileList.add(keggFolder + "hsa04380.xml");
-    fileList.add(keggFolder + "hsa05160.xml");
-    createExtendedKGML(fileList, bioCartaFile);
+    // INOH Pathway
+//    String subINOH_SigL2 = "INOH Pathway/Signal_Level2/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL2, fileFolder + "INOH Pathway/res_s2/", true, false);
+//    String subINOH_SigL3 = "INOH Pathway/Signal_Level3/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL3, fileFolder + "INOH Pathway/res_s3/", true, false);
     
-    if(true)return;
+//    String subINOH_MetL2 = "INOH Pathway/Metabolic_Level2/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_MetL2, fileFolder + "INOH Pathway/res_m2/", true, false);
+//    String subINOH_MetL3 = "INOH Pathway/Metabolic_Level3/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_MetL3, fileFolder + "INOH Pathway/res_m3/", true, false);
+    
+    
+    
+//    // NetPathway
+//    String subNetPath = "NetPath Pathway/";
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+//        "NetPath_3.owl", fileFolder + subNetPath, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+//        "NetPath_4.owl", fileFolder + subNetPath, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+//        "NetPath_11.owl", fileFolder + subNetPath, true, false);
+    
+//    // Panther
+//    String subPanther = "Panther/owl/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subPanther, fileFolder + "Panther/res/", true, false);
+    
+    // PathwayCommons
+//    String subPathwayCommons = "PathwayCommons/";
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "biogrid.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "cell-map.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "hprd.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "humancyc.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "imid.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "intact.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "mint.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "nci-nature.owl", fileFolder + subPathwayCommons, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+//        "reactome.owl", fileFolder + subPathwayCommons, true, false);
+//  //TODO: just if I have time left overs
+    
+//    // PhosphoSitePlus
+//    String subPhosphpSitePlus = "PhosphpSitePlus/";
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPhosphpSitePlus + 
+//        "Kinase_substrates.owl", fileFolder + subPhosphpSitePlus, true, false);
+    
     
    
-    bft.testCreateKGMLsFromBioCartaModel(bioCartaFile, false);
+//    // PID 
+//    String subPID = "PID_Pathways/";
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", 
+//        fileFolder + subPID, true, false);
+//    
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);
+//    
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "parkinsonspathway.owl", fileFolder + subPID, true, false);
+//    
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "BioCarta.bp2.owl", fileFolder + subPID, false, false);
+//    
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "BioCarta.bp3.owl", fileFolder + subPID, false, false);
+    
+//    // Reactome
+//    String subReactomeL2 = "ReactomePathways/Level2/";
+//    bft.parseAndWritePathway(fileFolder + subReactomeL2 + "Homo sapiens.owl", 
+//        fileFolder + subReactomeL2, "Sema4D mediated inhibition of cell attachment and migration");
+//    
+//    String subReactomeL3 = "ReactomePathways/Level3/";
+//    bft.parseAndWritePathway(fileFolder + subReactomeL3 + "Homo sapiens.owl", 
+//        fileFolder + subReactomeL3, "Sema4D mediated inhibition of cell attachment and migration");
+    
+//    //SPIKE
+//    String subSpike = "SPIKE/Spike2_LatestSpikeDB.owl";
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subSpike, 
+//        fileFolder + "SPIKE/", true, false); 
+    
+    // WikiPathways
+    String subWikiPath = "WikiPathway/WP1984_46412.owl";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subWikiPath, fileFolder + 
+        "WikiPathway/", true, false);    
 
-    if(true)return;
-   
-    bft.testGetPathwaysWithGeneID(bioCartaFile);
-
-  }  
+  }
 
 }

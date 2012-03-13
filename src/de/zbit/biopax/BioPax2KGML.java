@@ -36,6 +36,7 @@ import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
 import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level3.Pathway;
+import org.biopax.paxtools.util.IllegalBioPAXArgumentException;
 
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
@@ -57,24 +58,24 @@ public abstract class BioPax2KGML {
   /**
    * default folder name for the KGMLs "pws"
    */
-  String defaultFolderName = "pws";
+  static String defaultFolderName = "pws";
   static List<Species> allSpecies = null;
-  
+
   static {
     // TODO: Replace this with a flat-text file in resources to support more
     // organisms.
-    allSpecies = new ArrayList<Species>(3);
+    allSpecies = new ArrayList<Species>(4);
     allSpecies.add(new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
     allSpecies.add(new Species("Mus musculus", "_MOUSE", "Mouse", "mmu", 10090));
     allSpecies.add(new Species("Rattus norvegicus", "_RAT", "Rat", "rno", 10116));
     allSpecies.add(new Species("Enterococcus faecalis", "_ENTFA", "Enterococcus", "efa", 226185));
   }
-  
+
   /**
-   * This variable must be set to false for normal biopax2kgml conversion. 
+   * This variable must be set to false for normal biopax2kgml conversion.
    * 
-   * If it is true, an existing pathway will be augmented with relations, and relation subtypes.
-   * NO reactions and NO entries are added!!!
+   * If it is true, an existing pathway will be augmented with relations, and
+   * relation subtypes. NO reactions and NO entries are added!!!
    */
   boolean augmentOriginalKEGGpathway = false;
   boolean addSelfReactions = false;
@@ -113,7 +114,7 @@ public abstract class BioPax2KGML {
    * this name
    */
   String keggUnknownName = "unknown";
-  
+
   /**
    * mapper to map gene symbols to gene ids
    */
@@ -123,7 +124,7 @@ public abstract class BioPax2KGML {
    * mapper to map gene ids to KEGG ids
    */
   protected static GeneID2KeggIDMapper geneIDKEGGmapper = null;
-  
+
   /**
    * transforms a set to a map. The key is a RDFId and the value the
    * corresponding object
@@ -141,7 +142,7 @@ public abstract class BioPax2KGML {
 
     return map;
   }
-  
+
   /**
    * 
    * @return the new KEGG unknown "unknownx", whereas x is set to the
@@ -151,7 +152,7 @@ public abstract class BioPax2KGML {
   protected String getKEGGUnkownName() {
     return keggUnknownName + String.valueOf(++keggUnknownNo);
   }
-  
+
   /**
    * 
    * @return the new KEGG reaction name "rn:unknownx", whereas x is set to the
@@ -160,7 +161,7 @@ public abstract class BioPax2KGML {
    */
   protected String getReactionName() {
     return "rn:unknown" + String.valueOf(++keggReactionID);
-  }  
+  }
 
   /**
    * mapps an entered gene id to a kegg id, if this is not possible the species
@@ -184,7 +185,7 @@ public abstract class BioPax2KGML {
 
     return keggName;
   }
-  
+
   /**
    * The rdfID is in the format: http://pid.nci.nih.gov/biopaxpid_9717
    * 
@@ -207,14 +208,16 @@ public abstract class BioPax2KGML {
 
     return keggPathwayNumberCounter++;
   }
-  
+
   /**
-   * creates out of the pathwayName the KEGG no which is need to describe the pathway
+   * creates out of the pathwayName the KEGG no which is need to describe the
+   * pathway
+   * 
    * @param pathwayName
    * @return
    */
   protected int determineKEGGPathwayNumber(String pathwayName) {
-    //TODO: better idea instead of using hashCode???
+    // TODO: better idea instead of using hashCode???
     return pathwayName.hashCode();
   }
 
@@ -226,12 +229,19 @@ public abstract class BioPax2KGML {
    */
   public static Model getModel(InputStream io) {
     BioPAXIOHandler handler = new SimpleIOHandler();
-    return handler.convertFromOWL(io);
-  }    
-  
+    Model m = null;
+    try {
+      m = handler.convertFromOWL(io);
+    } catch (IllegalBioPAXArgumentException e) {
+      log.log(Level.SEVERE, "Could not read model!", e);
+    }
+    return m;
+  }
+
   /**
    * The {@link BioPax2KGML}{@link #geneSymbolMapper} and
-   * {@link BioPax2KGML#geneIDKEGGmapper} are initialized for the entered species
+   * {@link BioPax2KGML#geneIDKEGGmapper} are initialized for the entered
+   * species
    * 
    * @param species
    */
@@ -239,20 +249,20 @@ public abstract class BioPax2KGML {
     try {
       geneSymbolMapper = new GeneSymbol2GeneIDMapper(species.getCommonName());
     } catch (IOException e) {
-      log.log(Level.SEVERE, "Could not initalize mapper for species '" + species.toString() 
-          + "'!", e);
+      log.log(Level.SEVERE, "Could not initalize mapper for species '" + species.toString() + "'!",
+          e);
       System.exit(1);
     }
 
     try {
       geneIDKEGGmapper = new GeneID2KeggIDMapper(species);
     } catch (IOException e) {
-      log.log(Level.SEVERE, "Error while initializing gene id to KEGG ID mapper for species '" 
+      log.log(Level.SEVERE, "Error while initializing gene id to KEGG ID mapper for species '"
           + species.toString() + "'.", e);
       System.exit(1);
     }
   }
-  
+
   /**
    * @return a unique {@link BioPaxL22KGML#keggEntryID}.
    */
@@ -260,7 +270,7 @@ public abstract class BioPax2KGML {
     keggEntryID++;
     return keggEntryID;
   }
-  
+
   /**
    * determines the link for the pathway image
    * 
@@ -283,28 +293,30 @@ public abstract class BioPax2KGML {
       }
     }
   }
-  
+
   /**
-   * Creates a folder depending on the {@link BioPax2KGML#defaultFolderName} and the
-   * {@link BioPAXLevel}
+   * Creates a folder depending on the {@link BioPax2KGML#defaultFolderName} and
+   * the {@link BioPAXLevel}
+   * 
    * @param level
    * @return the folderName
    */
-  protected String createDefaultFolder(BioPAXLevel level){
+  protected static String createDefaultFolder(BioPAXLevel level) {
     String folderName = defaultFolderName + level.toString() + "/";
-    if (!new File(folderName).exists()){
+    if (!new File(folderName).exists()) {
       boolean success = (new File(folderName)).mkdir();
       if (success) {
         log.log(Level.SEVERE, "Could not create directory '" + folderName + "'");
         System.exit(1);
       }
     }
-    
+
     return folderName;
   }
-  
+
   /**
-   * Calls the method {@link BioPax2KGML#getModel(InputStream) for an entered owl file}
+   * Calls the method {@link BioPax2KGML#getModel(InputStream) for an entered
+   * owl file}
    * 
    * @param file
    * @return Model
@@ -323,39 +335,51 @@ public abstract class BioPax2KGML {
 
   /**
    * Creates for an entered {@link Model} the corresponding KEGG pathways
+   * 
    * @param m
    */
-  public static void createKGMLsFromModel(String fileName, boolean singleMode) {
+  public static void createKGMLsFromModel(String fileName, String destinationFolder,
+      boolean singleMode, boolean writeEntryExtended) {
     Model m = BioPax2KGML.getModel(fileName);
-    File f = new File(fileName);
-    
-    if (m.getLevel().equals(BioPAXLevel.L2)){
-      BioPaxL22KGML bp = new BioPaxL22KGML();
-      Set<pathway> pathways = m.getObjects(pathway.class);
-//      if (pathways!=null && pathways.size()>0) {
-      if (!singleMode){
-        bp.createKGMLsForPathways(m, pathways);  
+    if (m!=null){
+      File f = new File(fileName);
+      if (destinationFolder == null || destinationFolder.isEmpty()) {
+        destinationFolder = createDefaultFolder(m.getLevel());
+      }
+
+      if (m.getLevel().equals(BioPAXLevel.L2)) {
+        BioPaxL22KGML bp = new BioPaxL22KGML();
+        Set<pathway> pathways = m.getObjects(pathway.class);
+        // if (pathways!=null && pathways.size()>0) {
+        if (!singleMode) {
+          bp.createKGMLsForPathways(m, destinationFolder, pathways, false);
+        } else {
+          bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()),
+              destinationFolder, false);
+        }
+      } else if (m.getLevel().equals(BioPAXLevel.L3)) {
+        BioPaxL32KGML bp = new BioPaxL32KGML();
+        Set<Pathway> pathways = m.getObjects(Pathway.class);
+        // if (pathways!=null && pathways.size()>0) {
+        if (!singleMode) {
+          bp.createKGMLsForPathways(m, destinationFolder, pathways, writeEntryExtended);
+        } else {
+          bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()),
+              destinationFolder, writeEntryExtended);
+        }
       } else {
-        bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));
-      }      
-    } else if (m.getLevel().equals(BioPAXLevel.L3)){
-      BioPaxL32KGML bp = new BioPaxL32KGML();
-      Set<Pathway> pathways = m.getObjects(Pathway.class);
-//      if (pathways!=null && pathways.size()>0) {
-      if (!singleMode){
-        bp.createKGMLsForPathways(m, pathways);  
-      } else {
-        bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()));
+        log.log(Level.SEVERE, "Unkown BioPax Level '" + m.getLevel().toString()
+            + "' is not supported.");
+        System.exit(1);
       }
     } else {
-      log.log(Level.SEVERE, "Unkown BioPax Level '" + m.getLevel().toString() + 
-          "' is not supported.");
-      System.exit(1);
+      log.log(Level.SEVERE, "Could not continue, because the model is null.");
     }
-  }  
-  
+    
+  }
+
   /**
-   * @param 
+   * @param
    * @return name of the set without blanks
    */
   protected String getNameWithoutBlanks(Set<String> names) {
@@ -365,7 +389,7 @@ public abstract class BioPax2KGML {
       List<String> names2 = Utils.getListOfCollection(names);
       for (int i = names2.size() - 1; i > 0; i--) {
         name = names2.get(i);
-        if (name.length()>0 && !name.contains(" "))
+        if (name.length() > 0 && !name.contains(" "))
           return name;
       }
     }
