@@ -80,11 +80,11 @@ import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.GeneType;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
-import de.zbit.parser.Species;
 import de.zbit.util.DatabaseIdentifiers;
-import de.zbit.util.ProgressBar;
 import de.zbit.util.SortedArrayList;
+import de.zbit.util.Species;
 import de.zbit.util.Utils;
+import de.zbit.util.progressbar.ProgressBar;
 
 /**
  * This class works with PaxTools. It is used to fetch information out of a

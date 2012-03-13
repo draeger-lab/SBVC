@@ -38,10 +38,10 @@ import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level3.Pathway;
 import org.biopax.paxtools.util.IllegalBioPAXArgumentException;
 
+import de.zbit.io.FileTools;
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
-import de.zbit.parser.Species;
-import de.zbit.util.FileTools;
+import de.zbit.util.Species;
 import de.zbit.util.Utils;
 
 /**

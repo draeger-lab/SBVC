@@ -266,94 +266,100 @@ public class BioPax2KGMLTest {
     
     BioPax2KGMLTest bft = new BioPax2KGMLTest();
     
-//    bft.logUnificationXRefs("");
+    
+    // Database testing of the parser
     
     // INOH Pathway
-//    String subINOH_SigL2 = "INOH Pathway/Signal_Level2/";
-//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL2, fileFolder + "INOH Pathway/res_s2/", true, false);
-//    String subINOH_SigL3 = "INOH Pathway/Signal_Level3/";
-//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL3, fileFolder + "INOH Pathway/res_s3/", true, false);
+    String subINOH_SigL2 = "INOH Pathway/Signal_Level2/";
+    String subINOH_SigL3 = "INOH Pathway/Signal_Level3/";
+    String subINOH_MetL2 = "INOH Pathway/Metabolic_Level2/";
+    String subINOH_MetL3 = "INOH Pathway/Metabolic_Level3/";
     
-//    String subINOH_MetL2 = "INOH Pathway/Metabolic_Level2/";
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL2, fileFolder + "INOH Pathway/res_s2/", true, false);    
+//    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_SigL3, fileFolder + "INOH Pathway/res_s3/", true, false);
 //    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_MetL2, fileFolder + "INOH Pathway/res_m2/", true, false);
-//    String subINOH_MetL3 = "INOH Pathway/Metabolic_Level3/";
 //    bft.testCreateKGMLsFromDirectory(fileFolder + subINOH_MetL3, fileFolder + "INOH Pathway/res_m3/", true, false);
     
+    bft.logUnificationXRefs(fileFolder + subINOH_SigL2 + "");
+    bft.logUnificationXRefs(fileFolder + subINOH_SigL3 + "");
+    bft.logUnificationXRefs(fileFolder + subINOH_MetL2 + "");
+    bft.logUnificationXRefs(fileFolder + subINOH_MetL3 + "");
+    if (true) return; 
+
     
+    // NetPathway
+    String subNetPath = "NetPath Pathway/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+        "NetPath_3.owl", fileFolder + subNetPath, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+        "NetPath_4.owl", fileFolder + subNetPath, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
+        "NetPath_11.owl", fileFolder + subNetPath, true, false);
     
-//    // NetPathway
-//    String subNetPath = "NetPath Pathway/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
-//        "NetPath_3.owl", fileFolder + subNetPath, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
-//        "NetPath_4.owl", fileFolder + subNetPath, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subNetPath + 
-//        "NetPath_11.owl", fileFolder + subNetPath, true, false);
-    
-//    // Panther
-//    String subPanther = "Panther/owl/";
-//    bft.testCreateKGMLsFromDirectory(fileFolder + subPanther, fileFolder + "Panther/res/", true, false);
+    // Panther
+    String subPanther = "Panther/owl/";
+    bft.testCreateKGMLsFromDirectory(fileFolder + subPanther, fileFolder + "Panther/res/", true, false);
     
     // PathwayCommons
-//    String subPathwayCommons = "PathwayCommons/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "biogrid.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "cell-map.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "hprd.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "humancyc.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "imid.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "intact.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "mint.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "nci-nature.owl", fileFolder + subPathwayCommons, true, false);
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
-//        "reactome.owl", fileFolder + subPathwayCommons, true, false);
-//  //TODO: just if I have time left overs
+    String subPathwayCommons = "PathwayCommons/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "biogrid.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "cell-map.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "hprd.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "humancyc.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "imid.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "intact.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "mint.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "nci-nature.owl", fileFolder + subPathwayCommons, true, false);
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
+        "reactome.owl", fileFolder + subPathwayCommons, true, false);
+  //TODO: just if I have time left overs
     
-//    // PhosphoSitePlus
-//    String subPhosphpSitePlus = "PhosphpSitePlus/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPhosphpSitePlus + 
-//        "Kinase_substrates.owl", fileFolder + subPhosphpSitePlus, true, false);
+    // PhosphoSitePlus
+    String subPhosphpSitePlus = "PhosphpSitePlus/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPhosphpSitePlus + 
+        "Kinase_substrates.owl", fileFolder + subPhosphpSitePlus, true, false);
     
     
    
-//    // PID 
-//    String subPID = "PID_Pathways/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", 
-//        fileFolder + subPID, true, false);
-//    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);
-//    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "parkinsonspathway.owl", fileFolder + subPID, true, false);
-//    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "BioCarta.bp2.owl", fileFolder + subPID, false, false);
-//    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "BioCarta.bp3.owl", fileFolder + subPID, false, false);
+    // PID 
+    String subPID = "PID_Pathways/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", 
+        fileFolder + subPID, true, false);
     
-//    // Reactome
-//    String subReactomeL2 = "ReactomePathways/Level2/";
-//    bft.parseAndWritePathway(fileFolder + subReactomeL2 + "Homo sapiens.owl", 
-//        fileFolder + subReactomeL2, "Sema4D mediated inhibition of cell attachment and migration");
-//    
-//    String subReactomeL3 = "ReactomePathways/Level3/";
-//    bft.parseAndWritePathway(fileFolder + subReactomeL3 + "Homo sapiens.owl", 
-//        fileFolder + subReactomeL3, "Sema4D mediated inhibition of cell attachment and migration");
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);
     
-//    //SPIKE
-//    String subSpike = "SPIKE/Spike2_LatestSpikeDB.owl";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subSpike, 
-//        fileFolder + "SPIKE/", true, false); 
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "parkinsonspathway.owl", fileFolder + subPID, true, false);
+    
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "BioCarta.bp2.owl", fileFolder + subPID, false, false);
+    
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "BioCarta.bp3.owl", fileFolder + subPID, false, false);
+    
+    // Reactome
+    String subReactomeL2 = "ReactomePathways/Level2/";
+    bft.parseAndWritePathway(fileFolder + subReactomeL2 + "Homo sapiens.owl", 
+        fileFolder + subReactomeL2, "Sema4D mediated inhibition of cell attachment and migration");
+    
+    String subReactomeL3 = "ReactomePathways/Level3/";
+    bft.parseAndWritePathway(fileFolder + subReactomeL3 + "Homo sapiens.owl", 
+        fileFolder + subReactomeL3, "Sema4D mediated inhibition of cell attachment and migration");
+    
+    //SPIKE
+    String subSpike = "SPIKE/Spike2_LatestSpikeDB.owl";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subSpike, 
+        fileFolder + "SPIKE/", true, false); 
     
     // WikiPathways
     String subWikiPath = "WikiPathway/WP1984_46412.owl";
