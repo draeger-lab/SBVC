@@ -177,7 +177,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
       }
       
       if (pwOrg.getName() != null) {
-        String newSpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
+        String newSpecies = Utils.iterableToList(pwOrg.getName()).get(0);
         detSpecies = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
       } 
     } 
@@ -305,7 +305,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
         BioSource pwOrg = pathway.getOrganism();  
         if (pwOrg != null) {
           if (pwOrg.getName() != null) {
-            String pathwaySpecies = Utils.getListOfCollection(pwOrg.getName()).get(0);
+            String pathwaySpecies = Utils.iterableToList(pwOrg.getName()).get(0);
             if (pathwaySpecies.equals(species.getScientificName())) {
               for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
                 parseInteraction((Interaction) interaction, p, m, species);
@@ -581,7 +581,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
     String name = "";
 
     if (names != null && names.size() > 0) {
-      List<String> names2 = Utils.getListOfCollection(names);
+      List<String> names2 = Utils.iterableToList(names);
       if (names2.size() == 1) {
         name = names2.get(0);
       } else if (names2.size() == 2) {
@@ -786,11 +786,11 @@ public class BioPaxL32KGML extends BioPax2KGML {
       parseConversion((Conversion) entity, keggPW, m, species);
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
-          Utils.getListOfCollection(((GeneticInteraction) entity).getParticipant()), keggPW, m,
+          Utils.iterableToList(((GeneticInteraction) entity).getParticipant()), keggPW, m,
           species, RelationType.GErel, new SubType(SubType.ASSOCIATION));
     } else if (MolecularInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
-          Utils.getListOfCollection(((MolecularInteraction) entity).getParticipant()), keggPW, m,
+          Utils.iterableToList(((MolecularInteraction) entity).getParticipant()), keggPW, m,
           species, RelationType.PPrel, new SubType(SubType.INDIRECT_EFFECT));
     } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForTemplateReaction((TemplateReaction) entity, keggPW, m, species);
@@ -812,7 +812,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
   private EntryExtended createKEGGEntry(Interaction inter, 
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species) {
     EntryExtended keggEntry1 = null;
-    List<Entity> participants = Utils.getListOfCollection(inter.getParticipant());
+    List<Entity> participants = Utils.iterableToList(inter.getParticipant());
     if (participants.size() > 1) {
       for (int i = 0; i < participants.size(); i++) {
         if (Pathway.class.isAssignableFrom(participants.get(i).getClass())) {
@@ -1266,7 +1266,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
                   try {
                     r = createKEGGReaction(((BiochemicalReaction) con).getLeft(),
                         ((BiochemicalReaction) con).getRight(),
-                        Utils.getListOfCollection(((BiochemicalReaction) con)
+                        Utils.iterableToList(((BiochemicalReaction) con)
                             .getParticipantStoichiometry()), keggPW, m, species,
                             getReactionType(con.getConversionDirection()));
 
@@ -1274,13 +1274,13 @@ public class BioPaxL32KGML extends BioPax2KGML {
                     try {
                       r = createKEGGReaction(((ComplexAssembly) con).getLeft(),
                           ((ComplexAssembly) con).getRight(),
-                          Utils.getListOfCollection(((ComplexAssembly) con)
+                          Utils.iterableToList(((ComplexAssembly) con)
                               .getParticipantStoichiometry()), keggPW, m, species,
                               getReactionType(con.getConversionDirection()));
                     } catch (ClassCastException e2) {
                       r = createKEGGReaction(((TransportWithBiochemicalReaction) con).getLeft(),
                           ((TransportWithBiochemicalReaction) con).getRight(),
-                          Utils.getListOfCollection(((TransportWithBiochemicalReaction) con)
+                          Utils.iterableToList(((TransportWithBiochemicalReaction) con)
                               .getParticipantStoichiometry()), keggPW, m, species,
                               getReactionType(con.getConversionDirection()));
                     }
@@ -1389,13 +1389,13 @@ public class BioPaxL32KGML extends BioPax2KGML {
       if  (!augmentOriginalKEGGpathway)
         createKEGGReaction(((ComplexAssembly) entity).getLeft(),
           ((ComplexAssembly) entity).getRight(),
-          Utils.getListOfCollection(((ComplexAssembly) entity).getParticipantStoichiometry()),
+          Utils.iterableToList(((ComplexAssembly) entity).getParticipantStoichiometry()),
           keggPW, m, species, getReactionType(((ComplexAssembly) entity).getConversionDirection()));
     } else if (BiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       if  (!augmentOriginalKEGGpathway)
         createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
           ((BiochemicalReaction) entity).getRight(),
-          Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
+          Utils.iterableToList(((BiochemicalReaction) entity).getParticipantStoichiometry()),
           keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
     } else if (Degradation.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelations(((Degradation) entity).getLeft(), ((Degradation) entity).getRight(),
@@ -1409,7 +1409,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
         // deltaG, deltaH, deltaS, ec, and KEQ are ignored
         createKEGGReaction(((BiochemicalReaction) entity).getLeft(),
           ((BiochemicalReaction) entity).getRight(),
-          Utils.getListOfCollection(((BiochemicalReaction) entity).getParticipantStoichiometry()),
+          Utils.iterableToList(((BiochemicalReaction) entity).getParticipantStoichiometry()),
           keggPW, m, species, getReactionType(((BiochemicalReaction) entity).getConversionDirection()));
     } else if (Conversion.class.isAssignableFrom(entity.getClass())){
       createKEGGRelations(((Conversion)entity).getLeft(), ((Conversion)entity).getRight(), keggPW, 

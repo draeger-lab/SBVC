@@ -1031,7 +1031,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
    */
   private EntryExtended createKEGGEntry(interaction inter, Pathway keggPW, Model m, Species species) {
     EntryExtended keggEntry1 = null;
-    List<InteractionParticipant> participants = Utils.getListOfCollection(inter.getPARTICIPANTS());
+    List<InteractionParticipant> participants = Utils.iterableToList(inter.getPARTICIPANTS());
     if (participants.size() > 1) {
       for (int i = 0; i < participants.size(); i++) {
         if (pathway.class.isAssignableFrom(participants.get(i).getClass())) {

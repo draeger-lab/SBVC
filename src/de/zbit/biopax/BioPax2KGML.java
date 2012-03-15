@@ -386,7 +386,7 @@ public abstract class BioPax2KGML {
     String name = "";
 
     if (names != null && names.size() > 0) {
-      List<String> names2 = Utils.getListOfCollection(names);
+      List<String> names2 = Utils.iterableToList(names);
       for (int i = names2.size() - 1; i > 0; i--) {
         name = names2.get(i);
         if (name.length() > 0 && !name.contains(" "))
