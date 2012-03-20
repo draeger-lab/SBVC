@@ -21,23 +21,27 @@ and Andreas Zell\,$^1$\footnote{to whom correspondence should be addressed}}
 \begin{abstract}
 
 \section{Motivation:}
-The goal of systems biology is the modeling and understanding of biological and chemical processes in a cell. Thus, in-silico models are build to reproduced thoses cellular processes. One distinguishes between quantitative and qualitative models. Quantitative models incorporate data which can be quantified numerically. In contrast, qualitative models describe the relationship between the model entities. SBML and BioPax are two of the most popular modeling languages. Until the release of the SBML extension package, SBML qual, it was not possible to describe qualitative models with SBML. That was exclusively possible with BioPax. The BioCarta database includes pathway models which contain both reactions and relations. These models are described with the BioPax format but, up to no, not with the SBML qual format.
+BioPax and SBML are two of the most popular modeling languages in systems biology. The focus of SBML is the simulation and modeling of molecular pathways, whereas the BioPax specification concentrates on data exchange, visualization, and analysis of pathways. BioPax models reactions and relations. In contrast, SBML is exclusively able to handle reactions. But with the release of the SBML qual extension, it is also possible to model relations with SBML. Before this release, relations couldn't be translated to SBML or were erroneously converted to reactions. Until now, there exist no converter for BioPax to SBML, that translates reactions and relations.
 \section{Results:}
-We provide a complete collection of converted BioCarta pathways in the new SBML qual format. Furthermore, both BioPax level 2 and level 3 pathways are translated.
+Here we present the conversion of the complete nature pathway interaction database (PID) which includes pathways from BioCarta, Reactome, and from the National Cancer institute. PID provides the pathways in the BioPax Level 2 and Level 3 format. Both formats are translated to the SBML format including the qual extension. Thus, the result SBML files contain both reactions and relations.
 \section{Availability:}
-The complete collection of the BioCarta models is freely available on our homepage ..... (\textbf{TODO Finja: create homepage!})
-
+The complete collection of the PID models is freely available on our homepage ..... (\textbf{TODO Finja: create homepage!})
 \section{Contact:} \href{finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
 \end{abstract}
 
 \section{Introduction}
-\begin{itemize}
-\item Allgemeines zu Modellen
-\item SBML, BioPax sehr gängige Formate, die am meisten verwendet werden
-\item SBML früher nur reaktionen, jetzt mit qual -> a new converter is necessary, that old knowledte isn't lost. or old knowledge can be extended
-\item Vorteile von qual
-\end{itemize}
-\textbf{TODO: Florian und Andreas: Habt ihr hier noch konkrete Ideen, was ich noch einbauen k\"onnte? Stichworte reichen v\"ollig.}
+The goal of systems biology is the modeling and understanding of biological and chemical processes in a cell. BioPax and SBML are common modeling languages to describe such processes. The BioPax specification aims at exchanging, visualization, and analyzing such processes on a large scale. Following, BioPax can be used to image metabolic, signaling, molecular, gene regulatory and genetic interaction networks (\textbf{cite}). In contrast, SBML is mostly used for quantitative modeling because it is well defined and homogenous (\textbf{cite}). The SBML core specification defines reactions in detail but no relations between molecules. 
+%problem
+Since the release of the qual specification, it was not possible to define relations or to integrate reactions and relation in on model (\textbf{cite}). 
+%relevance
+Furthermore, it was not possible to easily combine or exchange information between different databases, if one database uses the BioPax format and the other on the SBML format. 
+%literature review
+So far, there exist several visualization tools, like Cytoscape, which can handle both formats (\textbf{cite}). But until now, there exists only one converter from SBML to BioPax (\textbf{http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPax.html}) but no converter for BioPax to SBML, which's conversion also includes relations. Following, the need of combining these formats to use the knowledge different databases becomes more and more urgent.
+% what we did
+We present a complete conversion of the nature pathway interaction database (PID)from BioPax Level 2 and Level 3 format to the SBML format including the qual extension. The pathway conversion is implemented in Java and uses jSBML and PaxTools. The translated files are freely available on our homepage: ...
+
+
+\textbf{TODO: Clemens, Florian und Andreas: Habt ihr hier noch konkrete Ideen, was ich noch einbauen k\"onnte? Fehlt etwas?}
 
 
 \begin{methods}
@@ -49,7 +53,7 @@ The complete collection of the BioCarta models is freely available on our homepa
 %(3) Demir et al. Nature Biotechnology 28 , 935–942 (2010) doi:10.1038/nbt.1666
 
 
-
+Biopax basis=owl (Web Ontology Language)
 \subsection{Specification of SBML qual}
 \begin{itemize}
 \item QualtitativeModel
@@ -67,7 +71,10 @@ The complete collection of the BioCarta models is freely available on our homepa
 \textbf{TODO Finja: Grobe Beschreibung, Verweis auf Publikationen}
 
 \subsection{Conversion of BioPax to SBML qual}
+
 \begin{itemize}
+\item Use of Paxtools for Java einlesen
+\item Use of jSBML to write the SBML qual
 \item Species is determined automatically (if it is mentioned in the file)
 \item Works file vice, 1 file = 1 pathway
 \item how is distinguished between a transition and a reaction... -> include table
@@ -78,75 +85,84 @@ The complete collection of the BioCarta models is freely available on our homepa
 \begin{table}[!t]
 \processtable{Description of the translation of BioPax control elements\label{Tab:BioPax2SBML}}
 {\begin{tabular}{llll}\toprule
-BioPax controller & BioPax controlled & Converted\\
-                  &                   & SBML qual\\
-                  &                   & element\\
+BioPax controller & BioPax controlled               & Converted\\
+                  &                                 & SBML qual\\
+                  &                                 & element\\
 \midrule
 \textbf{BioPax level 3}\\
 \midrule
-PhysicalEntity & BiochemicalReaction               & Reaction\\
-PhysicalEntity & ComplexAssembly                   & Reaction\\
-PhysicalEntity & Control                           & Transition\\
-PhysicalEntity & Degradation                       & Transition\\
-PhysicalEntity & Transport                         & Transition\\
-PhysicalEntity & TransportWithBiochemicalReaction  & Reaction\\
-PhysicalEntity & Pathway                           & Transition\\
-PhysicalEntity & TemplateReaction                  & Transition\\
+PhysicalEntity & BiochemicalReaction                & reaction\\
+PhysicalEntity & ComplexAssembly                    & reaction\\
+PhysicalEntity & Control                            & transition\\
+PhysicalEntity & Degradation                        & transition\\
+PhysicalEntity & Transport                          & transition\\
+PhysicalEntity & TransportWithBiochemicalReaction   & reaction\\
+PhysicalEntity & Pathway                            & transition\\
+PhysicalEntity & TemplateReaction                   & transition\\
 \\
-Pathway         & BiochemicalReaction               & Transition\\
-Pathway         & ComplexAssembly                   & Transition\\
-Pathway         & Conversion                        & Transition\\
-Pathway         & Degradation                       & Transition\\
-Pathway         & Pathway                           & Transition\\
-Pathway         & TemplateReaction                  & Transition\\
-Pathway         & Transport                         & Transition\\
-Pathway         & TransportWithBiochemicalReaction  & Transition\\
+Pathway         & BiochemicalReaction               & transition\\
+Pathway         & ComplexAssembly                   & transition\\
+Pathway         & Control                           & transition\\
+Pathway         & Degradation                       & transition\\
+Pathway         & Pathway                           & transition\\
+Pathway         & TemplateReaction                  & transition\\
+Pathway         & Transport                         & transition\\
+Pathway         & TransportWithBiochemicalReaction  & transition\\
 \\\midrule
 \textbf{BioPax level 2}\\
 \midrule
-physicalEntity & biochemicalReaction               & Reaction\\
-physicalEntity & complexAssembly                   & Reaction\\
-physicalEntity & control                           & Transition\\
-physicalEntity & pathway                           & Transition\\
-physicalEntity & transport                         & Transition\\
-physicalEntity & transportWithBiochemicalReaction  & Reaction\\
+physicalEntity & biochemicalReaction                & reaction\\
+physicalEntity & complexAssembly                    & reaction\\
+physicalEntity & control                            & transition\\
+physicalEntity & pathway                            & transition\\
+physicalEntity & transport                          & transition\\
+physicalEntity & transportWithBiochemicalReaction   & reaction\\
 \\
-pathway         & biochemicalReaction               & Transition\\
-pathway         & complexAssembly                   & Transition\\
-pathway         & conversion                        & Transition\\
-pathway         & pathway                           & Transition\\
-pathway         & transportWithBiochemicalReaction  & Transition\\
-pathway         & transport                         & Transition\\\botrule
-\end{tabular}}{BioPax control elements consists of a controller and one or more controlled elements. Depending on the kind of controller or controlled element, a reaction or a transition can be converted to SBML qual. The table gives an overview of this conversion regarding BioPax level 2 and BioPax level 3.}
+pathway         & biochemicalReaction               & transition\\
+pathway         & complexAssembly                   & transition\\
+pathway         & control                           & transition\\
+pathway         & pathway                           & transition\\
+pathway         & transportWithBiochemicalReaction  & transition\\
+pathway         & transport                         & transition\\\botrule
+\end{tabular}}{BioPax control elements consists of a controller and one or more controlled elements. Depending on the kind of controller or controlled element, an entity is translated to a reaction or a transition. The table gives an overview of this conversion regarding BioPax level 2 and BioPax level 3.}
 \end{table}
 
 \subsection{Conversion of BioPax level 2}
 
 
-\begin{figure*}[!th]
+\begin{figure*}[t!h]
 \centering \includegraphics[width=0.96\textwidth]{BioPax2SBMLqual.png}
-\caption{Conversion from BioPax Level 2 to SBML qual. The red rounded rectangles and lines describe the BioPax leve 2 elements and how they are inherited. SBML qual entities are colored green. The conversion from BioPax level 2 to SBML qual is colored black.}\label{fig:BioPax2SBMLqual}
+\caption{Conversion from BioPax Level 2 to SBML qual. The red rounded rectangles and lines describe the BioPax leve 2 elements and how they are inherited. SBML qual entities and inheritance lines are colored green. The conversion from BioPax level 2 to SBML qual is dentoted with black lines. For some elements, it depends on the enclosed element entities if BioPax is tranlsate to a reaction or a relation. These are visualized as black dashed lines. The tranlation of these elements is shown in more detail in Table \ref{Tab:BioPax2SBML}.}\label{fig:BioPax2SBMLqual}
 \end{figure*}
 
 
 \subsection{Conversion of BioPax level 3}
-\begin{figure*}[!th]
+\begin{figure*}[t!h]
 \centering \includegraphics[width=0.96\textwidth]{BioPax3SBMLqual.png}
-\caption{Conversion from BioPax Level 3 to SBML qual. The blue rounded rectangles and lines describe the BioPax leve 2 elements and how they are inherited. SBML qual entities are colored green. The conversion from BioPax level 2 to SBML qual is colored black.}\label{fig:BioPax3SBMLqual}
+\caption{Conversion from BioPax Level 3 to SBML qual. The blue rounded rectangles and lines describe the BioPax leve 3 elements and how they are inherited. SBML qual entities and inheritance lines are colored green. The conversion from BioPax level 3 to SBML qual is dentoted with black lines. For some elements, it depends on the enclosed element entities if BioPax is tranlsate to a reaction or a relation. These are visualized as black dashed lines. The tranlation of these elements is shown in more detail in Table \ref{Tab:BioPax2SBML}.}\label{fig:BioPax3SBMLqual}
 \end{figure*}
 
 
 \begin{itemize}
 \item TODO: Conversion/Control elemente nochmal zusätzlich einzeichnen?
+\item Eine example conversion einbauen?
 \end{itemize}
 \end{methods}
 
 
 \section{Results and Discussion}
-Warum ist es so toll qual Modelle zu haben
+Warum ist es so toll einen converter von biopax to sbml qual zu haben?
+\begin{itemize}
+\item we can exchange and combine information from different databases using different model languages
+\item \textbf{TODO: Clemens, Florian und Andreas: Habt ihr hier noch konkrete Erg\"anzungen?}
+\end{itemize}
 
 \section{Conclusion}
-.....
+\begin{itemize}
+\item we provide a conversion from the most important database formats
+\item we can exchange and combine information from different databases using different model languages
+\item \textbf{TODO: Clemens, Florian und Andreas: Habt ihr hier noch konkrete Erg\"anzungen?}
+\end{itemize}
 
 
 \section*{Acknowledgement}
@@ -162,5 +178,8 @@ We thank xy.
 %\bibliographystyle{plain}
 %
 \bibliography{document}
+
+
+
 
 \end{document}
