@@ -30,35 +30,32 @@ The complete collection of the PID models is freely available on our homepage ..
 \end{abstract}
 
 \section{Introduction}
-The goal of systems biology is the modeling and understanding of biological and chemical processes in a cell. BioPax and SBML are common modeling languages to describe such processes. The BioPax specification aims at exchanging, visualization, and analyzing such processes on a large scale. Following, BioPax can be used to image metabolic, signaling, molecular, gene regulatory and genetic interaction networks (\textbf{cite}). In contrast, SBML is mostly used for quantitative modeling because it is well defined and homogenous (\textbf{cite}). The SBML core specification defines reactions in detail but no relations between molecules.
+The goal of systems biology is the modeling and understanding of biological and chemical processes in a cell. BioPax and SBML are common modeling languages to describe such processes. The BioPax specification aims at exchanging, visualization, and analyzing such processes on a large scale. Following, BioPax can be used to image metabolic, signaling, molecular, gene regulatory and genetic interaction networks \citep{Demir2010}. In contrast, SBML is mostly used for quantitative modeling because it is well defined and homogenous \citep{Hucka2003}. The SBML core specification defines reactions in detail but no relations between molecules.
 %problem
 Since the release of the qual specification, it was not possible to define relations or to integrate reactions and relation in on model (\textbf{cite}).
 %relevance
 Furthermore, it was not possible to easily combine or exchange information between different databases, if one database uses the BioPax format and the other on the SBML format.
 %literature review
-So far, there exist several visualization tools, like Cytoscape, which can handle both formats (\textbf{cite}). But until now, there exists only one converter from SBML to BioPax (\textbf{http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPax.html}) but no converter for BioPax to SBML, which's conversion also includes relations. Following, the need of combining these formats to use the knowledge different databases becomes more and more urgent.
+So far, there exist several visualization tools, like Cytoscape, which can handle both formats (\textbf{cite}). \citet*{Ruebenacker2009} suggested a new a bridging format to solve the problem of the conversion from BioPax to SBML \citep{Ruebenacker2009}. But until now, there exists only one converter from SBML to BioPax (see http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPax.html) but no converter for BioPax to SBML, which's conversion also includes relations. Following, the need of combining these formats to use the knowledge different databases becomes more and more urgent.
 % what we did
-We present a complete conversion of the nature pathway interaction database (PID)from BioPax Level 2 and Level 3 format to the SBML format including the qual extension. The pathway conversion is implemented in Java and uses jSBML and PaxTools. The translated files are freely available on our homepage: ...
-
+% necessary to mention why we use PID?
+We present a complete conversion of the nature pathway interaction database (PID, \cite{Schaefer2009}) from BioPax Level 2 and Level 3 format to the SBML format including the qual extension. The pathway conversion is implemented in Java and uses jSBML and PaxTools. The translated files are freely available on our homepage: ...
+% what we find out
+% what do the results mean (why are they significant?)
 
 \textbf{TODO: Clemens, Florian und Andreas: Habt ihr hier noch konkrete Ideen, was ich noch einbauen k\"onnte? Fehlt etwas?}
 
 
 \begin{methods}
 \section{Material and Methods}
-\subsection{Material BioCarta}
-\textbf{TODO: Finja rewrite}
- BioCarta pathways of the nature Pathway Interaction Database (PID) (2). PID provides human pathways in the BioPax format level 3 (3), which specifies for each interaction a ControlType attribute. The ControlType attribute determines if the interaction is activating or inhibiting.
-%(2) Carl F. Schaefer, Kira Anthony, Shiva Krupa, Jeffrey Buchoff, Matthew Day, Timo Hannay & Kenneth H. Buetow. PID: The Pathway Interaction Database. Nucleic Acids Res. 37, D674-9 (2009)
-%(3) Demir et al. Nature Biotechnology 28 , 935–942 (2010) doi:10.1038/nbt.1666
-
-
-Biopax basis=owl (Web Ontology Language)
-\subsection{Specification of SBML qual}
+\subsection{SBML, SBML qual, and BioPax specification}
+%%%%%%%%% SBML
+SBML (Systems Biology Markup Language) specification is a special XML format to describe biological models. Therefore, several classes are defined. The most important ones are species, reaction  specification defines several classes, called species, reaction \citep{Hucka2003}.
+%%%%%%%%% SBML qual
 \begin{itemize}
 \item QualtitativeModel
 \item QualitativeSpecies
-\item Transition: All interactions between two or more entities, which are not molecular reactions, are named relation. These relations describe enzyme-enzyme relations, protein-protein interactions, interactions of transcription factors and genes, protein-compound interaction and links to other pathways. In SBML, qual describes relations as Transitions. Transitions consist of Input, Output, and Term objects. SBML qual specifies the kind of relation in the variable “sign” of the Input object. The sign variable can have the value “positive”, “negative”, “dual”, and “unkown”. \textbf{TODO Finja: Rewrite, because the same text in path2models}
+\item Transition: All interactions between two or more entities, which are not molecular reactions, are named relation. These relations describe enzyme-enzyme relations, protein-protein interactions, interactions of transcription factors and genes, protein-compound interaction and links to other pathways. In SBML, qual describes relations as Transitions. Transitions consist of Input, Output, and Term objects. SBML qual specifies the kind of relation in the variable ï¿½signï¿½ of the Input object. The sign variable can have the value ï¿½positiveï¿½, ï¿½negativeï¿½, ï¿½dualï¿½, and ï¿½unkownï¿½. \textbf{TODO Finja: Rewrite, because the same text in path2models}
 \item Input
 \item Output
 \item FunctionTerm \textbf{TODO Florian: K\"onntest du hier bitte ein oder zwei S\"atze schreiben?}
@@ -66,11 +63,26 @@ Biopax basis=owl (Web Ontology Language)
 \item
 \end{itemize}
 
+%%%%%%%%% BioPax 
+BioPax Biology Pathway Exchange \citep{Demir2010}
+Biopax basis=owl (Web Ontology Language)
 
-\subsection{Specification of BioPax level 2 and 3}
+
+%%%%%%%%% BioPax difference between level 2 and 3
 \textbf{TODO Finja: Grobe Beschreibung, Verweis auf Publikationen}
 
 \subsection{Conversion of BioPax to SBML qual}
+%%%%%%%%% Material and implementation
+\textbf{TODO: Finja rewrite, focus on PID}
+ BioCarta pathways of the nature Pathway Interaction Database (PID) (2). PID provides human pathways in the BioPax format level 3 (3), which specifies for each interaction a ControlType attribute. The ControlType attribute determines if the interaction is activating or inhibiting.
+Java
+jSBML \citep{Draeger2011}
+qual (\textbf{TODO: Citation?})
+PaxTools
+
+
+%%%%%%%%% Conversion
+Entities 
 
 \begin{itemize}
 \item Use of Paxtools for Java einlesen
@@ -157,7 +169,7 @@ TODO: Typen (protein, gen, etc.) als SBO term in detail auflisten und erklaeren.
 
 
 \begin{itemize}
-\item TODO: Conversion/Control elemente nochmal zusätzlich einzeichnen?
+\item TODO: Conversion/Control elemente nochmal zusï¿½tzlich einzeichnen?
 \item Eine example conversion einbauen?
 \end{itemize}
 \end{methods}
@@ -172,7 +184,7 @@ Warum ist es so toll einen converter von biopax to sbml qual zu haben?
 
 \section{Conclusion}
 
-Conversions between different formats are important in all parts of computer sciences. Many conversions, in general, have errors or come with loss of information. The BioPax to SBML conversion is such an example. Due to limitations of the SBML specification, it was simply not possible to include all information from BioPax files in SBML files, while producing correct SBML code. But with SBML level 3 and the addition of extensions to the specifications, in particular the \texttt{qual} extension, it is now possible to create accurate and specification conform SBML code, and minimize or even eliminate the loss of information. 
+Conversions between different formats are important in all parts of computer sciences. Many conversions, in general, have errors or come with loss of information. The BioPax to SBML conversion is such an example. Due to limitations of the SBML specification, it was simply not possible to include all information from BioPax files in SBML files, while producing correct SBML code. But with SBML level 3 and the addition of extensions to the specifications, in particular the \texttt{qual} extension, it is now possible to create accurate and specification conform SBML code, and minimize or even eliminate the loss of information.
 
 BioPax is an RDF format that defines various derived entities that can be genes, proteins, small molecules, etc. These can be translated to SBML species and the type of the entity can be encoded as SBO term or MIRIAM annotation on the species itself. Relations between entities (which correspond to edges in a pathway picture) are also provided with detailed information in BioPax. These can be transports, biochemical reactions, complex assemblies, etc. And this is the point where most conversions to SBML usually produce errors or have a massive loss of information. The SBML core specification only provides reactions, which represent real biochemical reactions with substrates, products and enzymes. But processes like the transport or modulation of an entity can not directly be encoded as a reaction, at least without knowing the exact chemical equation. Hence, former conversions from BioPax to SBML did either convert those relations to incorrect reactions or simply remove them during translation. To fill this gap, the SBML community has very recently released the \texttt{qual} specification, which allows to model arbitrary transitions between species. Using this extension, we produce error-free SBML and minimize or even eliminate the loss of information during the translation.
 
@@ -185,7 +197,7 @@ This results in comprehensive and correct SBML models, created for all pathways 
 \begin{itemize}
 \item we provide a conversion from the most important database formats
 \item we can exchange and combine information from different databases using different model languages
-\item \textbf{TODO: Florian und Andreas: Habt ihr hier noch konkrete Erg\"anzungen?}
+\item \textbf{TODO: Clemens, Florian und Andreas: Habt ihr hier noch konkrete Erg\"anzungen?}
 \end{itemize}
 
 
