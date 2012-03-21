@@ -51,7 +51,14 @@ We present a complete conversion of the nature pathway interaction database (PID
 \subsection{SBML, SBML qual, and BioPax specification}
 %%%%%%%%% SBML
 SBML (Systems Biology Markup Language) specification is a special XML format to describe biological models. Therefore, several classes are defined. The most important ones are species, reaction  specification defines several classes, called species, reaction \citep{Hucka2003}.
+It focuses on the description of quantitative models and processes, like chemical reactions.
 %%%%%%%%% SBML qual
+The SBML qual extension introduces qualitative elements, such as quantitative species, symbols, and transitions, providing the necessary means to describe signaling pathways.
+Although, technically, those processes are chemical reactions, too, it can often be far more useful to represent them by logical states and transitions.
+Instead of concentration levels that are transformed continuously via reactions, qualitative species have discrete states that are changed using transitions.
+These transitions consist of input and output elements and at least one function term.
+If, in a qualitative model, a protein A is inhibiting a protein B, this would be represented as a transition with input A and output B.
+
 \begin{itemize}
 \item QualtitativeModel
 \item QualitativeSpecies
