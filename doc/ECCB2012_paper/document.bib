@@ -27,7 +27,7 @@
 	Collado-Vides and Susumu Goto and Michael Hucka and Nicolas Le Novère
 	and Natalia Maltsev and Akhilesh Pandey and Paul Thomas and Edgar
 	Wingender and Peter D Karp and Chris Sander and Gary D Bader},
-  title = {The BioPAX community standard for pathway data sharing.},
+  title = {The {BioPAX} community standard for pathway data sharing.},
   journal = {Nat Biotechnol},
   year = {2010},
   volume = {28},
@@ -62,46 +62,101 @@
   url = {http://dx.doi.org/10.1038/nbt.1666}
 }
 
+@ARTICLE{Draeger2008,
+  author = {Andreas Dr\"ager and Nadine Hassis and Jochen Supper and Adrian Schr\"oder
+	and Andreas Zell},
+  title = {{SBMLsqueezer: a CellDesigner plug-in to generate kinetic rate equations
+	for biochemical networks.}},
+  journal = {BMC Syst Biol},
+  year = {2008},
+  volume = {2},
+  pages = {39},
+  abstract = {The development of complex biochemical models has been facilitated
+	through the standardization of machine-readable representations like
+	SBML (Systems Biology Markup Language). This effort is accompanied
+	by the ongoing development of the human-readable diagrammatic representation
+	SBGN (Systems Biology Graphical Notation). The graphical SBML editor
+	CellDesigner allows direct translation of SBGN into SBML, and vice
+	versa. For the assignment of kinetic rate laws, however, this process
+	is not straightforward, as it often requires manual assembly and
+	specific knowledge of kinetic equations.SBMLsqueezer facilitates
+	exactly this modeling step via automated equation generation, overcoming
+	the highly error-prone and cumbersome process of manually assigning
+	kinetic equations. For each reaction the kinetic equation is derived
+	from the stoichiometry, the participating species (e.g., proteins,
+	mRNA or simple molecules) as well as the regulatory relations (activation,
+	inhibition or other modulations) of the SBGN diagram. Such information
+	allows distinctions between, for example, translation, phosphorylation
+	or state transitions. The types of kinetics considered are numerous,
+	for instance generalized mass-action, Hill, convenience and several
+	Michaelis-Menten-based kinetics, each including activation and inhibition.
+	These kinetics allow SBMLsqueezer to cover metabolic, gene regulatory,
+	signal transduction and mixed networks. Whenever multiple kinetics
+	are applicable to one reaction, parameter settings allow for user-defined
+	specifications. After invoking SBMLsqueezer, the kinetic formulas
+	are generated and assigned to the model, which can then be simulated
+	in CellDesigner or with external ODE solvers. Furthermore, the equations
+	can be exported to SBML, LaTeX or plain text format.SBMLsqueezer
+	considers the annotation of all participating reactants, products
+	and regulators when generating rate laws for reactions. Thus, for
+	each reaction, only applicable kinetic formulas are considered. This
+	modeling scheme creates kinetics in accordance with the diagrammatic
+	representation. In contrast most previously published tools have
+	relied on the stoichiometry and generic modulators of a reaction,
+	thus ignoring and potentially conflicting with the information expressed
+	through the process diagram. Additional material and the source code
+	can be found at the project homepage (URL found in the Availability
+	and requirements section).},
+  doi = {10.1186/1752-0509-2-39},
+  institution = {Center for Bioinformatics Tübingen (ZBIT), University of Tübingen,
+	Sand 1, 72076 Tübingen, Germany. andreas.draeger@uni-tuebingen.de},
+  keywords = {Algorithms; Chemistry, Organic, methods; Database Management Systems;
+	Gene Regulatory Networks; Hypermedia; Information Storage and Retrieval,
+	methods; Kinetics; Metabolic Networks and Pathways; Models, Biological;
+	Models, Chemical; Protein Interaction Mapping, methods; Signal Transduction;
+	Systems Biology, methods; User-Computer Interface},
+  owner = {buechel},
+  pii = {1752-0509-2-39},
+  pmid = {18447902},
+  timestamp = {2012.03.21},
+  url = {http://dx.doi.org/10.1186/1752-0509-2-39}
+}
+
 @ARTICLE{Draeger2011,
-  author = {Andreas Dräger and Nicolas Rodriguez and Marine Dumousseau and Alexander
-	Dörr and Clemens Wrzodek and Nicolas Le Novère and Andreas Zell and
-	Michael Hucka},
-  title = {JSBML: a flexible Java library for working with SBML.},
+  author = {Dr\"ager, Andreas and Rodriguez, Nicolas and Dumousseau, Marine and
+	D\"orr, Alexander and Wrzodek, Clemens and Le Nov\`{e}re, Nicolas
+	and Zell, Andreas and Hucka, Michael},
+  title = {{JSBML: a flexible Java library for working with SBML}},
   journal = {Bioinformatics},
   year = {2011},
   volume = {27},
   pages = {2167--2168},
   number = {15},
-  month = {Aug},
-  abstract = {SUMMARY: The specifications of the Systems Biology Markup Language
+  month = jun,
+  abstract = {Summary: The specifications of the Systems Biology Markup Language
 	(SBML) define standards for storing and exchanging computer models
 	of biological processes in text files. In order to perform model
-	simulations, graphical visualizations and other software manipulations,
+	simulations, graphical visualizations, and other software manipulations,
 	an in-memory representation of SBML is required. We developed JSBML
 	for this purpose. In contrast to prior implementations of SBML APIs,
-	JSBML has been designed from the ground up for the Java programming
-	language, and can therefore be used on all platforms supported by
-	a Java Runtime Environment. This offers important benefits for Java
-	users, including the ability to distribute software as Java Web Start
-	applications. JSBML supports all SBML Levels and Versions through
-	Level 3 Version 1, and we have strived to maintain the highest possible
-	degree of compatibility with the popular library libSBML. JSBML also
-	supports modules that can facilitate the development of plugins for
-	end user applications, as well as ease migration from a libSBML-based
-	backend. AVAILABILITY: Source code, binaries and documentation for
-	JSBML can be freely obtained under the terms of the LGPL 2.1 from
-	the website http://sbml.org/Software/JSBML.},
+	JSBML has been designed from the ground up for the Java\texttrademark{}
+	programming language, and can therefore be used on all platforms
+	supported by a Java Runtime Environment. This offers important benefits
+	for Java users, including the ability to distribute software as Java
+	Web Start applications. JSBML supports all SBML Levels and Versions
+	through Level~3 Version~1, and we have strived to maintain the highest
+	possible degree of compatibility with the popular library libSBML.
+	JSBML also supports modules that can facilitate the development of
+	plugins for end-user applications, as well as ease migration from
+	a libSBML-based backend. 
+	
+	Availability: Source code, binaries, and documentation for JSBML can
+	be freely obtained under the terms of the LGPL 2.1 from the website
+	\url{http://sbml.org/Software/JSBML}.},
   doi = {10.1093/bioinformatics/btr361},
-  institution = {Center for Bioinformatics Tuebingen (ZBIT), University of Tuebingen,
-	Tübingen, Germany. jsbml-team@sbml.org},
-  keywords = {Computer Simulation; Database Management Systems; Information Storage
-	and Retrieval, methods; Models, Biological; Programming Languages;
-	Software; Systems Biology, methods},
-  owner = {buechel},
-  pii = {btr361},
-  pmid = {21697129},
-  timestamp = {2012.03.20},
-  url = {http://dx.doi.org/10.1093/bioinformatics/btr361}
+  eprint = {http://bioinformatics.oxfordjournals.org/content/27/15/2167.full.pdf+html},
+  pdf = {http://bioinformatics.oxfordjournals.org/content/early/2011/06/22/bioinformatics.btr361.full.pdf},
+  url = {http://bioinformatics.oxfordjournals.org/content/27/15/2167}
 }
 
 @ARTICLE{Finney2003,
@@ -129,6 +184,43 @@
   pmid = {14641091},
   timestamp = {2012.03.20},
   url = {http://dx.doi.org/10.1042/}
+}
+
+@ARTICLE{Funahashi2007,
+  author = {Akira Funahashi and Akiya Jouraku and Yukiko Matsuoka and Hiroaki
+	Kitano},
+  title = {{Integration of CellDesigner and SABIO-RK.}},
+  journal = {In Silico Biol},
+  year = {2007},
+  volume = {7},
+  pages = {S81--S90},
+  number = {2 Suppl},
+  abstract = {Understanding the logic and dynamics of gene-regulatory and biochemical
+	networks is a major challenge for systems biology. To facilitate
+	this research topic, we have developed CellDesigner to visualize,
+	model and simulate biochemical networks. CellDesigner allows the
+	users to easily create networks using solidly defined and comprehensive
+	graphical notation. CellDesigner utilizes SBML to described models
+	and can simulate models using an integrated SBML ODE Solver or third
+	party simulation engine; thus enabling users to simulate through
+	a sophisticated graphical user interface. Although CellDesigner can
+	integrate with existing databases (KEGG, PubMed, BioModels, etc.),
+	by calling a web browser, or connecting to its web page through HTTP,
+	integration with SABIO-RK has the potential to expand connectivity
+	and semi-automate visualization and model building. SABIO-RK contains
+	information about biochemical reactions, related kinetic equations
+	and parameters. Also information about the experimental conditions
+	under which these parameters were measured is stored. By using the
+	Web service API provided by the SABIO-RK team, we have succeeded
+	to directly connect to the database, send search queries by ID or
+	name of its component, and then import the query results into CellDesigner.},
+  institution = {JST/ERATO-SORST Kitano Symbiotic Systems Project, Japan. funa@symbio.jst.go.jp},
+  keywords = {Computer Communication Networks; Computer Simulation; Gene Regulatory
+	Networks; Metabolic Networks and Pathways; Software},
+  owner = {buechel},
+  pii = {200707S110},
+  pmid = {17822394},
+  timestamp = {2012.03.21}
 }
 
 @ARTICLE{Gauges2006,
@@ -182,8 +274,8 @@
 	and J. C. Schaff and B. E. Shapiro and T. S. Shimizu and H. D. Spence
 	and J. Stelling and K. Takahashi and M. Tomita and J. Wagner and
 	J. Wang and S. B. M. L. Forum},
-  title = {The systems biology markup language (SBML): a medium for representation
-	and exchange of biochemical network models.},
+  title = {{The systems biology markup language (SBML): a medium for representation
+	and exchange of biochemical network models.}},
   journal = {Bioinformatics},
   year = {2003},
   volume = {19},
@@ -211,9 +303,44 @@
   timestamp = {2012.03.20}
 }
 
+@ARTICLE{Mi2011,
+  author = {Huaiyu Mi and Anushya Muruganujan and Emek Demir and Yukiko Matsuoka
+	and Akira Funahashi and Hiroaki Kitano and Paul D Thomas},
+  title = {{BioPAX support in CellDesigner.}},
+  journal = {Bioinformatics},
+  year = {2011},
+  volume = {27},
+  pages = {3437--3438},
+  number = {24},
+  month = {Dec},
+  abstract = {MOTIVATION: BioPAX is a standard language for representing and exchanging
+	models of biological processes at the molecular and cellular levels.
+	It is widely used by different pathway databases and genomics data
+	analysis software. Currently, the primary source of BioPAX data is
+	direct exports from the curated pathway databases. It is still uncommon
+	for wet-lab biologists to share and exchange pathway knowledge using
+	BioPAX. Instead, pathways are usually represented as informal diagrams
+	in the literature. In order to encourage formal representation of
+	pathways, we describe a software package that allows users to create
+	pathway diagrams using CellDesigner, a user-friendly graphical pathway-editing
+	tool and save the pathway data in BioPAX Level 3 format. AVAILABILITY:
+	The plug-in is freely available and can be downloaded at ftp://ftp.pantherdb.org/CellDesigner/plugins/BioPAX/
+	CONTACT: huaiyumi@usc.edu SUPPLEMENTARY INFORMATION: Supplementary
+	data are available at Bioinformatics online.},
+  doi = {10.1093/bioinformatics/btr586},
+  institution = {of Southern California, Los Angeles, CA 90089, USA. huaiyumi@usc.edu},
+  keywords = {Animals; Computational Biology; Databases, Factual; Humans; Metabolic
+	Networks and Pathways; Models, Biological; Signal Transduction; Software},
+  owner = {buechel},
+  pii = {btr586},
+  pmid = {22021903},
+  timestamp = {2012.03.21},
+  url = {http://dx.doi.org/10.1093/bioinformatics/btr586}
+}
+
 @ARTICLE{Ruebenacker2009,
-  author = {O. Ruebenacker and I. I. Moraru and J. C. Schaff and M. L. Blinov},
-  title = {Integrating BioPAX pathway knowledge with SBML models.},
+  author = {O. R\"ubenacker and I. I. Moraru and J. C. Schaff and M. L. Blinov},
+  title = {{Integrating BioPAX pathway knowledge with SBML models.}},
   journal = {IET Syst Biol},
   year = {2009},
   volume = {3},
@@ -260,7 +387,7 @@
 @ARTICLE{Schaefer2009,
   author = {Carl F Schaefer and Kira Anthony and Shiva Krupa and Jeffrey Buchoff
 	and Matthew Day and Timo Hannay and Kenneth H Buetow},
-  title = {PID: the Pathway Interaction Database.},
+  title = {{PID: the Pathway Interaction Database.}},
   journal = {Nucleic Acids Res},
   year = {2009},
   volume = {37},
@@ -299,6 +426,78 @@
   pmid = {18832364},
   timestamp = {2012.03.20},
   url = {http://dx.doi.org/10.1093/nar/gkn653}
+}
+
+@ARTICLE{Smoot2011a,
+  author = {Michael E Smoot and Keiichiro Ono and Johannes Ruscheinski and Peng-Liang
+	Wang and Trey Ideker},
+  title = {Cytoscape 2.8: new features for data integration and network visualization.},
+  journal = {Bioinformatics},
+  year = {2011},
+  volume = {27},
+  pages = {431--432},
+  number = {3},
+  month = {Feb},
+  abstract = {Cytoscape is a popular bioinformatics package for biological network
+	visualization and data integration. Version 2.8 introduces two powerful
+	new features--Custom Node Graphics and Attribute Equations--which
+	can be used jointly to greatly enhance Cytoscape's data integration
+	and visualization capabilities. Custom Node Graphics allow an image
+	to be projected onto a node, including images generated dynamically
+	or at remote locations. Attribute Equations provide Cytoscape with
+	spreadsheet-like functionality in which the value of an attribute
+	is computed dynamically as a function of other attributes and network
+	properties. Availability and implementation: Cytoscape is a desktop
+	Java application released under the Library Gnu Public License (LGPL).
+	Binary install bundles and source code for Cytoscape 2.8 are available
+	for download from http://cytoscape.org.},
+  doi = {10.1093/bioinformatics/btq675},
+  institution = {Department of Medicine, University of California, San Diego, 9500
+	Gilman Drive, La Jolla, CA 92093, USA. msmoot@ucsd.edu},
+  keywords = {Computational Biology, methods; Software; Statistics as Topic, methods},
+  owner = {buechel},
+  pii = {btq675},
+  pmid = {21149340},
+  timestamp = {2012.03.21},
+  url = {http://dx.doi.org/10.1093/bioinformatics/btq675}
+}
+
+@ARTICLE{Zinovyev2008,
+  author = {Andrei Zinovyev and Eric Viara and Laurence Calzone and Emmanuel
+	Barillot},
+  title = {{BiNoM: a Cytoscape plugin for manipulating and analyzing biological
+	networks.}},
+  journal = {Bioinformatics},
+  year = {2008},
+  volume = {24},
+  pages = {876--877},
+  number = {6},
+  month = {Mar},
+  abstract = {BiNoM (Biological Network Manager) is a new bioinformatics software
+	that significantly facilitates the usage and the analysis of biological
+	networks in standard systems biology formats (SBML, SBGN, BioPAX).
+	BiNoM implements a full-featured BioPAX editor and a method of 'interfaces'
+	for accessing BioPAX content. BiNoM is able to work with huge BioPAX
+	files such as whole pathway databases. In addition, BiNoM allows
+	the analysis of networks created with CellDesigner software and their
+	conversion into BioPAX format. BiNoM comes as a library and as a
+	Cytoscape plugin which adds a rich set of operations to Cytoscape
+	such as path and cycle analysis, clustering sub-networks, decomposition
+	of network into modules, clipboard operations and others. AVAILABILITY:
+	Last version of BiNoM distributed under the LGPL licence together
+	with documentation, source code and API are available at http://bioinfo.curie.fr/projects/binom},
+  doi = {10.1093/bioinformatics/btm553},
+  institution = {Institut Curie, Service de Bioinformatique, 26 rue d'Ulm, F-75248
+	Paris Cedex 05, France. andrei.zinovyev@curie.fr},
+  keywords = {Computer Simulation; Database Management Systems; Databases, Factual;
+	Information Storage and Retrieval, methods; Models, Biological; Programming
+	Languages; Proteome, metabolism; Signal Transduction, physiology;
+	Software; User-Computer Interface},
+  owner = {buechel},
+  pii = {btm553},
+  pmid = {18024474},
+  timestamp = {2012.03.21},
+  url = {http://dx.doi.org/10.1093/bioinformatics/btm553}
 }
 
 @comment{jabref-meta: selector_publisher:}
