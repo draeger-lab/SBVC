@@ -127,7 +127,7 @@ A detailed translation description of these elements is shown in Table \ref{Tab:
 The complete nature Pathway Interaction Database (PID) is converted from BioPax Level 2 and Level 3 to SBML including the qualitative models extension.
 PID provides NCI-Nature curated pathways, pathways from BioCarta from June 2004, and Reactome human pathways from Version 22, whereas the Reactome data is updated as soon as new pathway informations are available \citep{Schaefer2009}.\\
 The translation of the BioPax pathway files is performed in five steps.
-An overview of the mapping from BioPax elements to SBML and to SBML qual elements is shown in Figure \ref{fig:BioPaxSBMLqul}.
+An overview of the mapping from BioPax elements to SBML and to SBML qual elements is shown in Figure \ref{fig:BioPaxSBMLqual}.
 %%%%%%%%%%%%%% 1. Step %%%%%% determine organism
 In the first step, the pathway organism is determined by searching for the BioSource reference in the BioPax file.
 The default organism is human.
@@ -137,19 +137,27 @@ The models correspond to the complete pathway represented in the BioPax file.
 %%%%%%%%%%%%%% 3. Step %%%%%% entities and annotation
 % conversion of Entities, gene id...
 In the third step, for each \texttt{PhysicalEntity} a SBML \texttt{species} and \texttt{qualitativeSpecies} is created.
-Initially, (\textbf{TODO: how is the species influenced if the PhysicalEntity is gene, protein..}).
+Depending of the kind of the \texttt{PhysicalEntity}, i.e. if it is a protein, complex, DNA, RNA, or small molecule, the species is annotated with the corresponding SBO term \textbf{TODO: Do we need a citation here?}.
+Furthermore, the compartment is assigned to the \texttt{species}. If it is not possible to determine the compartment, a default compartment is assigned.
 Then, it is searched if there exists an RDF link from the \texttt{PhysicalEntity} to the corresponding Entrez Gene ID, because the Gene ID facilitates the annotation in the fifth step.
 If there exists no Gene ID, the gene symbol is search and mapped to a Gene ID.
 If neither a gene id nor a gene symbol is available the name of the \texttt{PhysicalEntity} is used.
 %%%%%%%%%%%%%% 4. Step %%%%%% reaction relations
-In the fourth step, the BioPax interaction elements are converted. For
-% conversion of reaction
-    % level 3 stoichometrie level 2 hat das noch nicht
-% conversion of relations
-    % Unterscheidung relation/reaction
-    % Verweis auf Bild
-    % Verweis auf Tabelle
-
+In the fourth step, the BioPax interaction elements are converted. 
+Interaction elements can be split in \texttt{Conversion} and \texttt{Control} elements.
+Conversion are mainly converted into SBML reactions except of the \texttt{Transport} and the \texttt{Degradation} elements.
+These are translated into transitions. 
+In BioPax Level 3 the stoichiometry of the reactants and products of \texttt{BiochemicalReaction}s and \texttt{TransportWithBiochemicalReaction}s can also be translated. 
+Level 2 does not provide stoichiometric information.\\
+The conversion of the \texttt{Control} elements is straight forward, whereas the conversion of \texttt{Control} elements is more sophisticated, because translation into a transition or a reaction depends on the enclosed \texttt{Control} elements.
+\texttt{Control} elements always consist of zero or one \texttt{Controller} and zero or more \texttt{Controlled} elements. 
+\texttt{]Controller} elements can be inherited from \texttt{PhysicalEntity} or \texttt{Pathway}, whereas \texttt{Controlled} elements also are \texttt{Interaction} elements.
+Thus, it depends on the kind of \texttt{Controller} and the \texttt{Controlled} element if the \texttt{Interaction} is translated to a SBML reaction or transition.
+If the \texttt{Controller} or the \texttt{Controlled} element is a \texttt{Pathway} element the \texttt{Interaction} is always converted to a transition, because in biology it is not possible to create a reaction with a complete pathway as an reactant or a product.
+In the other cases, an interaction is translated to a transition if the \texttt{Controlled} element is translated to a transition, too. 
+For instance, the conversion of a \texttt{Modulation} consisting of a \texttt{PhysicalEntity} as \texttt{Controller} and a \texttt{ComplexAssembly} as \texttt{Controlled} is translated to a reaction.
+But if the \texttt{Controlled} element is a degradation the \texttt{Modulation} is converted into a transition. 
+A detailed overview of the conversion of the \texttt{Control} elements is shown in Table \ref{Tab:BioPax2SBML}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% TABLE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[t!h]
@@ -221,7 +229,7 @@ These can be identifiers for various databases, e.g., UniProt, Entrez Gene, Ense
     <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3, Q7Z5L2</bp:ID>
   </bp:unificationXref>
 %%%%%%%%%%% Beispiel ENDE %%%%%%%%%%%%%%%%%%%%
-  
+
 In SBML, such identifiers can be expressed as standardized MIRIAM URNs that can be added as annotation to any SBML element.
 We support and add MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology).
 All supported identifiers from the BioPax files are parsed, some are manually curated (see example of inconsistent usage above) and many annotations are supplemented by additional queries to the KEGG API for every translated element.
@@ -274,4 +282,4 @@ We thank xy.
 %
 \bibliography{document}
 
-\end{document}
+\end{document} 
