@@ -1,23 +1,24 @@
 \documentclass{bioinfo}
-\copyrightyear{2005}
-\pubyear{2005}
-\usepackage{graphicx}
-\hyphenation{Complex-Assembly}
+
+\usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
+\hypersetup{breaklinks=true,
+pagecolor=white,
+colorlinks=false}
+\urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
 
 % Useful macros:
-
 \newcommand{\qual}{\texttt{qual}}
+
+\copyrightyear{2012}
+\pubyear{2012}
 
 \begin{document}
 \firstpage{1}
 
 \title[BioPax to SBML qual]{Qualitative translation of relations from BioPax to SBML qual}
-\author[B\"uchel \textit{et~al}]{Finja B\"uchel\,$^{1,*}$,
-and Andreas Zell\,$^1$\footnote{to whom correspondence should be addressed}}
-\address{$^{1}$Department of Cognitive Systems, University of Tuebingen, Sand 1,
-72076 T\"ubingen, Germany}
+\author[Finja B\"uchel \textit{et~al}]{Finja B\"uchel\,$^{1\footnote{to whom correspondence should be addressed}}$, and Andreas Zell\,$^1$}
 
-
+\address{$^{1}$Center for Bioinformatics Tuebingen (ZBIT), \\University of Tuebingen, 72076 T\"ubingen, Germany}
 \history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
 
 \editor{Associate Editor: XXXXXXX}
@@ -48,9 +49,14 @@ BioPax can be used to image metabolic, signaling, molecular, gene regulatory and
 In contrast, SBML is mostly used for quantitative modeling because it offers the possibility to include kinetic equations and enables the interpretation of the interaction network as an differential equation system \citep{Hucka2003}.
 The SBML core specification defines reactions in detail but no other relationships between molecules.
 %problem
-Before the release of the Qualitative Models specification (\qual, see %\href{http://sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}
-\href{http://sbml.org/Community/Wiki/SBML_Level_3_Proposals/Qualitative_Models}
-{www.sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}), it was not possible to define relations or to integrate reactions and relations in one model.
+Before the release of the Qualitative Models specification (\qual, \citealp[see][]{QualSpecification}),
+
+%see %\url{http://sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}
+%\href{http://sbml.org/Community/Wiki/SBML_Level_3_Proposals/Qualitative_Models}
+%{www.sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}),
+
+
+it was not possible to define relations or to integrate reactions and relations in one model.
 %relevance
 Furthermore, it was not possible to easily combine or exchange information between different databases if one database uses the BioPax format and the other one the SBML format.
 %literature review
