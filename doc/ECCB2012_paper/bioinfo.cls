@@ -450,7 +450,12 @@
 \def\@maketitle{%
   \let\footnote\thanks
   \clearemptydoublepage
-    \checkoddpage\ifcpoddpage\setlength{\aboveskipchk}{-3pc}\else\setlength{\aboveskipchk}{-5pc}\fi%for checking oddpage or evenpage top skip%%
+% CUSTOM REMOVED: The following line conflicts with the hyperref package!!!
+   \checkoddpage\ifcpoddpage\setlength{\aboveskipchk}{-3pc}\else\setlength{\aboveskipchk}{-5pc}\fi
+% Thus, we fixed the aboveskipchk variable to -3pc.
+%\setlength{\aboveskipchk}{-3pc}
+
+
   \vspace*{\aboveskipchk}%
   \vspace{\dropfromtop}%
   \hbox to \textwidth{%

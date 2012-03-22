@@ -1,20 +1,24 @@
 \documentclass{bioinfo}
 
+\usepackage{multicol} % Merge cells horizontally
 \usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 \hypersetup{breaklinks=true,
 pagecolor=white,
-colorlinks=false}
+colorlinks=false,}
 \urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
-\hyphenation{BioPax BioCarta PaxTools}
-\def\TTra{\textsuperscript{\tiny{\texttrademark}\,}}
 
+\hyphenation{BioPax BioCarta PaxTools}
 % Useful macros:
+\newcommand{\TTra}{\textsuperscript{\tiny{\texttrademark}\,}}
 \newcommand{\qual}{\texttt{qual}}
+
+
 
 \copyrightyear{2012}
 \pubyear{2012}
 
 \begin{document}
+
 \firstpage{1}
 
 \title[BioPax to SBML qual]{Qualitative translation of relations from BioPax to SBML qual}
@@ -57,7 +61,7 @@ Furthermore, the combination or exchange of information between different databa
 %literature review
 So far, there exist several visualization tools, like Cytoscape or CellDesigner, which can handle both formats by using plugins \citep{Mi2011, Funahashi2007, Smoot2011a, Zinovyev2008}).
 \citet*{Ruebenacker2009} suggest a new a bridging format to solve the problem of the conversion from BioPax to SBML.
-But until now, there exists mainly converters from SBML to BioPax like \emph{The System Biology Format Converter} (\citealp[see][]{Group2011}) but no converter for BioPax to SBML, whose conversion would also include relations.
+But until now, there exists mainly converters from SBML to BioPax like \emph{The System Biology Format Converter} \citep[see][]{SBFC} but no converter for BioPax to SBML, whose conversion would also include relations.
 The need to combine both formats to use the knowledge from a multitude of databases in various application becomes more and more urgent.
 
 % what we did
@@ -106,7 +110,7 @@ Otherwise it is explicitly denoted in the text.
 \subsection{Implementation}
 The conversion was programmed with Java\TTra, using JSBML \citep{Draeger2011} with the Qualitative Models extension, PaxTools, and the KEGG API \citep{Kanehisa2006}.
 PaxTools was used to read the BioPax files and to manipulate the information content.
-This information was extended with MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology) \textbf{TODO Clemens: Citation for Miriam annotation}.
+This information was extended with MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology)\citep{Novere2005}.
 
 \subsection{Conversion of BioPax to SBML \qual}\label{subsec:BioPax}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% FIGURE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,28 +145,57 @@ The models correspond to the complete pathway represented in the BioPax file.
 %%%%%%%%%%%%%% 3. Step %%%%%% entities and annotation
 % conversion of Entities, gene id...
 In the third step, for each \texttt{PhysicalEntity} a SBML \texttt{species} and \texttt{qualitativeSpecies} is created.
-Depending of the kind of the \texttt{PhysicalEntity}, i.e. if it is a protein, complex, DNA, RNA, or small molecule, the species is annotated with the corresponding SBO term \textbf{TODO Clemens: SBO citation}.
-Then the \texttt{species}' compartment is assigned depending on the GO annotation of the \texttt{PhysicalEntity}.
-If no GO term is specified the \texttt{species} is assigned to a default compartment.
-Finally, an RDF link from the \texttt{PhysicalEntity} to a corresponding Entrez Gene ID is searched, because the Gene ID facilitates the annotation in the fifth step.
+Depending of the kind of the \texttt{PhysicalEntity}, i.e. if it is a protein, complex, DNA, RNA, or small molecule, the species is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPax2SBO} for a list of used terms).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% TABLE X %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[tb]
+\processtable{BioPax entities and assigned SBO terms\label{Tab:BioPax2SBO}}
+{\begin{tabular}{llll}\toprule
+\textbf{BioPax entity} & \textbf{Assigned SBO term} & \textbf{SBO name} \\
+\midrule
+Complex         & SBO:0000253 & non-covalent complex \\
+Protein         & SBO:0000252 & polypeptide chain \\
+Dna             & SBO:0000251 & deoxyribonucleic acid \\
+DnaRegion       & SBO:0000251 & deoxyribonucleic acid \\
+Rna             & SBO:0000250 & ribonucleic acid \\
+RnaRegion       & SBO:0000250 & ribonucleic acid \\
+SmallMolecule   & SBO:0000247 & simple chemical \\
+Gene            & SBO:0000240 & informational molecule segment \\
+\botrule
+\end{tabular}}
+{
+Each BioPax \texttt{Entity} is converted to a SBML \texttt{species} and \texttt{qualitativeSpecies}.
+In BioPax, one can specify the nature of the real entity by classes, that are derived from \texttt{Entity} (e.g., DNA, Protein, etc).
+SBML does not contain specific entities that can be derived from a SBML \texttt{species}.
+The common way to separate different genomic entities in SBML is using SBO terms from the material entity branch.
+This table specifies the SBO terms that we used to distinguish between various cellular entities in SBML.
+}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% CW: Compartment text ist IMHO nicht richtig und unwichtig => entfernt.
+%Then the \texttt{species}' compartment is assigned depending on the GO annotation of the \texttt{PhysicalEntity}.
+%If no GO term is specified the \texttt{species} is assigned to a default compartment.
+
+Finally, the BioPax document is mined for an RDF link from the \texttt{PhysicalEntity} to a corresponding Entrez Gene ID. These identifers are unique and facilitates the automated annotation of this species (described in the fifth step).
 If there exists no Gene ID but a gene symbol, the gene symbol is mapped to a Gene ID. \textbf{TODO: Clemens das noch n\"aher ausf\"uhren?}
 If neither a Gene ID nor a gene symbol is available the name of the \texttt{PhysicalEntity} is used.
+
 
 %%%%%%%%%%%%%% 4. Step %%%%%% reaction relations
 In the fourth step, the BioPax interaction elements are converted.
 Interaction elements can be split in \texttt{Conversion} and \texttt{Control} elements.
-\texttt{Conversion}s are mainly translated into SBML reactions except of the \texttt{Transport} and the \texttt{Degradation} elements.
-These are translated into transitions.
-In BioPax Level~3 the stoichiometry of the reactants and products of \texttt{BiochemicalReaction}s and \texttt{TransportWithBiochemicalReaction}s can also be translated.
-Level~2 does not provide stoichiometric information.
-The conversion of the \texttt{Control} elements is straight forward, whereas the conversion of \texttt{Control} elements is more sophisticated, because translation into a transition or a reaction depends on the enclosed \texttt{Control} elements.
+
+\texttt{Conversion}s are mainly translated into SBML reactions except of the \texttt{Transport} and the \texttt{Degradation} elements, which are translated into transitions. Translation of reactions from BioPax to SBML is performed by creating the same reaction with all substrates, products and enzymes in SBML. Furthermore BioPax Level~3 provides the stoichiometry of the reactants and products of \texttt{BiochemicalReaction}s and \texttt{TransportWithBiochemicalReaction}s which are also translated to SBML.Level~2 does not provide stoichiometric information.
+
+The conversion of the \texttt{Control} elements is straightforward, whereas the conversion of \texttt{Control} elements is more sophisticated, because translation into a transition or a reaction depends on the enclosed \texttt{Control} elements.
 \texttt{Control} elements always consist of zero or more \texttt{Controller} and zero or one \texttt{Controlled} elements.
 \texttt{Controller} elements can be inherited from \texttt{PhysicalEntity} or \texttt{Pathway}, whereas \texttt{Controlled} elements are also \texttt{Interaction} elements.
 Thus, it depends on the kind of \texttt{Controller} and the \texttt{Controlled} element if the \texttt{Interaction} is translated to a SBML reaction or transition.
 If the \texttt{Controller} or the \texttt{Controlled} element is a \texttt{Pathway} element the \texttt{Interaction} is always converted to a transition, because in biology it is not possible to create a reaction with a complete pathway as an reactant or a product.
 A \texttt{Conversion} is translated into a \texttt{transition} if the \texttt{Controlled} element is translated to a transition, too.
 For instance, the conversion of a \texttt{Modulation}, consisting of a \texttt{PhysicalEntity} as \texttt{Controller} and a \texttt{BioChemicalReaction} as \texttt{Controlled}, is translated to a reaction.
-An example is shown in Figure~\ref{fig:Ceramide} which shows the ceramide signaling pathway, where the biochemical reaction from sphingomyelin to ceramide (the \texttt{Controlled} element) is positively modulated from SMPD1+ (the \texttt{Controller}). 
+An example is shown in Figure~\ref{fig:Ceramide} which shows the ceramide signaling pathway, where the biochemical reaction from sphingomyelin to ceramide (the \texttt{Controlled} element) is positively modulated from SMPD1+ (the \texttt{Controller}).
 This modulation will be converted into a reaction where SMPD1+ is modelled as an enzyme of the reaction.
 But if the \texttt{Controlled} element is a \texttt{Degradation}, the \texttt{Modulation} is converted into a transition.
 In some cases, the \texttt{Controlled} element is an \texttt{Interaction} entity that does not belong to a special subclass.
@@ -178,7 +211,8 @@ BioPax controller & BioPax controlled               & Converted\\
                   &                                 & SBML \qual\\
                   &                                 & element\\
 \midrule
-\textbf{BioPax Level~3}\\
+%\textbf{BioPax Level~3}\\
+\multicolumn{3}{c}{\centering \textbf{BioPax Level~3}}\\
 \midrule
 PhysicalEntity & BiochemicalReaction                & reaction\\
 PhysicalEntity & ComplexAssembly                    & reaction\\
@@ -198,7 +232,8 @@ Pathway         & TemplateReaction                  & transition\\
 Pathway         & Transport                         & transition\\
 Pathway         & TransportWithBiochemicalReaction  & transition\\
 \\\midrule
-\textbf{BioPax Level~2}\\
+%\textbf{BioPax Level~2}\\
+\multicolumn{3}{c}{\centering \textbf{BioPax Level~2}}\\
 \midrule
 physicalEntity & biochemicalReaction                & reaction\\
 physicalEntity & complexAssembly                    & reaction\\
@@ -224,32 +259,32 @@ The table gives an overview of this conversion regarding BioPax Level~2 and BioP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In the fifth and final step, the SBML instances are further annotated.
 The BioPax specification allows users to encode arbitrary identifiers for elements.
-These can be identifiers for various databases, e.g., UniProt, Entrez Gene, Ensembl, etc. Unfortunately, the syntax used in BioPax is not very consistent which leads to XML elements like TODO-X or TODO-Y within BioPax documents that hamper the automatic reading and interpretation of those models by third party applications.
+These can be identifiers for various databases, e.g., UniProt, Entrez Gene, Ensembl, etc. Unfortunately, the syntax used in BioPax is sometimes inconsistent which leads to XML database annotations like "UniProt" or "UniProtKB" within BioPax documents that hamper the automatic reading and interpretation of those models by third party applications.
 %%%%%%%%%%% Beispiel %%%%%%%%%%%%%%%%%%%%
-\textbf{TODO Clemens: Rewrite this example!!!}
-  <bp:unificationXref rdf:ID="unificationXref14">
-    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProt</bp:DB>
-    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3</bp:ID>
-  </bp:unificationXref>
-  <bp:unificationXref rdf:ID="unificationXref14">
-    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProtKB</bp:DB>
-    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3</bp:ID>
-  </bp:unificationXref>
-  <bp:unificationXref rdf:ID="unificationXref14">
-    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProt</bp:DB>
-    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3, Q7Z5L2</bp:ID>
-  </bp:unificationXref>
+%  <bp:unificationXref rdf:ID="unificationXref14">
+%    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProt</bp:DB>
+%    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3</bp:ID>
+%  </bp:unificationXref>
+%  <bp:unificationXref rdf:ID="unificationXref14">
+%    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProtKB</bp:DB>
+%    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3</bp:ID>
+%  </bp:unificationXref>
+%  <bp:unificationXref rdf:ID="unificationXref14">
+%    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">UniProt</bp:DB>
+%    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema\#string">Q4KMY3, Q7Z5L2</bp:ID>
+%  </bp:unificationXref>
 %%%%%%%%%%% Beispiel ENDE %%%%%%%%%%%%%%%%%%%%
 
 In SBML, such identifiers can be expressed as standardized MIRIAM URNs that can be added as annotation to any SBML element.
-We support and add MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology).
-All supported identifiers from the BioPax files are parsed, some are manually curated (see example of inconsistent usage above) and some annotations are supplemented by additional queries to the KEGG API for every translated element.
+We support and add MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology). To obtain identifiers for those databases, we map the Entrez Gene identifier, which we annotated on every element in Step 2, to a KEGG identifier. Using the KEGG API, we then query all of those identifiers to retrieve better names, descriptions and the mentioned database identifiers.
+%CW: Entfernt. wurde durch neuen satz (s.o.) ersetzt.
+%All supported identifiers from the BioPax files are parsed, some are manually curated by us, and some annotations are supplemented by additional queries to the KEGG API for every translated element.
 The goal of those annotations is to provide models that can be used directly by many researchers, no matter what identifiers or databases they use.
 \end{methods}
 
 
 \section{Results and Discussion}
-%http://pid.nci.nih.gov/about.shtml#pid 
+%http://pid.nci.nih.gov/about.shtml#pid
 % TODO: das ist der Link, der unbedingt in die übersetzten die Pathways geschrieben werden muss.
 %%%%%%%%%%%%%%%%%%%%%%%%%%% BEGIN FIGURE 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[t!h]
@@ -273,10 +308,10 @@ The website of the National Cancer Institute (http://www.cancer.gov) \textbf{TOD
 %6. Jetzt gibt es endlich BioPax to SBML qual, das viel besser ist weil,...
 %7. Im folgenden werden die Merkmale näher erläutert.
 
-The Pathway Interaction Database (PID) is a curated and peer-reviewed pathway database containing human molecular signaling and regulatory events from the Nature Cancer Institute, BioCarta and Reactome. 
+The Pathway Interaction Database (PID) is a curated and peer-reviewed pathway database containing human molecular signaling and regulatory events from the Nature Cancer Institute, BioCarta and Reactome.
 The pathways are provided as XML, Level~2, and Level~3 BioPax files and is updated monthly.
 Until now, the pathways are not available in the SBML format and they could not be translated to SBML without loosing information, because the SBML core specification describes reactions but no other relationships.
-But the description of those relationships becomes more and more interesting for simulation processes and analysis purposes because with these realationships. 
+But the description of those relationships becomes more and more interesting for simulation processes and analysis purposes because with these realationships.
 The recently published SBML Qualitative Models extension (\qual) allows the description of other relationships, like protein-protein interactions.
 
 conversion control not so easy.... problems where must we distinguish?\\
