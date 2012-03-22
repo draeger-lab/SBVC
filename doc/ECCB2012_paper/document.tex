@@ -1,10 +1,10 @@
 \documentclass{bioinfo}
 
-\usepackage{multicol} % Merge cells horizontally
+%\usepackage{multicol} % Merge cells horizontally
 \usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 \hypersetup{breaklinks=true,
 pagecolor=white,
-colorlinks=false,}
+colorlinks=false}
 \urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
 
 \hyphenation{BioPax BioCarta PaxTools}
@@ -22,9 +22,17 @@ colorlinks=false,}
 \firstpage{1}
 
 \title[BioPax to SBML qual]{Qualitative translation of relations from BioPax to SBML qual}
-\author[Finja B\"uchel \textit{et~al}]{Finja B\"uchel\,$^{1\footnote{to whom correspondence should be addressed}}$, and Andreas Zell\,$^1$}
+\author[Finja B\"uchel \textit{et~al}]{
+Finja B\"uchel\,$^{1\footnote{to whom correspondence should be addressed}}$, 
+Clemens Wrzodek\,$^1$,
+Florian Mittag\,$^1$,
+Andreas Dr\"ager\,$^1$,
+Nicolas Rodriguez\,$^2$,
+Nicolas Le Nov\`{e}re\,$^2$,
+and Andreas Zell\,$^1$}
+\address{$^{1}$Center for Bioinformatics Tuebingen (ZBIT), University of Tuebingen, T\"ubingen, Germany\\
+$^{2}$Computational Systems Neurobiology Group, European Bioinformatics Institute, Hinxton, United Kingdom}
 
-\address{$^{1}$Center for Bioinformatics Tuebingen (ZBIT), \\University of Tuebingen, 72076 T\"ubingen, Germany}
 \history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
 
 \editor{Associate Editor: XXXXXXX}
@@ -59,8 +67,8 @@ Before the release of the Qualitative Models specification (\qual, \citealp[see]
 %relevance
 Furthermore, the combination or exchange of information between different databases if one database uses the BioPax format and the other one the SBML format was difficult or even impossible.
 %literature review
-So far, there exist several visualization tools, like Cytoscape or CellDesigner, which can handle both formats by using plugins \citep{Mi2011, Funahashi2007, Smoot2011a, Zinovyev2008}).
-\citet*{Ruebenacker2009} suggest a new a bridging format to solve the problem of the conversion from BioPax to SBML.
+So far, there exist several visualization tools, like Cytoscape or CellDesigner, which can handle both formats by using plugins \citep{Mi2011, Funahashi2007, Smoot2011a, Zinovyev2008}.
+\citet{Ruebenacker2009} suggest a new a bridging format to solve the problem of the conversion from BioPax to SBML.
 But until now, there exists mainly converters from SBML to BioPax like \emph{The System Biology Format Converter} \citep[see][]{SBFC} but no converter for BioPax to SBML, whose conversion would also include relations.
 The need to combine both formats to use the knowledge from a multitude of databases in various application becomes more and more urgent.
 
@@ -71,6 +79,10 @@ The pathway conversion is implemented in Java\TTra and uses JSBML \citep{Draeger
 The translated files are freely available on our homepage: ...\textbf{TODO and add licence}
 % what we find out?
 % what do the results mean (why are they significant?)
+
+
+
+
 
 
 \begin{methods}
@@ -100,11 +112,11 @@ which can be separated into the subclasses \texttt{Catalysis}, \texttt{Modulatio
 
 BioPax is released level-wise.
 The current level is Level~3.
-Level 1 is exclusively able to describe metabolic interactions, whereas Level~2 supports signaling pathways and molecular interactions.
+Level~1 is exclusively able to describe metabolic interactions, whereas Level~2 supports signaling pathways and molecular interactions.
 In addition to Level~2, gene regulatory networks and genetic interactions can be described with Level~3.
 For this purpose the \texttt{Control} subclass \texttt{TemplateReactionRegulation} and the \texttt{Conversion} subclass \texttt{Degradation} have been added.
 Furthermore, \texttt{PhysicalEntity} is now able to define \texttt{DNAregion} and \texttt{RNAregion}.
-Level~3 is not backwards compatible with Level~2, but Level~2 is backwards compatible with Level 1 \citep{Demir2010}.
+Level~3 is not backwards compatible with Level~2, but Level~2 is backwards compatible with Level~1 \citep{Demir2010}.
 In this paper all BioPax element names begin with capital letters and refer to Level~2 and 3.
 Otherwise it is explicitly denoted in the text.
 \subsection{Implementation}
@@ -146,13 +158,13 @@ The models correspond to the complete pathway represented in the BioPax file.
 % conversion of Entities, gene id...
 In the third step, for each \texttt{PhysicalEntity} a SBML \texttt{species} and \texttt{qualitativeSpecies} is created.
 Depending of the kind of the \texttt{PhysicalEntity}, i.e. if it is a protein, complex, DNA, RNA, or small molecule, the species is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPax2SBO} for a list of used terms).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%% TABLE X %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[tb]
 \processtable{BioPax entities and assigned SBO terms\label{Tab:BioPax2SBO}}
 {\begin{tabular}{llll}\toprule
 \textbf{BioPax entity} & \textbf{Assigned SBO term} & \textbf{SBO name} \\
 \midrule
+Gene            & SBO:0000240 & informational molecule segment \\
 Complex         & SBO:0000253 & non-covalent complex \\
 Protein         & SBO:0000252 & polypeptide chain \\
 Dna             & SBO:0000251 & deoxyribonucleic acid \\
@@ -160,7 +172,6 @@ DnaRegion       & SBO:0000251 & deoxyribonucleic acid \\
 Rna             & SBO:0000250 & ribonucleic acid \\
 RnaRegion       & SBO:0000250 & ribonucleic acid \\
 SmallMolecule   & SBO:0000247 & simple chemical \\
-Gene            & SBO:0000240 & informational molecule segment \\
 \botrule
 \end{tabular}}
 {
@@ -172,22 +183,17 @@ This table specifies the SBO terms that we used to distinguish between various c
 }
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % CW: Compartment text ist IMHO nicht richtig und unwichtig => entfernt.
 %Then the \texttt{species}' compartment is assigned depending on the GO annotation of the \texttt{PhysicalEntity}.
 %If no GO term is specified the \texttt{species} is assigned to a default compartment.
-
 Finally, the BioPax document is mined for an RDF link from the \texttt{PhysicalEntity} to a corresponding Entrez Gene ID. These identifers are unique and facilitates the automated annotation of this species (described in the fifth step).
-If there exists no Gene ID but a gene symbol, the gene symbol is mapped to a Gene ID. \textbf{TODO: Clemens das noch n\"aher ausf\"uhren?}
+If there exists no Gene ID but a gene symbol, the gene symbol is mapped to a Gene ID. 
 If neither a Gene ID nor a gene symbol is available the name of the \texttt{PhysicalEntity} is used.
-
 
 %%%%%%%%%%%%%% 4. Step %%%%%% reaction relations
 In the fourth step, the BioPax interaction elements are converted.
 Interaction elements can be split in \texttt{Conversion} and \texttt{Control} elements.
-
 \texttt{Conversion}s are mainly translated into SBML reactions except of the \texttt{Transport} and the \texttt{Degradation} elements, which are translated into transitions. Translation of reactions from BioPax to SBML is performed by creating the same reaction with all substrates, products and enzymes in SBML. Furthermore BioPax Level~3 provides the stoichiometry of the reactants and products of \texttt{BiochemicalReaction}s and \texttt{TransportWithBiochemicalReaction}s which are also translated to SBML.Level~2 does not provide stoichiometric information.
-
 The conversion of the \texttt{Control} elements is straightforward, whereas the conversion of \texttt{Control} elements is more sophisticated, because translation into a transition or a reaction depends on the enclosed \texttt{Control} elements.
 \texttt{Control} elements always consist of zero or more \texttt{Controller} and zero or one \texttt{Controlled} elements.
 \texttt{Controller} elements can be inherited from \texttt{PhysicalEntity} or \texttt{Pathway}, whereas \texttt{Controlled} elements are also \texttt{Interaction} elements.
@@ -283,6 +289,10 @@ The goal of those annotations is to provide models that can be used directly by 
 \end{methods}
 
 
+
+
+
+
 \section{Results and Discussion}
 %http://pid.nci.nih.gov/about.shtml#pid
 % TODO: das ist der Link, der unbedingt in die übersetzten die Pathways geschrieben werden muss.
@@ -308,29 +318,22 @@ The website of the National Cancer Institute (http://www.cancer.gov) \textbf{TOD
 %6. Jetzt gibt es endlich BioPax to SBML qual, das viel besser ist weil,...
 %7. Im folgenden werden die Merkmale näher erläutert.
 
-The Pathway Interaction Database (PID) is a curated and peer-reviewed pathway database containing human molecular signaling and regulatory events from the Nature Cancer Institute, BioCarta and Reactome.
-The pathways are provided as XML, Level~2, and Level~3 BioPax files and is updated monthly.
-Until now, the pathways are not available in the SBML format and they could not be translated to SBML without loosing information, because the SBML core specification describes reactions but no other relationships.
-But the description of those relationships becomes more and more interesting for simulation processes and analysis purposes because with these realationships.
-The recently published SBML Qualitative Models extension (\qual) allows the description of other relationships, like protein-protein interactions.
+The Pathway Interaction Database (PID) is a curated and peer-reviewed pathway database containing human pathways with molecular signaling and regulatory events provided by the Nature Cancer Institute, BioCarta, and Reactome.
+The pathways are provided in XML, BioPax Level~2, and Level~3 format.
+% removed " are updated monthly and "
 
-conversion control not so easy.... problems where must we distinguish?\\
-Annotation discussion?
 
-%%%%%%%%%%%%%%% What inferences can be drawn from this finding %%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%% What are the practical an theoreticl implications of our results %%%%%%%%%%%%%%%
-SBML qual macht SBML mächtiger\\
-Vorhandene Info von PID kann nun auch für SBML analysen weiter verwendet wreden\\
-Bestehende sachen können mit infos erweitert werden\\
-we can exchange and combine information from different databases using different model languages\\
-Information used from PID which can now be furter used with sBML...\\
-With qual an important step is done to exchange signaling complete\\
+Until now, the pathways are not available in the SBML format and they can not be translated to SBML without loosing information, because the SBML core specification describes reactions but no other relationships.
+However, the description of those relationships becomes more and more interesting for simulation processes and analysis purposes.
+Many simulation tools use SMBL and not BioPax, although they can not analyze relations.
+The recently published SBML Qualitative Models extension (\qual) solves this inconvenience and enables the description of such processes in a simple and easy-understandable way.
+%Whereas other conversion tools can not translate relations, due to the missing SBML specification, we can provide a complete translation of the PID database.
+We converted both the Level~2 and the Level~3 BioPax files to SBML qual and provided the translated files on our homepage \textbf{TODO Finja: insert homepage}.
+The reason for converting both levels was the additional description possibility of gene regulatory networks and genetic interactions in BioPax Level~3 which can be missed in the Level~2 pathway models.
+%Further pathway and species references are added during the model conversion.
+%The translated models can be used for an informative knowledge exchange.
+\textbf{TODO: weiter ausf\"uhren}
 
-%%%%%%%%%%%%%% How does results relate previous research %%%%%%%%%%%%%%%%%%%%
-Wir knüpfen an die Converter an die bisher nur SBML core übersetzen können
-
-%%%%%%%%%%%%%% Which problems are next to be solved %%%%%%%%%%%%%%%%%%%%%%%%%
-Extension
 
 
 \section{Conclusion}
@@ -364,10 +367,8 @@ These models can easily be used, e.g., for further simulation and modeling steps
 %TODO (DONE): mehr details von sbml core reations und qual relations und zusammenfassung der uebersetzung, inklusive MIRIAM annotations, sbo terms, etc. Letztendlich auf konvertierte pathways (+URL) als ultimatives ergebnis hinweisen.
 
 \section*{Acknowledgement}
-We thank Nicloas Le Nov\`{e}re for ... \textbf{TODO} Nicloas Rodriguez?.
-
 \paragraph{Funding\textcolon} Federal Ministry of Education and Research (BMBF), Germany, National Genome Research Network (NGFN+) under grant number 01GS08134 and Virtual Liver Network unter grant number O315756.
-
+\textbf{TODO: bibliography auf drei autoren kürzen und die bbl Datei einbinden}
 \bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
 %\bibliographystyle{plainnat}
@@ -377,4 +378,4 @@ We thank Nicloas Le Nov\`{e}re for ... \textbf{TODO} Nicloas Rodriguez?.
 %
 \bibliography{document}
 
-\end{document} 
+\end{document}
