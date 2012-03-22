@@ -441,7 +441,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.dna_region,
           ",", null);
     } else if (Protein.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.protein,
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.enzyme, GeneType.protein,
           ",", null);
     } else if (Rna.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, GeneType.rna, ",",
@@ -1312,7 +1312,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
                 }
               }  else if (Conversion.class.isAssignableFrom(con.getClass())){
                   List<Relation> rels =  createKEGGRelations(con.getLeft(), con.getRight(), keggPW, m, species, 
-                    RelationType.PPrel, getSubtype(con.getInteractionType()));
+                    RelationType.other, getSubtype(con.getInteractionType()));
                   for (Relation rel : rels) {
                     if (rel !=null)
                       createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype);

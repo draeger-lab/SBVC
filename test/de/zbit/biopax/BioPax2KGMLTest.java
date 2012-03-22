@@ -337,11 +337,11 @@ public class BioPax2KGMLTest {
 //    bft.logUnificationXRefs(fileFolder + subPhosphpSitePlus + 
 //        "Kinase_substrates.owl");
    
-//    // PID 
-//    String subPID = "PID_Pathways/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "Activation__myristolyation_of_BID_and_translocation_to_mitochondria.owl", 
-//        fileFolder + subPID, true, false);
+    // PID 
+    String subPID = "PID_Pathways/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "ceramidepathway.owl", 
+        fileFolder + subPID, true, false);
 //    
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
 //        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);    
@@ -376,10 +376,10 @@ public class BioPax2KGMLTest {
     
 
     // WikiPathways
-    String subWikiPath = "WikiPathway/WP1984_46412.owl";
+//    String subWikiPath = "WikiPathway/WP1984_46412.owl";
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subWikiPath, fileFolder + 
 //        "WikiPathway/", true, false);    
-    bft.logUnificationXRefs(fileFolder + subWikiPath);
+//    bft.logUnificationXRefs(fileFolder + subWikiPath);
 
   }
 
