@@ -16,9 +16,11 @@
  */
 package de.zbit.biopax;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,9 +36,12 @@ import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.entity;
 import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level3.Pathway;
 import org.biopax.paxtools.util.IllegalBioPAXArgumentException;
+
+import com.hp.hpl.jena.ontology.Ontology;
 
 import de.zbit.io.FileTools;
 import de.zbit.mapper.GeneID2KeggIDMapper;
@@ -347,24 +352,28 @@ public abstract class BioPax2KGML {
         destinationFolder = createDefaultFolder(m.getLevel());
       }
 
+      String comment = getRDFScomment(f);
+      
+      // BioPax Level 2 
       if (m.getLevel().equals(BioPAXLevel.L2)) {
         BioPaxL22KGML bp = new BioPaxL22KGML();
         Set<pathway> pathways = m.getObjects(pathway.class);
         // if (pathways!=null && pathways.size()>0) {
         if (!singleMode) {
-          bp.createKGMLsForPathways(m, destinationFolder, pathways, false);
+          bp.createKGMLsForPathways(m, comment, destinationFolder, pathways, false);
         } else {
-          bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()),
+          bp.createKGMLForBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()),
               destinationFolder, false);
         }
-      } else if (m.getLevel().equals(BioPAXLevel.L3)) {
+      } //BioPax Level 3
+        else if (m.getLevel().equals(BioPAXLevel.L3)) {
         BioPaxL32KGML bp = new BioPaxL32KGML();
         Set<Pathway> pathways = m.getObjects(Pathway.class);
         // if (pathways!=null && pathways.size()>0) {
         if (!singleMode) {
-          bp.createKGMLsForPathways(m, destinationFolder, pathways, writeEntryExtended);
+          bp.createKGMLsForPathways(m, comment, destinationFolder, pathways, writeEntryExtended);
         } else {
-          bp.createKGMLForBioPaxFile(m, FileTools.removeFileExtension(f.getName()),
+          bp.createKGMLForBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()),
               destinationFolder, writeEntryExtended);
         }
       } else {
@@ -376,6 +385,36 @@ public abstract class BioPax2KGML {
       log.log(Level.SEVERE, "Could not continue, because the model is null.");
     }
     
+  }
+
+  /**
+   * In this method the <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">
+   * ...</rdfs:comment> is parse  
+   * @return
+   */
+  public static String getRDFScomment(File f) {
+    String comment = "", line = "";
+    String pattern = ".*<rdfs:comment.*?\">.*?</rdfs:comment>.*";
+    BufferedReader br;
+    try {
+      br = new BufferedReader(new FileReader(f));
+      while ((line = br.readLine())!=null){
+        if (line.matches(pattern))
+          break;
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    line = line.replaceFirst(".*<rdfs:comment.*?\">", "");
+    line = line.replaceFirst("</rdfs:comment>.*", "");
+    
+    if (!line.isEmpty())
+      return line;
+    
+    return comment;
   }
 
   /**
