@@ -1,66 +1,71 @@
 \documentclass{bioinfo}
 
-\usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 \usepackage{color}
+\usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 
 \hypersetup{breaklinks=true,
 pagecolor=white,
 colorlinks=false}
 \urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
 
-\hyphenation{BioPax BioCarta PaxTools}
+% Allow line breaks in texttt
+\newcommand{\origttfamily}{}% sollte noch nicht definiert sein!
+\let\origttfamily=\ttfamily % alte Definition von \ttfamily sichern
+\renewcommand{\ttfamily}{\origttfamily \hyphenchar\font=`\-}
+
+\hyphenation{BioPax BioCarta PaxTools SBML}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Useful macros:
 
-\newcommand{\TTra}{\textsuperscript{\tiny{\texttrademark}}}
+\newcommand{\TTra}{\texttrademark}
 \newcommand{\TODO}[1]{\textcolor{red}{\textbf{#1}}}
 
 % B
-\newcommand{\BiochemicalReaction}{\texttt{BiochemicalReaction}}
+\newcommand{\BiochemicalReaction}{\texttt{Bio\-chemical\-Reaction}}
 
 % C
-\newcommand{\Catalysis}{\texttt{Catalysis}}
+\newcommand{\Catalysis}{\texttt{Cata\-lysis}}
 \newcommand{\ComplexAssembly}{\texttt{Complex\-Assembly}}
 \newcommand{\Conversion}{\texttt{Conversion}}
 \newcommand{\Control}{\texttt{Control}}
 \newcommand{\Controller}{\texttt{Controller}}
 \newcommand{\Controlled}{\texttt{Controlled}}
-\newcommand{\ControlType}{\texttt{ControlType}}
+\newcommand{\ControlType}{\texttt{Control\-Type}}
 
 % D
-\newcommand{\Degradation}{\texttt{Degradation}}
+\newcommand{\Degradation}{\texttt{Degra\-dation}}
 \newcommand{\DNAregion}{\texttt{DNAregion}}
 
 % E
 \newcommand{\Entity}{\texttt{Entity}}
 
 % F
-\newcommand{\functionTerm}{\texttt{functionTerm}}
+\newcommand{\functionTerm}{\texttt{function\-Term}}
 
 % G
-\newcommand{\GeneticInteraction}{\texttt{GeneticInteraction}}
+\newcommand{\GeneticInteraction}{\texttt{Genetic\-Interaction}}
 
 % I
 \newcommand{\Input}{\texttt{Input}}
-\newcommand{\Interaction}{\texttt{Interaction}}
+\newcommand{\Interaction}{\texttt{Inter\-action}}
 
 % M
 \newcommand{\model}{\texttt{model}}
 \newcommand{\Modulation}{\texttt{Modulation}}
-\newcommand{\MolecularInteraction}{\texttt{Molecular\-Interaction}}
+\newcommand{\MolecularInteraction}{\texttt{Mo\-le\-cu\-lar\-In\-ter\-ac\-tion}}
 
 % O
 \newcommand{\Output}{\texttt{output}}
 
 % P
 \newcommand{\Pathway}{\texttt{Pathway}}
-\newcommand{\PhysicalEntity}{\texttt{PhysicalEntity}}
+\newcommand{\PhysicalEntity}{\texttt{Physical\-Entity}}
 
 % Q
 \newcommand{\qual}{\texttt{qual}}
-\newcommand{\qualitativeModel}{\texttt{qualitativeModel}}
-\newcommand{\qualitativeSpecies}{\texttt{qualitativeSpecies}}
+\newcommand{\qualitativeModel}{\texttt{qualitative\-Model}}
+\newcommand{\qualitativeSpecies}{\texttt{qualitative\-Species}}
 
 % R
 \newcommand{\reaction}{\texttt{reaction}}
@@ -72,11 +77,11 @@ colorlinks=false}
 \newcommand{\Symbol}{\texttt{symbol}}
 
 % T
-\newcommand{\TemplateReactionRegulation}{\texttt{TemplateReactionRegulation}}
-\newcommand{\TemplateReaction}{\texttt{TemplateReaction}}
+\newcommand{\TemplateReactionRegulation}{\texttt{Template\-Reaction\-Regulation}}
+\newcommand{\TemplateReaction}{\texttt{Template\-Reaction}}
 \newcommand{\transition}{\texttt{transition}}
 \newcommand{\Transport}{\texttt{Transport}}
-\newcommand{\TransportWithBiochemicalReaction}{\texttt{TransportWithBiochemicalReaction}}
+\newcommand{\TransportWithBiochemicalReaction}{\texttt{Transport\-With\-Biochemical\-Reaction}}
 
 % End macros.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,7 +123,7 @@ Here we present the conversion result of the complete nature Pathway Interaction
 All PID BioPax Level~2 and Level~3 pathway files have been translated into the SBML format including both reactions and relations by using the new \qual{} extension package.
 \section{Availability:}
 The complete collection of the PID models is freely available on our homepage \url{http://www.cogsys.cs.uni-tuebingen.de/software/Qualitative-Models/}
-\section{Contact:} 
+\section{Contact:}
 \href{finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
 \end{abstract}
 
@@ -170,7 +175,7 @@ Instead of concentration levels, that are transformed continuously via reactions
 These {\transition}s consist of \Input{} and \Output{} elements and at least one \functionTerm.
 If, in a qualitative model, protein A inhibits protein B, this would be represented as a \transition{} with \Input{} A, whose \sign{} attribute is \emph{negative} and \Output{} B.
 The \sign{} attribute of the \Input{} elements describes wether the relationship between the input and output elements is \emph{positive}, \emph{negative}, \emph{dual}, or \emph{unknown}.
-\emph{Dual} means that the transition can operate both activating (\emph{positive}) and inhibiting (\emph{negative}). 
+\emph{Dual} means that the transition can operate both activating (\emph{positive}) and inhibiting (\emph{negative}).
 In contrast, \emph{unknown} is assigned to the \Input{} if the transition effect is not further specified.
 
 
@@ -181,13 +186,13 @@ The Biology Pathway Exchange Language (BioPax) is an OWL (Web Ontology Language)
 There is one superclass called \Entity{} that extends all other BioPax classes.
 Two main classes are distinguished: \PhysicalEntity{} and \Interaction.
 \PhysicalEntity{} describes molecules, such as proteins, complexes, small molecules, DNA, or RNA, whereas \Interaction{} defines reactions and relations between \PhysicalEntity's.
-\Interaction{} is split into \Control{} and \Conversion{} which can be separated into the subclasses \Catalysis, \Modulation, \TemplateReactionRegulation, \TemplateReaction, \GeneticInteraction, \\\MolecularInteraction, 
-\Transport, \BiochemicalReaction, \\\TransportWithBiochemicalReaction, \Degradation{} and\\ \ComplexAssembly.
+\Interaction{} is split into \Control{} and \Conversion{} which can be separated into the subclasses \Catalysis, \Modulation, \TemplateReactionRegulation, \TemplateReaction, \GeneticInteraction, \MolecularInteraction,
+\Transport, \BiochemicalReaction, \TransportWithBiochemicalReaction, \Degradation{} and \ComplexAssembly.
 
 BioPax is released level-wise with the current release Level~3.
 Level~1 is exclusively able to describe metabolic interactions, whereas Level~2 supports signaling pathways and molecular interactions.
 In addition to Level~2, gene regulatory networks and genetic interactions can be described with Level~3.
-For this purpose the \Control{} subclass \TemplateReactionRegulation{}, the \Conversion{} subclass \Degradation{}, \TemplateReaction, \\\GeneticInteraction, and \MolecularInteraction have been added.
+For this purpose the \Control{} subclass \TemplateReactionRegulation{}, the \Conversion{} subclass \Degradation{}, \TemplateReaction, \GeneticInteraction, and \MolecularInteraction have been added.
 Furthermore, \PhysicalEntity{} is now able to define \DNAregion{} and \RNAregion.
 Level~3 is not backwards compatible with Level~2, but Level~2 is backwards compatible with Level~1 \citep{Demir2010}.
 In this paper, all BioPax element names begin with capital letters and refer to Level~2 and 3.
@@ -248,7 +253,7 @@ SmallMolecule   & SBO:0000247 & simple chemical \\
 \botrule
 \end{tabular}}
 {
-Each BioPax \Entity{} is converted to an SBML \species{} and \qualitativeSpecies. 
+Each BioPax \Entity{} is converted to an SBML \species{} and \qualitativeSpecies.
 In BioPax, one can specify the nature of the real entity by classes that are derived from \Entity{} (e.g., DNA, Protein, etc).
 SBML does not contain specific entities that can be derived from an SBML \species.
 The common way to separate different genomic entities in SBML is using SBO terms from the material entity branch.
@@ -261,7 +266,7 @@ This table specifies the SBO terms that we used to distinguish between various c
 In the second step, an SBML \species{} and \qualitativeSpecies{} is created for each \PhysicalEntity{}.
 Depending of the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the species is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPax2SBO} for a list of used terms).
 
-Then, the BioPax document is mined for an RDF link from the \PhysicalEntity{} to a corresponding Entrez Gene ID. 
+Then, the BioPax document is mined for an RDF link from the \PhysicalEntity{} to a corresponding Entrez Gene ID.
 These identifers are unique and facilitate the automated annotation of this species (described in the fourth step).
 If there exists no Gene ID but a gene symbol, the gene symbol is mapped to a Gene ID.
 If neither a Gene ID nor a gene symbol is available the name of the \PhysicalEntity{} is used.
@@ -275,7 +280,7 @@ Interaction elements can be split in \Conversion{} and \Control{} elements.
 %%%% Reactions
 The translation of reactions from BioPax to SBML is performed by creating the same reaction with all substrates, products and enzymes in SBML.
 Furthermore, BioPax Level~3 provides the stoichiometry of the reactants and products of {\BiochemicalReaction}'s and
-{\TransportWithBiochemicalReaction}'s, which are also translated into SBML. 
+{\TransportWithBiochemicalReaction}'s, which are also translated into SBML.
 Level~2 does not provide stoichiometric information.
 
 %%%%% Control
@@ -291,7 +296,7 @@ This modulation will be converted into a reaction where SMPD1+ is modeled as an 
 But if the \Controlled{} element is a \Degradation, the \Modulation{} is converted into a transition.
 In some cases, the \Controlled{} element is an \Interaction{} entity that does not belong to a special subclass.
 Then, the \Controlled{} element itself is translated into a transition, and the connection between the \Controller{} and the translated \transition{} is also translated into a transition.
-The \sign{} attribute of the \Input{} element describes the relationship between \Input{} and \Output{} and is determined depending on the \ControlType{} attribute. 
+The \sign{} attribute of the \Input{} element describes the relationship between \Input{} and \Output{} and is determined depending on the \ControlType{} attribute.
 This attribute is assigned to nearly all \Control{} elements.
 If the \ControlType{} is activating, \sign{} is set to \emph{active}; if it is inhibiting \sign{} is set to \emph{negative}; if it is both \sign{} is set to \emph{dual}; otherwise \sign{} is set to \emph{unknown}.
 A detailed overview of the conversion of the \Control{} elements is shown in Table~\ref{Tab:BioPax2SBML}.
@@ -311,7 +316,7 @@ and the entities with an black arrow out of the diamond the modulation output.
 The green arrows symbolize positive regulators and the round rectangles complexes.
 Pathways are visualized with a trapezium.
 The ceramide signaling pathway is one pathway example providing an amount of information which cannot be translated to SBML before the recent release of the Qualitative Models extension (\qual).
-With \qual, it is possible to translate reactions an relations and to include them in one model. 
+With \qual, it is possible to translate reactions an relations and to include them in one model.
 Even pathway-reaction modulations, like the ``response to heat´´ pathway that positively stimulates the reaction from SMPD1 to SMPD1+, can be described.\newline
 By courtacy of the website of the National Cancer Institute (http://www.cancer.gov).}
 \label{fig:Ceramide}
@@ -320,7 +325,7 @@ By courtacy of the website of the National Cancer Institute (http://www.cancer.g
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In the fourth and final step, the SBML instances are further annotated.
 The BioPax specification allows users to encode arbitrary identifiers for elements.
-These can be identifiers for various databases, e.g., UniProt, Entrez Gene, Ensembl, etc. 
+These can be identifiers for various databases, e.g., UniProt, Entrez Gene, Ensembl, etc.
 Unfortunately, the syntax used in BioPax is sometimes inconsistent, which leads to XML database annotations like ``UniProt'' or ``UniProtKB'' within BioPax documents that hamper the automatic reading and interpretation of those models by third party applications.
 
 
@@ -340,8 +345,8 @@ Unfortunately, the syntax used in BioPax is sometimes inconsistent, which leads 
 %%%%%%%%%%% Beispiel ENDE %%%%%%%%%%%%%%%%%%%%
 
 In SBML, such identifiers can be expressed as standardized MIRIAM URNs that can be added as annotation to any SBML element.
-We support and add MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology). 
-To obtain identifiers for those databases, we map the Entrez Gene identifier, which we annotated on every element in Step 2, to a KEGG identifier. 
+We support and add MIRIAM identifiers for the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomeclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology).
+To obtain identifiers for those databases, we map the Entrez Gene identifier, which we annotated on every element in Step 2, to a KEGG identifier.
 Using the KEGG API, we then query all of those identifiers to retrieve more descriptive names, descriptions and the mentioned database identifiers.
 % CW: Entfernt. wurde durch neuen satz (s.o.) ersetzt.
 % All supported identifiers from the BioPax files are parsed, some are manually
@@ -401,7 +406,7 @@ pathway         & transport                         & transition\\\botrule
 \end{tabular}}{BioPax \Control{} elements consists of a \Controller{} and one
 or more \Controlled{} elements.
 Depending on the kind of \Controller{} or \Controlled{} element, the \Control{} entity is translated into an SBML reaction or transition.
-The table gives an overview of this conversion regarding BioPax Level~2 and BioPax Level~3. 
+The table gives an overview of this conversion regarding BioPax Level~2 and BioPax Level~3.
 The Level~2 entities are labeled with small initial letters and the translation is listed in the lower part of the table.}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%% END TABLE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
