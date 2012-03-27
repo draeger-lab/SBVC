@@ -349,12 +349,12 @@ public class BioPax2KGMLTest {
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
 //        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);    
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "parkinsonspathway.owl", fileFolder + subPID, true, false);  
+//        "ceramidepathway.owl", fileFolder + subPID, true, false);  
     
-    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-        "BioCarta.bp2_part.owl", fileFolder + subPID, false, false);    
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "BioCarta.bp3.owl", fileFolder + subPID, false, false);
+//        "BioCarta.bp2_part.owl", fileFolder + subPID, false, false);    
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "BioCarta.bp3.owl", fileFolder + subPID, true, false);
 //    
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp3.owl");
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp2.owl");

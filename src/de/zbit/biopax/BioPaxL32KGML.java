@@ -32,9 +32,6 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.Model;
-import org.biopax.paxtools.model.level2.dataSource;
-import org.biopax.paxtools.model.level2.entity;
-import org.biopax.paxtools.model.level2.xref;
 import org.biopax.paxtools.model.level3.BioSource;
 import org.biopax.paxtools.model.level3.BiochemicalReaction;
 import org.biopax.paxtools.model.level3.Catalysis;
@@ -70,7 +67,6 @@ import org.biopax.paxtools.model.level3.TemplateReactionRegulation;
 import org.biopax.paxtools.model.level3.Transport;
 import org.biopax.paxtools.model.level3.TransportWithBiochemicalReaction;
 import org.biopax.paxtools.model.level3.Xref;
-import org.springframework.beans.factory.config.SetFactoryBean;
 
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
@@ -84,12 +80,11 @@ import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
-import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.DatabaseIdentifiers;
+import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.SortedArrayList;
 import de.zbit.util.Species;
 import de.zbit.util.Utils;
-import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.progressbar.ProgressBar;
 
 /**
@@ -633,31 +628,18 @@ public class BioPaxL32KGML extends BioPax2KGML {
                 "--Input: " + entity.getRDFId() + "\t" + entity.getModelInterface());
         }
 
-        Map<Entity, Integer> geneIDs = getEntrezGeneIDs(pwEntities, species, xrefs);
-        for (java.util.Map.Entry<Entity, Integer> entity : geneIDs.entrySet()) {
-          log.log(Level.FINER, "----res: " + entity.getValue() + " " + entity.getValue());
-          pw.addGeneID(entity.getValue());
-        }
+//        Map<Entity, Integer> geneIDs = getEntrezGeneIDs(pwEntities, species, xrefs);
+        //TODO: rewrite
+//        for (java.util.Map.Entry<Entity, Integer> entity : geneIDs.entrySet()) {
+//          log.log(Level.FINER, "----res: " + entity.getValue() + " " + entity.getValue());
+//          pw.addGeneID(entity.getValue());
+//        }
       }
     }
 
     return pathways;
   }
-  
-  /**
-   * 
-   * @param xref
-   * @return Integer of the entered xref or null
-   */
-  public static Integer getEntrezGeneIDFromDBxref(RelationshipXref xref) {
-    if (xref.getDb().equals("LL")) {
-      log.info(xref.getRDFId() + "|" + xref.getId());
-      return Integer.parseInt(xref.getId());
-    } else {
-      return null;
-    }
-  }
-  
+   
   /**
    * Adds the created {@link Entry} to the
    * {@link BioPaxL32KGML#bc2KeggEntry} map and to the
@@ -675,17 +657,15 @@ public class BioPaxL32KGML extends BioPax2KGML {
     EntryExtended keggEntry;
 
     // get all availabe database identifiers of the entity
-    Map<IdentifierDatabases, Collection<String>> identifiers = getDatabaseIdentifiers(entity);
-    Collection<String> geneIDs = identifiers.get(IdentifierDatabases.EntrezGene);    
-
+    Map<IdentifierDatabases, Collection<String>> identifiers = 
+      getDatabaseIdentifiers(entity, eType, gType);
+       
     // determine graph name and gene symbols   
-    Map<String, Entity> geneSymbols = new HashMap<String, Entity>();
     String graphName = "";
     Set<String> names = entity.getName();
     StringBuffer name = new StringBuffer();
     if (names != null && names.size() > 0) {
-      for (String n : names) {
-        geneSymbols.put(n, entity);
+      for (String n : names) {        
         n = n.trim();
         n = n.replace(" ", "_");
         name.append(n);
@@ -697,20 +677,22 @@ public class BioPaxL32KGML extends BioPax2KGML {
     graphName = name.toString().trim();
     
     // determine gene id
-    Integer geneID = -1;
-    if (geneIDs.size()>0){
+    Integer geneID = null;
+    Collection<String> geneIDs = identifiers.get(IdentifierDatabases.EntrezGene); 
+    if (geneIDs!=null && geneIDs.size()>0){
       geneID = Integer.parseInt((Utils.collectionToList(geneIDs).get(0)));  
     } else {
       // we have to search the gene id with the gene symbol, adding symbol to
-      // the gene symbol set   
-     if (getEntrezGeneIDOverGeneSymbol(geneSymbols).get(entity) != null)
-       geneID = getEntrezGeneIDOverGeneSymbol(geneSymbols).get(entity).intValue();   
+      // the gene symbol set  
+      Collection<String> geneSymbols = identifiers.get(IdentifierDatabases.GeneSymbol);
+      if(geneSymbols!=null && geneSymbols.size()>0){
+        geneID = BioPax2KGML.getEntrezGeneIDForGeneSymbol(geneSymbols);
+      }
     }
-    
-    
+        
     // determine kegg name
     String keggname = null;
-    if (geneID != -1) {
+    if (geneID != null) {
       keggname = mapGeneIDToKEGGID(geneID, species);
     } else {
       keggname = getKEGGUnkownName();
@@ -740,7 +722,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
       } else if (keggEntry.getGeneType().equals(EntryTypeExtended.rna)) {
         cl = ((Rna)entity).getCellularLocation();
       }      
-      if (cl.getComment().size()>0)
+      if (cl!=null && cl.getComment().size()>0)
       keggEntry.setCompartment(Utils.collectionToList(cl.getComment()).get(0));
     } 
 
@@ -776,28 +758,70 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param keggEntry
    * @param entity
    */
-  private Map<IdentifierDatabases, Collection<String>> getDatabaseIdentifiers (Entity entity) {
+  private Map<IdentifierDatabases, Collection<String>> getDatabaseIdentifiers (Entity entity,
+      EntryType eType, EntryTypeExtended gType) {
     Map<IdentifierDatabases, Collection<String>> map = 
       new HashMap<DatabaseIdentifiers.IdentifierDatabases, Collection<String>>();
     
     Set<Provenance> ds = entity.getDataSource();
-    Set<Xref> xrefs = entity.getXref();
+    Set<Xref> xrefs = entity.getXref();       
     
-    
-    
-    for (Provenance p : ds) {
-      for (Xref d : p.getXref()) {
-        if (!d.getDb().isEmpty()){          
-          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getIdentifier(d.getDb());
-          if (dbIdentifier != null){
-            String comment = Utils.collectionToList(d.getComment()).get(0);
-//            if(!comment.isEmpty())
-//            keggEntry.addDatabaseIdentifier(dbIdentifier, comment);
+    // Provencance elements
+    if(ds!=null && ds.size()>0){
+      for (Provenance p : ds) {
+        for (Xref d : p.getXref()) {
+          if (!d.getDb().isEmpty()){          
+            IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getIdentifier(d.getDb());
+            if (dbIdentifier != null){
+              if (Utils.collectionToList(d.getComment())!=null && 
+                  Utils.collectionToList(d.getComment()).size()>0){
+                String comment = Utils.collectionToList(d.getComment()).get(0);
+                if(!comment.isEmpty())
+                  Utils.addToMapOfSets(map, dbIdentifier, comment);  
+              }
+            }
           }
-        }
-      }      
+        }      
+      }
     }
     
+    // xref elements
+    if (xrefs != null && xrefs.size() > 0) {
+      for (Xref x : xrefs) {
+        if (!x.getDb().isEmpty()) {
+          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getIdentifier(x.getDb());
+          if (dbIdentifier != null) {
+            if (Utils.collectionToList(x.getComment())!=null && 
+                Utils.collectionToList(x.getComment()).size()>0){
+              String comment = Utils.collectionToList(x.getComment()).get(0);
+              if (!comment.isEmpty())
+                Utils.addToMapOfSets(map, dbIdentifier, comment);  
+            }            
+          } else if (x.getDb().equalsIgnoreCase("LL")) {
+            if (Utils.collectionToList(x.getComment())!=null && 
+                Utils.collectionToList(x.getComment()).size()>0){
+              String comment = Utils.collectionToList(x.getComment()).get(0);
+              if (!comment.isEmpty())
+                Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, comment);  
+            }
+          }
+        }
+      }
+    }
+    
+    // gene symbols are assigend depending on the EntryTypes
+    // EntryTypeExtended: protein, dna_region, rna_region, dna, rna, unknown;
+    // EntryType:         ortholog, enzyme, reaction, gene, group, compound, map, genes, other
+    if(!eType.equals(EntryType.map)){     
+      Set<String> names = entity.getName();
+      if (names != null && names.size() > 0) {
+        for (String n : names) {        
+          n = n.trim();
+          Utils.addToMapOfSets(map, IdentifierDatabases.GeneSymbol, n);
+        }      
+      }
+    }
+
     return map;
   }
   
@@ -1090,11 +1114,11 @@ public class BioPaxL32KGML extends BioPax2KGML {
           log.log(Level.FINER, "--Input: " + entity.getRDFId() + "\t" + entity.getModelInterface());
       }
 
-      Map<Entity, Integer> geneIDs = getEntrezGeneIDs(pwEntities, species, xrefs);
-      for (java.util.Map.Entry<Entity, Integer> entity : geneIDs.entrySet()) {
-        log.log(Level.FINER, "----res: " + entity.getKey() + " " + entity.getValue());
-        pw.addGeneID(entity.getValue());
-      }
+//      Map<Entity, Integer> geneIDs = getEntrezGeneIDs(pwEntities, species, xrefs);
+//      for (java.util.Map.Entry<Entity, Integer> entity : geneIDs.entrySet()) {
+//        log.log(Level.FINER, "----res: " + entity.getKey() + " " + entity.getValue());
+//        pw.addGeneID(entity.getValue());
+//      }
       // }//TODO: is necessary to uncomment!!!!
       bar.DisplayBar();
     }
@@ -1138,115 +1162,70 @@ public class BioPaxL32KGML extends BioPax2KGML {
     return resEntities;
   }
 
-  /**
-   * This method maps to all gene symbols of the entered entities the
-   * corresponding gene id It's an advantage to preprocess the entities to
-   * exclusively having entities with a name call therefore the method
-   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)} This method also considers
-   * 
-   * @link {@link Complex} classes. NOTE: the method is not so clean and should
-   *       be rewritten!!
-   * 
-   * @param pwEntities
-   * @param species
-   * @param xrefs
-   * @return
-   */
-  private static Map<Entity, Integer> getEntrezGeneIDs(Set<BioPAXElement> pwEntities, String species,
-      Map<String, RelationshipXref> xrefs) {
-    //TODO: change programming!!! inefficient!!! better use get databaseIdentifiers....
-    Map<Entity, Integer> geneIDs = new HashMap<Entity, Integer>();
-
-    // searching for gene ids
-    Map<String, Entity> geneSymbols = new HashMap<String, Entity>();
-    for (BioPAXElement ent : pwEntities) {
-      Integer geneID = null;
-      Entity entity = (Entity)ent;
-      String id = entity.getRDFId();
-
-      // gene id in xrefs?
-      if (xrefs.containsKey(id)) {
-        geneID = getEntrezGeneIDFromDBxref(xrefs.get(id));
-      }
-
-      if (geneID == null) {
-        // we have to search the gene id with the gene symbol, adding symbol to
-        // the gene symbol set
-        Set<String> names = entity.getName();
-        if (names != null && names.size() > 0) {
-          for (String name : names) {
-            if (name.contains("/")) {
-              String[] split = name.split("/");
-              for (String rs : split) {
-                if (!geneSymbols.containsKey(rs))
-                  geneSymbols.put(rs, entity);
-              }
-            } else if (!geneSymbols.containsKey(name)) {
-              geneSymbols.put(name, entity);
-            }
-          }
-        }
-      } else if (!geneIDs.containsKey(geneID)) {
-        // gene id found directly
-        log.log(Level.FINER, "found: " + entity.getRDFId() + " " + geneID);
-        geneIDs.put(entity, geneID);
-      }
-    }
-
-    // getting the gene ids which could not be found directly
-    if (geneSymbols.size() > 0) {
-      geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(geneSymbols));
-    }
-
-    return geneIDs;
-  }
+//  /**
+//   * This method maps to all gene symbols of the entered entities the
+//   * corresponding gene id It's an advantage to preprocess the entities to
+//   * exclusively having entities with a name call therefore the method
+//   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)} This method also considers
+//   * 
+//   * @link {@link Complex} classes. NOTE: the method is not so clean and should
+//   *       be rewritten!!
+//   * 
+//   * @param pwEntities
+//   * @param species
+//   * @param xrefs
+//   * @return
+//   */
+//  private static Map<Entity, Integer> getEntrezGeneIDs(Set<BioPAXElement> pwEntities, String species,
+//      Map<String, RelationshipXref> xrefs) {
+//    //TODO: change programming!!! inefficient!!! better use get databaseIdentifiers....
+//    Map<Entity, Integer> geneIDs = new HashMap<Entity, Integer>();
+//
+//    // searching for gene ids
+//    Map<String, Entity> geneSymbols = new HashMap<String, Entity>();
+//    for (BioPAXElement ent : pwEntities) {
+//      Integer geneID = null;
+//      Entity entity = (Entity)ent;
+//      String id = entity.getRDFId();
+//
+//      // gene id in xrefs?
+//      if (xrefs.containsKey(id)) {
+//        geneID = getEntrezGeneIDFromDBxref(xrefs.get(id));
+//      }
+//
+//      if (geneID == null) {
+//        // we have to search the gene id with the gene symbol, adding symbol to
+//        // the gene symbol set
+//        Set<String> names = entity.getName();
+//        if (names != null && names.size() > 0) {
+//          for (String name : names) {
+//            if (name.contains("/")) {
+//              String[] split = name.split("/");
+//              for (String rs : split) {
+//                if (!geneSymbols.containsKey(rs))
+//                  geneSymbols.put(rs, entity);
+//              }
+//            } else if (!geneSymbols.containsKey(name)) {
+//              geneSymbols.put(name, entity);
+//            }
+//          }
+//        }
+//      } else if (!geneIDs.containsKey(geneID)) {
+//        // gene id found directly
+//        log.log(Level.FINER, "found: " + entity.getRDFId() + " " + geneID);
+//        geneIDs.put(entity, geneID);
+//      }
+//    }
+//
+//    // getting the gene ids which could not be found directly
+//    if (geneSymbols.size() > 0) {
+//      geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(geneSymbols));
+//    }
+//
+//    return geneIDs;
+//  }
   
-  /**
-   * Maps the entered gene symbol names to a geneID
-   * 
-   * @param geneSymbolMapper
-   *          {@link GeneSymbol2GeneIDMapper}
-   * @param nameSet
-   *          with names of one {@link BioPAXElement} element
-   * @return the gene id o
-   */
-  private static Map<Entity, Integer> getEntrezGeneIDOverGeneSymbol(Map<String, Entity> nameSet) {
-    log.finest("getGeneIDOverGeneSymbol");
-    Map<Entity, Integer> geneIDs = new HashMap<Entity, Integer>();
-    Integer geneID = null;
-
-    for (java.util.Map.Entry<String, Entity> symbol : nameSet.entrySet()) {
-      try {
-        geneID = geneSymbolMapper.map(symbol.getKey());
-      } catch (Exception e) {
-        log.log(Level.WARNING, "Error while mapping name: " + symbol.getKey() + ".", e);
-      }
-
-      if (geneID != null) {
-        log.log(Level.FINER, "----- found! Geneid: " + geneID + " " + symbol.getValue().getRDFId()
-            + " " + symbol.getKey());
-        geneIDs.put(symbol.getValue(), geneID);
-        break;
-      } else if (symbol.getKey().contains("-")) {
-        log.log(Level.FINER,
-            "recall for symbol: " + symbol.getValue().getRDFId() + " " + symbol.getKey());
-        Map<String, Entity> set = new HashMap<String, Entity>();
-        set.put(symbol.getKey().replace("-", ""), symbol.getValue());
-        geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(set));
-      } else if (symbol.getKey().contains(" ")) {
-        log.log(Level.FINER,
-            "recall for symbol: " + symbol.getValue().getRDFId() + " " + symbol.getKey());
-        Map<String, Entity> set = new HashMap<String, Entity>();
-        set.put(symbol.getKey().replace(" ", "_"), symbol.getValue());
-        geneIDs.putAll(getEntrezGeneIDOverGeneSymbol(set));
-      } else {
-        log.log(Level.FINER,
-            "----- not found " + symbol.getValue().getRDFId() + " " + symbol.getKey());
-      }
-    }
-
-    return geneIDs;
-  }
+  
 
   /**
    * For a list of controllers and controlled elements the corresponding KEGG

@@ -24,6 +24,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +38,9 @@ import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
-import org.biopax.paxtools.model.level2.entity;
 import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level3.Pathway;
 import org.biopax.paxtools.util.IllegalBioPAXArgumentException;
-
-import com.hp.hpl.jena.ontology.Ontology;
 
 import de.zbit.io.FileTools;
 import de.zbit.mapper.GeneID2KeggIDMapper;
@@ -338,6 +337,36 @@ public abstract class BioPax2KGML {
     return getModel(io);
   }
 
+  /**
+   * Maps the entered gene symbol names to a geneID
+   * 
+   * @param set of gene symbols
+   * @return the gene id (default value = null)
+   */
+  protected static Integer getEntrezGeneIDForGeneSymbol(Collection<String> geneSymbols) {
+    log.finest("getGeneIDOverGeneSymbol");
+    Integer geneID = null;
+
+    for (String symbol : geneSymbols) {
+      try {
+        geneID = geneSymbolMapper.map(symbol);
+      } catch (Exception e) {
+        log.log(Level.WARNING, "Error while mapping name: " + symbol + ".", e);
+      }
+
+      if (geneID != null) {
+        return geneID;
+      } else if (symbol.contains("-")) {
+        return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace("-", "")));
+      } else if (symbol.contains(" ")) {
+        return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace(" ", "_")));
+      } else {
+        log.log(Level.FINER, "----- not found " + symbol);
+      }
+    }
+    return geneID;
+  }
+  
   /**
    * Creates for an entered {@link Model} the corresponding KEGG pathways
    * 
