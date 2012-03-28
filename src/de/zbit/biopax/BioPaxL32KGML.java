@@ -1,6 +1,6 @@
 /*
- * $Id${file_name} ${time} ${user} $
- * $URL${file_name} $
+ * $Id$
+ * $URL$
  * ---------------------------------------------------------------------
  * This file is part of SBVC, the systems biology visualizer and
  * converter. This tools is able to read a plethora of systems biology
