@@ -1,0 +1,36 @@
+###################
+# Core Developers #
+###################
+
+Clemens Wrzodek (1)
+  clemens.wrzodek@uni-tuebingen.de
+Finja Büchel (1)
+  finja.buechel@uni-tuebingen.de
+  
+###################
+#  Contributors   #
+###################
+
+Andreas Dräger (1)
+  andreas.draeger@uni-tuebingen.de
+Florian Mittag (1)
+  florian.mittag@uni-tuebingen.de
+
+###################
+#   Supervisor    #
+###################
+
+Andreas Zell (1)
+  andreas.zell@uni-tuebingen.de
+
+###################
+#     Alumni      #
+###################
+
+ Currently none.
+
+###################
+#  Institutions   #
+###################
+
+(1) University of Tübingen, Germany

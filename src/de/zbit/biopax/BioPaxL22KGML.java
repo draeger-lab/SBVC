@@ -1,14 +1,22 @@
 /*
- * $Id$
- * $URL$
+ * $$Id${file_name} ${time} ${user} $$
+ * $$URL${file_name} $$
  * ---------------------------------------------------------------------
- * This file is part of the SysBio API library.
+ * This file is part of SBVC, the systems biology visualizer and
+ * converter. This tools is able to read a plethora of systems biology
+ * file formats and convert them to an internal data structure.
+ * These files can then be visualized, either using a simple graph
+ * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
+ * Some currently supported IO formats are SBML (+qual, +layout), KGML,
+ * BioPax, SBGN, etc. Please visit the project homepage at
+ * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
+ * latest version of SBVC.
  *
- * Copyright (C) 2009-2012 by the University of Tuebingen, Germany.
+ * Copyright (C) 2012-${year} by the University of Tuebingen, Germany.
  *
- * This library is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation. A copy of the license
+ * SBVC is free software; you can redistribute it and/or 
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation. A copy of the license
  * agreement is provided in the file named "LICENSE.txt" included with
  * this software distribution and also available online as
  * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
@@ -128,6 +136,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
     de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
         pathwayName, species.getKeggAbbr(), pathNo, pathwayName);
     keggPW.setComment(comment);
+    keggPW.setOriginFormatName("BioPax");
     
     log.info("Converting pathway '" + pathwayName + "'.");
     
@@ -246,6 +255,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
         sourceDB + String.valueOf(number), species.getKeggAbbr(), number,
         pwName);
     keggPW.setComment(comment);
+    keggPW.setOriginFormatName("BioPax");
     
     log.info("Converting pathway '" + pwName + "'.");
     
@@ -670,7 +680,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
       for (dataSource d : ds) {
         if (d.getNAME().size()>0){
           String db = Utils.collectionToList(d.getNAME()).get(0);
-          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getIdentifier(db);
+          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getDatabase(db);
           if (dbIdentifier != null){
             if (Utils.collectionToList(d.getCOMMENT())!=null &&
                 Utils.collectionToList(d.getCOMMENT()).size()>0) {
@@ -687,7 +697,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
     if (xrefs.size() != 0) {
       for (xref d : xrefs) {
         if (!d.getDB().isEmpty()){          
-          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getIdentifier(d.getDB());
+          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getDatabase(d.getDB());
           if (dbIdentifier != null) {
             if (Utils.collectionToList(d.getCOMMENT())!=null &&
                 Utils.collectionToList(d.getCOMMENT()).size()>0) {
