@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level3.BioSource;
 import org.biopax.paxtools.model.level3.BiochemicalReaction;
 import org.biopax.paxtools.model.level3.Catalysis;
@@ -748,6 +749,9 @@ public class BioPaxL32KGML extends BioPax2KGML {
       parseControl((Control) entity, keggPW, m, species);
     } else if (Conversion.class.isAssignableFrom(entity.getClass())) {
       parseConversion((Conversion) entity, keggPW, m, species);
+    } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
+      // TODO CW: Copied from Level2. Please confirm that this is correct here!
+      createKEGGEntry((Pathway) entity, keggPW, m, species, EntryType.map, null, ",", null);
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
           Utils.iterableToList(((GeneticInteraction) entity).getParticipant()), keggPW, m,
@@ -1046,7 +1050,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
     Set<BioPAXElement> resEntities = new HashSet<BioPAXElement>();
     Set<String> name = entity.getName();
 
-    if (name.size() > 0 && !(Pathway.class.isAssignableFrom(entity.getClass()))) {
+    if (name!=null && name.size() > 0 && !(Pathway.class.isAssignableFrom(entity.getClass()))) {
       if (Complex.class.isAssignableFrom(entity.getClass())) {
         Complex c = (Complex) entity;
         for (PhysicalEntity pe : c.getComponent()) {

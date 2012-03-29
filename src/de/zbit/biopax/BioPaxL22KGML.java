@@ -214,7 +214,9 @@ public class BioPaxL22KGML extends BioPax2KGML {
       if (pathwayStep.class.isAssignableFrom(interaction.getClass())){
         parsePathwayStep((pathwayStep)interaction, keggPW, m, species);
       } else if (interaction.class.isAssignableFrom(interaction.getClass())){
-        parseInteraction((interaction) interaction, keggPW, m, species);  
+        parseInteraction((interaction) interaction, keggPW, m, species);
+      } else if (pathway.class.isAssignableFrom(interaction.getClass())){
+        createKEGGEntry((pathway) interaction, keggPW, m, species, EntryType.map, null, ",", null);  
       } else {
         log.log(Level.SEVERE, "Could not parse: '" + interaction.getModelInterface() + "'.");
       }      
@@ -334,7 +336,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
     Set<entity> resEntities = new HashSet<entity>();
     String name = entity.getNAME();
 
-    if (!name.isEmpty() && !(pathway.class.isAssignableFrom(entity.getClass()))) {
+    if (name!=null && !name.isEmpty() && !(pathway.class.isAssignableFrom(entity.getClass()))) {
       if (complex.class.isAssignableFrom(entity.getClass())) {
         complex c = (complex) entity;
         for (physicalEntityParticipant pe : c.getCOMPONENTS()) {
@@ -860,7 +862,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
                   relType, subtype);
             } else if (interaction.class.isAssignableFrom(process.getClass())) {
               interaction inter = ((interaction)process); 
-              if (!inter.getNAME().isEmpty()){                
+              if (inter.getNAME()!=null && !inter.getNAME().isEmpty()){
                 EntryExtended keggEntry2 = createKEGGEntry(inter, keggPW, m, species);
                 if (keggEntry2 !=null)
                   createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),

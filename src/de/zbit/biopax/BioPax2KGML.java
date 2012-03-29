@@ -137,11 +137,13 @@ public abstract class BioPax2KGML {
   public static final String keggUnknownName = "unknown";
 
   /**
+   * TODO: If these mappers are static, we must somehow distinguish instances for different species!
    * mapper to map gene symbols to gene ids
    */
   protected static GeneSymbol2GeneIDMapper geneSymbolMapper = null;
 
   /**
+   * TODO: If these mappers are static, we must somehow distinguish instances for different species!
    * mapper to map gene ids to KEGG ids
    */
   protected static GeneID2KeggIDMapper geneIDKEGGmapper = null;
@@ -181,7 +183,7 @@ public abstract class BioPax2KGML {
    *         {@link BioPax2KGML#keggReactionID} is augmented after this step
    */
   protected String getReactionName() {
-    return "rn:unknown" + String.valueOf(++keggReactionID);
+    return keggUnknownName + String.valueOf(++keggReactionID);
   }
 
   /**
@@ -374,8 +376,12 @@ public abstract class BioPax2KGML {
   
   /**
    * Creates for an entered {@link Model} the corresponding KEGG pathways
-   * 
-   * @param m
+   * @param fileName
+   * @param destinationFolder
+   * @param singleMode the OPPOSITE of split mode. If <code>TRUE</code>, only a
+   * single file will be created.
+   * @param writeEntryExtended
+   * @return
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
     (String fileName, String destinationFolder,
@@ -610,7 +616,7 @@ public abstract class BioPax2KGML {
     
     int number = pathway.hashCode();
     String sourceDB="";
-    String pwName="unknown";
+    String pwName=keggUnknownName;
     String link = null;
     if (pathway instanceof BioPAXElement) {
       getKeggPathwayNumber(((BioPAXElement)pathway).getRDFId());

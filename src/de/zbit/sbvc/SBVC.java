@@ -51,6 +51,7 @@ import de.zbit.util.prefs.SBProperties;
 
 /**
  * @author Finja B&uuml;chel
+ * @author Clemens Wrzodek
  * @version $Rev$
  */
 public class SBVC extends Launcher{
@@ -70,7 +71,7 @@ public class SBVC extends Launcher{
   }
 
   public SBVC() {
-    // TODO Auto-generated constructor stub
+    this(new String[0]);
   }
 
   @Override
@@ -83,10 +84,17 @@ public class SBVC extends Launcher{
     parseInputFile(input, folderName, splitMode);
   }
 
+  /**
+   * 
+   * @param input <code>BioPAX</code> file.
+   * @param folderName Result folder in which the created file should be put.
+   * @param splitMode <code>TRUE</code> if separate files for each pathway should
+   * be created. <code>FALSE</code> to create a single output file.
+   */
   public void parseInputFile(String input, String folderName, boolean splitMode) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPax2KGML.createPathwaysFromModel(input, folderName, splitMode, false);
+      BioPax2KGML.createPathwaysFromModel(input, folderName, !splitMode, false);
     
     // translation to sbml
     KEGG2SBMLqual k2s = null;
