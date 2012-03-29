@@ -2,10 +2,10 @@
 # Core Developers #
 ###################
 
-Clemens Wrzodek (1)
-  clemens.wrzodek@uni-tuebingen.de
 Finja Büchel (1)
   finja.buechel@uni-tuebingen.de
+Clemens Wrzodek (1)
+  clemens.wrzodek@uni-tuebingen.de
   
 ###################
 #  Contributors   #

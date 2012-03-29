@@ -525,13 +525,13 @@ public class BioPaxL22KGML extends BioPax2KGML {
       keggEntry = createKEGGEntry((entity) entity, keggPW, m, species, EntryType.group, null, "/",
           components);
     } else if (sequenceEntity.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.dna, ",",
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.dna, ",",
           null);
     } else if (protein.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.enzyme, EntryTypeExtended.protein,
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.protein,
           ",", null);
     } else if (rna.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.rna, ",",
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.rna, ",",
           null);
     } else if (smallMolecule.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, EntryTypeExtended.unknown,

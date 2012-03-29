@@ -425,7 +425,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
     } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null);
     } else if (Gene.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, null, ",", null);
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",", null);
     } else {
       log.severe("Unknonw entity type: " + entity.getModelInterface() + "-" + entity.getRDFId());
       System.exit(1);
@@ -453,19 +453,19 @@ public class BioPaxL32KGML extends BioPax2KGML {
       keggEntry = createKEGGEntry((Entity) entity, keggPW, m, species, EntryType.group, null, "/",
           components);
     } else if (Dna.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.dna, ",",
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.dna, ",",
           null);
     } else if (DnaRegion.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.dna_region,
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.dna_region,
           ",", null);
     } else if (Protein.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.enzyme, EntryTypeExtended.protein,
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.protein,
           ",", null);
     } else if (Rna.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.rna, ",",
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.rna, ",",
           null);
     } else if (RnaRegion.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.rna_region,
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.rna_region,
           ",", null);
     } else if (SmallMolecule.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, EntryTypeExtended.unknown,
@@ -728,13 +728,12 @@ public class BioPaxL32KGML extends BioPax2KGML {
     
     if (keggEntry.isSetGeneType()) {
       CellularLocationVocabulary cl = null;
-      if (keggEntry.getGeneType().equals(EntryTypeExtended.protein)) {
-        cl = ((Protein)entity).getCellularLocation();        
-      } else if (keggEntry.getGeneType().equals(EntryTypeExtended.rna)) {
-        cl = ((Rna)entity).getCellularLocation();
-      }      
-      if (cl!=null && cl.getComment().size()>0)
-      keggEntry.setCompartment(Utils.collectionToList(cl.getComment()).get(0));
+      if (entity instanceof PhysicalEntity) {
+        cl = ((PhysicalEntity)entity).getCellularLocation();
+      }
+      if (cl!=null && cl.getComment().size()>0) {
+        keggEntry.setCompartment(Utils.collectionToList(cl.getComment()).get(0));
+      }
     } 
 
     // checking if entry already exists
@@ -985,7 +984,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
 
     // Participant (2 or more)
     if (participants.size() == 1) {
-      createKEGGEntry(participants.get(0), keggPW, m, species, EntryType.gene, null, ",", null);      
+      createKEGGEntry(participants.get(0), keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",", null);      
     } else if (participants.size() > 1) {
       for (int i = 0; i < participants.size() - 1; i++) {
         for (int j = i + 1; j < participants.size(); j++) {
