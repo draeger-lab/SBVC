@@ -1,0 +1,5 @@
+
+* SBVC 1.0.0 (released finally in YYYY-MM-DD)) is based on the following subversion revisions:
+  KEGGtranslator XX
+  SysBio XX
+  JSBML XX
