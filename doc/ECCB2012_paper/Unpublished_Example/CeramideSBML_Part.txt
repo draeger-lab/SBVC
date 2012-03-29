@@ -1,0 +1,102 @@
+...
+<model id="SId_534" name="ceramide signaling pathway" metaid="meta_SId_534" timeUnits="time" substanceUnits="substance" volumeUnits="volume">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <h1>Model of “ceramide signaling pathway” in “Homo sapiens (human)”</h1>
+            <a href="http://www.genome.jp/kegg-bin/show_pathway?3534">      <img src="http://www.genome.jp/kegg-bin/show_pathway?3534" alt="ceramide signaling pathway"/>
+                </a>
+            <br/>
+            <p>KGML version was: 0.71      <br/>
+                </p>
+            </body>
+      
+    </notes>
+...
+<qual:qualitativeSpecies metaid="meta_qual_response_to_heat" qual:compartment="default" sboTerm="SBO:0000552" qual:name="response_to_heat" qual:id="qual_response_to_heat">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+        </body>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#meta_qual_response_to_heat">
+              <bqbiol:unknownQualifier>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.eco:ECO%3A0000313"/>
+                </rdf:Bag>
+              </bqbiol:unknownQualifier>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+</qual:qualitativeSpecies>
+<qual:qualitativeSpecies metaid="meta_qual_ASMase" qual:compartment="default" sboTerm="SBO:0000245" qual:name="A-SMase" qual:id="qual_ASMase">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+        </body>
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#meta_qual_ASMase">
+              <bqbiol:unknownQualifier>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.eco:ECO%3A0000313"/>
+                </rdf:Bag>
+              </bqbiol:unknownQualifier>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+qual:qualitativeSpecies>
+<qual:qualitativeSpecies metaid="meta_qual_sphingomyelin" qual:compartment="default" sboTerm="SBO:0000247" qual:name="sphingomyelin" qual:id="qual_sphingomyelin">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+        </body>          
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#meta_qual_sphingomyelin">
+              <bqbiol:unknownQualifier>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.eco:ECO%3A0000313"/>
+                </rdf:Bag>
+              </bqbiol:unknownQualifier>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+</qual:qualitativeSpecies>
+<qual:qualitativeSpecies metaid="meta_qual_nacylsphingosine" qual:compartment="default" sboTerm="SBO:0000247" qual:name="n-acylsphingosine" qual:id="qual_nacylsphingosine">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+        </body>
+          
+        </notes>
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#meta_qual_nacylsphingosine">
+              <bqbiol:unknownQualifier>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.eco:ECO%3A0000313"/>
+                </rdf:Bag>
+              </bqbiol:unknownQualifier>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+</qual:qualitativeSpecies>
+<qual:transition metaid="_8eacf574-b022-4e20-bc1a-d552a15c7f6f" sboTerm="SBO:0000170" qual:id="tr_11">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#_8eacf574-b022-4e20-bc1a-d552a15c7f6f">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:biomodels.sbo:SBO%3A0000170"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+                      <qual:listOfInputs>
+          <qual:input metaid="meta_in_11" qual:transitionEffect="none" qual:sign="positive" sboTerm="SBO:0000170" qual:qualitativeSpecies="qual_response_to_heat" qual:id="in_11"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="qual_ASMase" qual:id="out_11"/>
+        </qual:listOfOutputs>
+      </qual:transition>

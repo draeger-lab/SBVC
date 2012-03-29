@@ -52,7 +52,7 @@ public class BioPax2KGMLTest {
 
   private void testCreateKGMLsFromBioCartaModel(String file, String destinationFolder, 
       boolean singleMode, boolean writeEntryExtended) {   
-    BioPax2KGML.createKGMLsFromModel(file, destinationFolder, singleMode, writeEntryExtended);    
+    BioPax2KGML.createPathwaysFromModel(file, destinationFolder, singleMode, writeEntryExtended);    
   }  
   
   private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
@@ -61,7 +61,7 @@ public class BioPax2KGMLTest {
     if (f.isDirectory()) {
       String[] files = f.list();
       for (String file : files) {
-        BioPax2KGML.createKGMLsFromModel(fileFolder + file, destinationFolder, singleMode, writeEntryExtended);    
+        BioPax2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, singleMode, writeEntryExtended);    
       }      
     }       
   }
@@ -353,8 +353,9 @@ public class BioPax2KGMLTest {
     
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
 //        "BioCarta.bp2_part.owl", fileFolder + subPID, false, false);    
-    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-        "BioCarta.bp3.owl", fileFolder + subPID, true, false);
+//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+//        "BioCarta.bp3.owl", fileFolder + subPID, true, false);
+    bft.parseAndWritePathway(fileFolder + subPID + "BioCarta.bp3.owl", fileFolder + subPID, "ceramide signaling pathway");
 //    
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp3.owl");
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp2.owl");

@@ -1,0 +1,77 @@
+<bp:Pathway rdf:ID="pid_3534">
+  <bp:dataSource rdf:resource="#pid_4"/>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ceramidepathway</bp:name>
+  <bp:organism rdf:resource="#pid_1"/>
+  <bp:pathwayComponent rdf:resource="#pid_3744"/>
+  <bp:pathwayComponent rdf:resource="#pid_3633"/>
+  <bp:pathwayComponent rdf:resource="#pid_3638"/>
+  ...
+  <bp:standardName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ceramide signaling pathway</bp:standardName>
+</bp:Pathway>
+<bp:Control rdf:ID="pid_3744">
+  <bp:controlType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:controlType>
+  <bp:dataSource rdf:resource="#pid_4"/>
+  <bp:controller rdf:resource="#pid_3745"/>
+  <bp:controlled rdf:resource="#pid_3741"/>
+</bp:Control>
+<bp:Pathway rdf:ID="pid_3745">
+  <bp:xref rdf:resource="#pid_3746"/>
+  <bp:standardName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">response to heat</bp:standardName>
+</bp:Pathway>
+<bp:BiochemicalReaction rdf:ID="pid_3741">
+  <bp:left rdf:resource="#pid_3536"/>
+  <bp:dataSource rdf:resource="#pid_4"/>
+  <bp:participantStoichiometry rdf:resource="#pid_3742"/>
+  <bp:participantStoichiometry rdf:resource="#pid_3743"/>
+  <bp:right rdf:resource="#pid_3539"/>
+  <bp:spontaneous rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</bp:spontaneous>
+</bp:BiochemicalReaction>
+<bp:Stoichiometry rdf:ID="pid_3742">
+  <bp:physicalEntity rdf:resource="#pid_3536"/>
+  <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</bp:stoichiometricCoefficient>
+</bp:Stoichiometry>
+<bp:Protein rdf:ID="pid_3536">
+  <bp:entityReference rdf:resource="#pid_3537"/>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A-SMase</bp:name>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sphingomyelin phosphodiesterase 1 acid lysosomal</bp:name>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SMPD1</bp:name>
+</bp:Protein>
+<bp:Stoichiometry rdf:ID="pid_3743">
+  <bp:physicalEntity rdf:resource="#pid_3539"/>
+  <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</bp:stoichiometricCoefficient>
+</bp:Stoichiometry>
+<bp:Protein rdf:ID="pid_3539">
+  <bp:entityReference rdf:resource="#pid_3537"/>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A-SMase</bp:name>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sphingomyelin phosphodiesterase 1 acid lysosomal</bp:name>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SMPD1</bp:name>
+  <bp:feature rdf:resource="#pid_3540"/>
+</bp:Protein>
+<bp:BiochemicalReaction rdf:ID="pid_3633">
+  <bp:left rdf:resource="#pid_3634"/>
+  <bp:dataSource rdf:resource="#pid_4"/>
+  <bp:participantStoichiometry rdf:resource="#pid_3636"/>
+  <bp:participantStoichiometry rdf:resource="#pid_3637"/>
+  <bp:right rdf:resource="#pid_1238"/>
+</bp:BiochemicalReaction>
+<bp:Stoichiometry rdf:ID="pid_3636">
+  <bp:physicalEntity rdf:resource="#pid_3634"/>
+  <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</bp:stoichiometricCoefficient>
+</bp:Stoichiometry>
+<bp:SmallMolecule rdf:ID="pid_3634">
+  <bp:entityReference rdf:resource="#pid_3635"/>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sphingomyelin</bp:name>
+</bp:SmallMolecule>
+<bp:SmallMolecule rdf:ID="pid_1238">
+  <bp:entityReference rdf:resource="#pid_1239"/>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ceramide</bp:name>
+  <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">n-acylsphingosine</bp:name>
+</bp:SmallMolecule>
+<bp:Catalysis rdf:ID="pid_3638">
+  <bp:controlType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:controlType>
+  <bp:dataSource rdf:resource="#pid_4"/>
+  <bp:controller rdf:resource="#pid_3539"/>
+  <bp:controlled rdf:resource="#pid_3633"/>
+  <bp:catalysisDirection rdf:datatype="http://www.w3.org/2001/XMLSchema#string">LEFT-TO-RIGHT</bp:catalysisDirection>
+</bp:Catalysis>
+...
