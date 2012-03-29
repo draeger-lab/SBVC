@@ -99,7 +99,7 @@
     	
             <zipfileset excludes="META-INF/*" src="${SysBioPath}/lib/commons-discovery.jar"/>
             <!-- <zipfileset excludes="META-INF/*" src="${SysBioPath}/lib/commons-logging.jar"/> -->
-            <!-- <zipfileset excludes="META-INF/*.SF" src="${SysBioPath}/lib/jaxrpc.jar"/> -->
+            <zipfileset excludes="META-INF/*.SF, javax/xml/namespace/QName.class" src="${SysBioPath}/lib/jaxrpc.jar"/>
             <!-- <zipfileset excludes="META-INF/*.SF" src="${SysBioPath}/lib/keggapi.jar"/> -->
             <zipfileset excludes="META-INF/*.SF" src="${SysBioPath}/lib/wsdl4j.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${SysBioPath}/lib/axis.jar"/>
