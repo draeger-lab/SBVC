@@ -65,6 +65,7 @@ import org.biopax.paxtools.model.level2.transport;
 import org.biopax.paxtools.model.level2.transportWithBiochemicalReaction;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level2.xref;
+import org.biopax.paxtools.model.level3.PhysicalEntity;
 
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
@@ -1139,19 +1140,21 @@ public class BioPaxL22KGML extends BioPax2KGML {
     List<ReactionComponent> substrates = new ArrayList<ReactionComponent>();
 
     for (physicalEntityParticipant left : lefts) {
+      
       EntryExtended keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, species);
          
       if (keggEntry != null) {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
+        rc.setStoichiometry((int)left.getSTOICHIOMETRIC_COEFFICIENT());
         products.add(rc);
-  
       }
     }
     
     for (physicalEntityParticipant right : rights) {
       EntryExtended keggEntry = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, species);
       if (keggEntry != null) {
-        ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());        
+        ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());   
+        rc.setStoichiometry((int)right.getSTOICHIOMETRIC_COEFFICIENT());
         substrates.add(rc);
   
       }
