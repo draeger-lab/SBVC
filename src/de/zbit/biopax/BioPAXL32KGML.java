@@ -388,6 +388,8 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, EntryTypeExtended.unknown,
           ",", null);
     } else {
+      // e.g. class org.biopax.paxtools.impl.level3.PhysicalEntityImpl
+      //log.log(Level.SEVERE, "2 This should not happen: '"  + entity.getClass() + "'.");
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.unknown,
           ",", null);
     }
