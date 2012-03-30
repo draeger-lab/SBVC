@@ -65,7 +65,6 @@ import org.biopax.paxtools.model.level2.transport;
 import org.biopax.paxtools.model.level2.transportWithBiochemicalReaction;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level2.xref;
-import org.biopax.paxtools.model.level3.PhysicalEntity;
 
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
@@ -79,9 +78,9 @@ import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
+import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
-import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.SortedArrayList;
 import de.zbit.util.Species;
 import de.zbit.util.Utils;
@@ -835,12 +834,14 @@ public class BioPaxL22KGML extends BioPax2KGML {
                   }  
                 }
               } else if (transport.class.isAssignableFrom(con.getClass())) {
-                List<Relation> rels = createKEGGRelations(((transport) con).getLEFT(),
-                    ((transport) con).getRIGHT(), keggPW, m, species, RelationType.PPrel, 
-                    new SubType(SubType.STATE_CHANGE));                
-                for (Relation rel : rels) {
-                  if (rel !=null)
-                    createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype);
+                Reaction r = createKEGGReaction(((transport) con).getLEFT(),
+                    ((transport) con).getRIGHT(), keggPW, m, species);                
+                if (relType.equals(RelationType.maplink) && r!=null) {
+                  for (ReactionComponent rc : r.getSubstrates()) {
+                    createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtype);
+                  }
+                } else if (relType.equals(RelationType.PPrel) && r!=null) {
+                  keggEntry1.appendReaction(r.getName());
                 }
               } else if (conversion.class.isAssignableFrom(con.getClass())){
                   List<Relation> rels =  createKEGGRelations(con.getLEFT(), con.getRIGHT(), keggPW, m, species, 
@@ -1013,8 +1014,8 @@ public class BioPaxL22KGML extends BioPax2KGML {
         createKEGGReaction(((biochemicalReaction) entity).getLEFT(),
           ((biochemicalReaction) entity).getRIGHT(), keggPW, m, species);
     } else if (transport.class.isAssignableFrom(entity.getClass())) {
-      createKEGGRelations(((transport) entity).getLEFT(), ((transport) entity).getRIGHT(), keggPW,
-          m, species, RelationType.PPrel, new SubType(SubType.STATE_CHANGE));
+      createKEGGReaction(((transport) entity).getLEFT(), ((transport) entity).getRIGHT(), keggPW,
+          m, species);
     } else if (transportWithBiochemicalReaction.class.isAssignableFrom(entity.getClass())) {
       if  (!augmentOriginalKEGGpathway)
         // BiochemicalReaction br = (TransportWithBiochemicalReaction) entity;
