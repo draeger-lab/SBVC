@@ -8,7 +8,7 @@
  * These files can then be visualized, either using a simple graph
  * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
  * Some currently supported IO formats are SBML (+qual, +layout), KGML,
- * BioPax, SBGN, etc. Please visit the project homepage at
+ * BioPAX, SBGN, etc. Please visit the project homepage at
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
@@ -25,6 +25,7 @@
 package de.zbit.biopax;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +65,7 @@ import de.zbit.util.Utils;
 import de.zbit.util.objectwrapper.ValuePair;
 
 /**
- * This class is a base class to convert BioPax files and contains all methods
+ * This class is a base class to convert BioPAX files and contains all methods
  * which are use for LEVEL 2 and LEVEL 3 converting
  * 
  * @author Finja B&uuml;chel
@@ -72,7 +73,7 @@ import de.zbit.util.objectwrapper.ValuePair;
  */
 public abstract class BioPax2KGML {
 
-  public static final Logger log = Logger.getLogger(BioPax2KGML.class.getName());
+  public static final Logger log = Logger.getLogger(BioPAX2KGML.class.getName());
 
   /**
    * default folder name for the KGMLs "pws"
@@ -167,7 +168,7 @@ public abstract class BioPax2KGML {
   /**
    * 
    * @return the new KEGG unknown "unknownx", whereas x is set to the
-   *         {@link BioPax2KGML#keggUnknownNo}.{@link BioPax2KGML#keggUnknownNo}
+   *         {@link BioPAX2KGML#keggUnknownNo}.{@link BioPAX2KGML#keggUnknownNo}
    *         is incremented after this step
    */
   protected static String getKEGGUnkownName() {
@@ -177,8 +178,8 @@ public abstract class BioPax2KGML {
   /**
    * 
    * @return the new KEGG reaction name "rn:unknownx", whereas x is set to the
-   *         {@link BioPax2KGML#keggReactionID}.
-   *         {@link BioPax2KGML#keggReactionID} is augmented after this step
+   *         {@link BioPAX2KGML#keggReactionID}.
+   *         {@link BioPAX2KGML#keggReactionID} is augmented after this step
    */
   protected String getReactionName() {
     return keggUnknownName + String.valueOf(++keggReactionID);
@@ -211,7 +212,7 @@ public abstract class BioPax2KGML {
    * The rdfID is in the format: http://pid.nci.nih.gov/biopaxpid_9717
    * 
    * From this id the number is excluded and used as pathway number, if this is
-   * not possible the {@link BioPaxL22KGML#keggPathwayNumberCounter} is used and
+   * not possible the {@link BioPAXL22KGML#keggPathwayNumberCounter} is used and
    * incremented
    * 
    * @param rdfId
@@ -248,8 +249,8 @@ public abstract class BioPax2KGML {
   }
 
   /**
-   * The {@link BioPax2KGML}{@link #geneSymbolMapper} and
-   * {@link BioPax2KGML#geneIDKEGGmapper} are initialized for the entered
+   * The {@link BioPAX2KGML}{@link #geneSymbolMapper} and
+   * {@link BioPAX2KGML#geneIDKEGGmapper} are initialized for the entered
    * species
    * 
    * @param species
@@ -273,7 +274,7 @@ public abstract class BioPax2KGML {
   }
 
   /**
-   * @return a unique {@link BioPaxL22KGML#keggEntryID}.
+   * @return a unique {@link BioPAXL22KGML#keggEntryID}.
    */
   protected int getKeggEntryID() {
     keggEntryID++;
@@ -304,7 +305,7 @@ public abstract class BioPax2KGML {
   }
 
   /**
-   * Creates a folder depending on the {@link BioPax2KGML#defaultFolderName} and
+   * Creates a folder depending on the {@link BioPAX2KGML#defaultFolderName} and
    * the {@link BioPAXLevel}
    * 
    * @param level
@@ -324,26 +325,20 @@ public abstract class BioPax2KGML {
   }
 
   /**
-   * Calls the method {@link BioPax2KGML#getModel(InputStream) for an entered
+   * Calls the method {@link BioPAX2KGML#getModel(InputStream) for an entered
    * owl file}
    * 
    * @param file
    * @return Model
    */
   public static Model getModel(final String file) {
-    InputStream io = null;
     try {
-      io = new InputStream() {
-        public int read() throws IOException {
-          return OpenFile.openFile(file).read();
-        }
-      };
+      StringBuffer fileContent = OpenFile.readFile(file);
+      return getModel(new ByteArrayInputStream(fileContent.toString().getBytes("UTF-8")));
     } catch (Exception e) {
-      log.log(Level.SEVERE, "Could not parse file: " + file + ".", e);
+      log.log(Level.SEVERE, "Could not read model!", e);
     }
-
-    log.log(Level.CONFIG, "Model sucessfully created");
-    return getModel(io);
+    return null;
   }
 
   /**
@@ -380,16 +375,13 @@ public abstract class BioPax2KGML {
    * Creates for an entered {@link Model} the corresponding KEGG pathways
    * @param fileName
    * @param destinationFolder
-   * @param singleMode the OPPOSITE of split mode. If <code>TRUE</code>, only a
-   * single file will be created.
    * @param writeEntryExtended
    * @return
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (String fileName, String destinationFolder,
-      boolean singleMode, boolean writeEntryExtended) {
-    Model m = BioPax2KGML.getModel(fileName);
-    return createPathwaysFromModel(m, fileName, destinationFolder, singleMode, writeEntryExtended); 
+    (String fileName, String destinationFolder, boolean writeEntryExtended) {
+    Model m = BioPAX2KGML.getModel(fileName);
+    return createPathwaysFromModel(m, fileName, destinationFolder, writeEntryExtended); 
   }
   
   /**
@@ -398,8 +390,7 @@ public abstract class BioPax2KGML {
    * @param m
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (Model m, String fileName, String destinationFolder,
-      boolean singleMode, boolean writeEntryExtended) {
+    (Model m, String fileName, String destinationFolder, boolean writeEntryExtended) {
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       new ArrayList<de.zbit.kegg.parser.pathway.Pathway>(); 
        
@@ -413,22 +404,24 @@ public abstract class BioPax2KGML {
      
       // BioPax Level 2 
       if (m.getLevel().equals(BioPAXLevel.L2)) {
-        BioPaxL22KGML bp = new BioPaxL22KGML();
+        BioPAXL22KGML bp = new BioPAXL22KGML();
         Set<pathway> pathways = m.getObjects(pathway.class);
         // if we want to split the incomming file
-        if (!singleMode && pathways!=null && pathways.size()>0) {
+        if (pathways!=null && pathways.size()>0) {
+          // Split mode and we have pathway objects
           keggPWs = bp.createPathways(m, comment, pathways);
         } else {
+          // All modes, but we have NO pathway objects (use the model)
           de.zbit.kegg.parser.pathway.Pathway keggPW = 
             bp.createPathwayFromBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()));
           keggPWs.add(keggPW);   
         }
       } //BioPax Level 3
         else if (m.getLevel().equals(BioPAXLevel.L3)) {
-        BioPaxL32KGML bp = new BioPaxL32KGML();
+        BioPAXL32KGML bp = new BioPAXL32KGML();
         Set<Pathway> pathways = m.getObjects(Pathway.class);
         // if we want to split the incomming file
-        if (!singleMode && pathways!=null && pathways.size()>0) {
+        if (pathways!=null && pathways.size()>0) {
           keggPWs = bp.createPathways(m, comment, pathways);
         } else {
           de.zbit.kegg.parser.pathway.Pathway keggPW = bp.createPathwayFromBioPaxFile
@@ -439,11 +432,22 @@ public abstract class BioPax2KGML {
         log.log(Level.SEVERE, "Unkown BioPax Level '" + m.getLevel().toString()
             + "' is not supported.");
         System.exit(1);
-      }      
+      }
       
     } else {
       log.log(Level.SEVERE, "Could not continue, because the model is null.");
     }    
+    
+    // Remove empty pathways
+    if (keggPWs!=null && keggPWs.size()>1) {
+      Iterator<de.zbit.kegg.parser.pathway.Pathway> it = keggPWs.iterator();
+      while (it.hasNext()) {
+        de.zbit.kegg.parser.pathway.Pathway p = it.next();
+        if (!p.isSetEntries() && !p.isSetReactions() && !p.isSetRelations()) {
+          it.remove();
+        }
+      }
+    }
     
     return keggPWs;
   }
@@ -452,23 +456,22 @@ public abstract class BioPax2KGML {
    * parses all pathways of the owl file and writes them in the KGML format
    * @param fileName
    * @param destinationFolder
-   * @param singleMode
    * @param writeEntryExtended
    */
   public static void writeKGMLsForPathways(String fileName, String destinationFolder,
-      boolean singleMode, boolean writeEntryExtended) {
-    Model m = BioPax2KGML.getModel(fileName);
+      boolean writeEntryExtended) {
+    Model m = BioPAX2KGML.getModel(fileName);
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPax2KGML.createPathwaysFromModel(m, fileName, destinationFolder,
-      singleMode, writeEntryExtended);
-    BioPax2KGML.writeKGMLsForPathways(m, destinationFolder, keggPWs, writeEntryExtended);
+      BioPAX2KGML.createPathwaysFromModel(m, fileName, destinationFolder,
+      writeEntryExtended);
+    BioPAX2KGML.writeKGMLsForPathways(m, destinationFolder, keggPWs, writeEntryExtended);
   }
   
   
   /**
    * This method creates for each pathway in the model a KGML file with the
    * pathway name and saves the pathways in an default folder see 
-   * {@link BioPax2KGML#createDefaultFolder(org.biopax.paxtools.model.BioPAXLevel)}
+   * {@link BioPAX2KGML#createDefaultFolder(org.biopax.paxtools.model.BioPAXLevel)}
    * 
    * @param m
    */
@@ -631,7 +634,7 @@ public abstract class BioPax2KGML {
       ValuePair<String, String> sAndl = getSourceDBL3(p.getDataSource());
       sourceDB = sAndl.getA();
       link = sAndl.getB();
-      pwName = BioPaxL32KGML.getPathwayName(p);
+      pwName = BioPAXL32KGML.getPathwayName(p);
     }
     if (pathwayName!=null && pathwayName.length()>0) {
       pwName = pathwayName;

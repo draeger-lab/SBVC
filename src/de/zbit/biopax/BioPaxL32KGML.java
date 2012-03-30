@@ -102,9 +102,9 @@ import de.zbit.util.progressbar.ProgressBar;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public class BioPaxL32KGML extends BioPax2KGML {
+public class BioPaxL32KGML extends BioPAX2KGML {
   
-  public static final Logger log = Logger.getLogger(BioPaxL32KGML.class.getName());
+  public static final Logger log = Logger.getLogger(BioPAXL32KGML.class.getName());
 
   /**
    * this method parses the biopax pathway by firstly determining the pathway species and
@@ -238,7 +238,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
   
 
   /**
-   * firstly set {@link BioPaxL32KGML#augmentOriginalKEGGpathway} to true, 
+   * firstly set {@link BioPAXL32KGML#augmentOriginalKEGGpathway} to true, 
    * secondly a model from biocarta is created, and
    * thirdly all relations are added to p if entry1 and entry2 of the relation are in p too. 
    * 
@@ -425,25 +425,25 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param model
    * @return
    */
-  public List<BioPaxPathwayHolder> getPathwaysWithEntrezGeneID(String species, Model m) {
+  public List<BioPAXPathwayHolder> getPathwaysWithEntrezGeneID(String species, Model m) {
     return getEntrezGeneIDsForPathways(getPathwayEntities(species, m), species, m);
   }
   
   /**
-   * creates a list with {@link BioPaxPathwayHolder} and the entities of the
+   * creates a list with {@link BioPAXPathwayHolder} and the entities of the
    * pathways
    * 
    * @param species
    * @param m
    * @return
    */
-  private List<BioPaxPathwayHolder> getPathwayEntities(String species, Model m) {
-    List<BioPaxPathwayHolder> pathways = new ArrayList<BioPaxPathwayHolder>();
+  private List<BioPAXPathwayHolder> getPathwayEntities(String species, Model m) {
+    List<BioPAXPathwayHolder> pathways = new ArrayList<BioPAXPathwayHolder>();
 
     for (Entity entity : m.getObjects(Entity.class)) {
       for (Interaction string : entity.getParticipantOf()) {
         for (Pathway pw : string.getPathwayComponentOf()) {
-          BioPaxPathwayHolder helper = new BioPaxPathwayHolder(pw.getRDFId(),
+          BioPAXPathwayHolder helper = new BioPAXPathwayHolder(pw.getRDFId(),
               getPathwayName(pw));
           int index = pathways.indexOf(helper);
           if (index > -1) {
@@ -525,13 +525,13 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param model
    * @return
    */
-  public List<BioPaxPathwayHolder> getPathwaysWithGeneID(String species, Model m) {
-    List<BioPaxPathwayHolder> pathways = new ArrayList<BioPaxPathwayHolder>();
+  public List<BioPAXPathwayHolder> getPathwaysWithGeneID(String species, Model m) {
+    List<BioPAXPathwayHolder> pathways = new ArrayList<BioPAXPathwayHolder>();
 
     for (Entity entity : m.getObjects(Entity.class)) {
       for (Interaction string : entity.getParticipantOf()) {
         for (Pathway pw : string.getPathwayComponentOf()) {
-          BioPaxPathwayHolder helper = new BioPaxPathwayHolder(pw.getRDFId());
+          BioPAXPathwayHolder helper = new BioPAXPathwayHolder(pw.getRDFId());
           int index = pathways.indexOf(helper);
           if (index > -1) {
             helper = pathways.get(index);
@@ -544,7 +544,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
     }
 
     Map<String, RelationshipXref> xrefs = getMapFromSet(m.getObjects(RelationshipXref.class));
-    for (BioPaxPathwayHolder pw : pathways) {
+    for (BioPAXPathwayHolder pw : pathways) {
       if (pw.getPathwayName().equals("http://pid.nci.nih.gov/biopaxpid_9796")) {
         log.log(Level.FINER, "Pathway: " + pw.getPathwayName() + ": " + pw.getNoOfEntities());
         Set<BioPAXElement> pwEntities = new HashSet<BioPAXElement>();
@@ -569,7 +569,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
    
   /**
    * Adds the created {@link Entry} to the
-   * {@link BioPaxL32KGML#bc2KeggEntry} map and to the
+   * {@link BioPAXL32KGML#bc2KeggEntry} map and to the
    * {@link de.zbit.kegg.parser.pathway.Pathway}
    * 
    * @param entity
@@ -603,7 +603,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
     }
     graphName = name.toString().trim();
     
-    String keggname = BioPax2KGML.getKEGGName(identifiers, species);
+    String keggname = BioPAX2KGML.getKEGGName(identifiers, species);
 
     // create graphics
     Graphics graphics = null;
@@ -1000,7 +1000,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * deteremines the gene ids of the elements in a pathway
    * 
    * This method is not so clean should be rewritten, becuase in the method
-   * {@link BioPaxL32KGML#getEntrezGeneIDsForPathways(List, String, Model)}
+   * {@link BioPAXL32KGML#getEntrezGeneIDsForPathways(List, String, Model)}
    * complexes are not treated right
    * 
    * @param pathways
@@ -1008,13 +1008,13 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param m
    * @return
    */
-  public List<BioPaxPathwayHolder> getEntrezGeneIDsForPathways(
-      List<BioPaxPathwayHolder> pathways, String species, Model m) {
+  public List<BioPAXPathwayHolder> getEntrezGeneIDsForPathways(
+      List<BioPAXPathwayHolder> pathways, String species, Model m) {
     log.info("Start parsing gene ids.");
     ProgressBar bar = new ProgressBar(pathways.size());
 
     Map<String, RelationshipXref> xrefs = getMapFromSet(m.getObjects(RelationshipXref.class));
-    for (BioPaxPathwayHolder pw : pathways) {
+    for (BioPAXPathwayHolder pw : pathways) {
       // if (pw.getRDFid().equals("http://pid.nci.nih.gov/biopaxpid_9796"))
       // {//TODO: is necessary to uncomment!!!!
       log.log(Level.FINER, "Pathway: " + pw.getPathwayName() + ": " + pw.getNoOfEntities());
@@ -1269,8 +1269,6 @@ public class BioPaxL32KGML extends BioPax2KGML {
 
             // CatalysisDirection - up to now ignored
           }
-        } else {
-          break;
         }
       }
     }
@@ -1485,6 +1483,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
 
         for (Stoichiometry stoichi : stoichiometry) {
+          if (stoichi.getPhysicalEntity()==null) continue;
           if (stoichi.getPhysicalEntity().equals(left)) {
             rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
             break;
@@ -1500,6 +1499,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
 
         for (Stoichiometry stoichi : stoichiometry) {
+          if (stoichi.getPhysicalEntity()==null) continue;
           if (stoichi.getPhysicalEntity().equals(right)) {
             rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
             break;

@@ -94,8 +94,8 @@ public class BioPaxPathwayHolder {
   
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof BioPaxPathwayHolder){
-      if(((BioPaxPathwayHolder) obj).getRDFid().equals(this.getRDFid())){
+    if (obj instanceof BioPAXPathwayHolder){
+      if(((BioPAXPathwayHolder) obj).getRDFid().equals(this.getRDFid())){
         return true;
       }
       else 

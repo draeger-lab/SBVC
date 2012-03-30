@@ -35,10 +35,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.sbml.jsbml.SBMLDocument;
+
 import de.zbit.AppConf;
 import de.zbit.Launcher;
-import de.zbit.biopax.BioPax2KGML;
+import de.zbit.biopax.BioPAX2KGML;
 import de.zbit.gui.GUIOptions;
+import de.zbit.io.FileTools;
 import de.zbit.kegg.KEGGtranslatorOptions;
 import de.zbit.kegg.KEGGtranslatorOptions.NODE_NAMING;
 import de.zbit.kegg.KGMLWriter;
@@ -97,7 +100,7 @@ public class SBVC extends Launcher{
   public void convertBioPAXToSBML(String input, String outputFolderName, boolean splitMode) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPax2KGML.createPathwaysFromModel(input, outputFolderName, !splitMode, false);
+      BioPAX2KGML.createPathwaysFromModel(input, outputFolderName, false);
     
     // translation to sbml
     KEGG2SBMLqual k2s = null;
@@ -126,8 +129,22 @@ public class SBVC extends Launcher{
     k2s.setAddLayoutExtension(false);
     k2s.setCheckAtomBalance(false);
     
-    for (de.zbit.kegg.parser.pathway.Pathway p : keggPWs) {
-      k2s.translate(p, Utils.ensureSlash(outputFolderName) + KGMLWriter.createFileName(p));
+    // Translate and write output
+    if (keggPWs.size()==1 && !splitMode && !new File(outputFolderName).isDirectory()) {
+      // Single in and single out file, no split mode.
+      de.zbit.kegg.parser.pathway.Pathway p = keggPWs.iterator().next();
+      String title = FileTools.removeFileExtension(outputFolderName);
+      if (title.toLowerCase().endsWith(".sbml")) title = title.substring(0, title.length()-5);
+      p.setTitle(title);
+      k2s.translate(p, outputFolderName);
+      
+    } else {
+      // We had multiple biopax pathway objects in input
+      // SBML does not permit multiple models => write one file per model
+        for (de.zbit.kegg.parser.pathway.Pathway p : keggPWs) {
+          k2s.translate(p, Utils.ensureSlash(outputFolderName) + KGMLWriter.createFileName(p));
+        }
+        
     }
     
     // Remember already queried objects (save cache)

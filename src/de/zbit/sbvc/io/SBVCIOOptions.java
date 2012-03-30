@@ -27,7 +27,6 @@ package de.zbit.sbvc.io;
 import java.io.File;
 
 import de.zbit.io.filefilter.SBFileFilter;
-import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
 import de.zbit.util.prefs.KeyProvider;
 import de.zbit.util.prefs.Option;
 import de.zbit.util.prefs.OptionGroup;
@@ -53,7 +52,7 @@ public interface SBVCIOOptions  extends KeyProvider{
   public static final Option<File> INPUT = new Option<File>("INPUT",
       File.class,
       "Path and name of the source, OWL formatted, XML-file.",
-      new Range<File>(File.class, SBFileFilter.createOWLFileFilter()), (short) 2, "-i" );
+      new Range<File>(File.class, SBFileFilter.createBioPAXFileFilter()), (short) 2, "-i" );
       //new File(System.getProperty("user.dir")));
 
   /**
