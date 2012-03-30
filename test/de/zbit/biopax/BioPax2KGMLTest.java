@@ -156,13 +156,13 @@ public class BioPax2KGMLTest {
         BioPaxL22KGML b22 = new BioPaxL22KGML();
         pathway pw = b22.getPathwayByName(m, pwName);      
         if(pw!=null)
-          keggPW = b22.parsePathway(m, BioPax2KGML.getRDFScomment(new File (file)), 
+          keggPW = b22.createPathway(m, BioPax2KGML.getRDFScomment(file), 
               pw, b22.determineSpecies(pw.getORGANISM()));
       } else if(m.getLevel().equals(BioPAXLevel.L3)){
         BioPaxL32KGML b23 = new BioPaxL32KGML();
         org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
         if(pw!=null)
-          keggPW = b23.parsePathway(m, BioPax2KGML.getRDFScomment(new File (file)),
+          keggPW = b23.createPathway(m, BioPax2KGML.getRDFScomment(file),
               pw, b23.determineSpecies(pw.getOrganism()));
       }
       

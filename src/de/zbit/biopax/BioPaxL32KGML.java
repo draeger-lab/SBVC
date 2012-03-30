@@ -113,7 +113,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param pathways
    * @return
    */
-  Collection<de.zbit.kegg.parser.pathway.Pathway> parsePathways(Model m, 
+  Collection<de.zbit.kegg.parser.pathway.Pathway> createPathways(Model m, 
       String comment, Set<Pathway> pathways) {
     Species oldSpecies = new Species("Homo sapiens", "_HUMAN", "human", "hsa", 9606);
     initalizeMappers(oldSpecies);
@@ -129,7 +129,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
         oldSpecies = newSpecies;
       }
       
-      keggPWs.add(parsePathway(m, comment, pathway, oldSpecies));
+      keggPWs.add(createPathway(m, comment, pathway, oldSpecies));
     }
     
     return keggPWs;
@@ -214,7 +214,7 @@ public class BioPaxL32KGML extends BioPax2KGML {
    * @param species
    * @return
    */
-  protected de.zbit.kegg.parser.pathway.Pathway parsePathway(Model m, String comment, 
+  protected de.zbit.kegg.parser.pathway.Pathway createPathway(Model m, String comment, 
       Pathway pathway, Species species) {
     if(geneSymbolMapper==null && geneIDKEGGmapper==null){
       initalizeMappers(species);

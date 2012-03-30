@@ -138,7 +138,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
    * @param pathways
    * @return
    */
-  protected Collection<Pathway> parsePathways(Model m, String comment, Set<pathway> pathways) {    
+  protected Collection<Pathway> createPathways(Model m, String comment, Set<pathway> pathways) {    
     Species oldSpecies = new Species("Homo sapiens", "_HUMAN", "human", "hsa", 9606);
     initalizeMappers(oldSpecies);
     
@@ -151,7 +151,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
         initalizeMappers(newSpecies);
         oldSpecies = newSpecies;
       }
-      keggPWs.add(parsePathway(m, comment, pathway, oldSpecies));
+      keggPWs.add(createPathway(m, comment, pathway, oldSpecies));
     }
     return keggPWs;
   }
@@ -196,7 +196,7 @@ public class BioPaxL22KGML extends BioPax2KGML {
    * @param species
    * @return
    */
-  Pathway parsePathway(Model m, String comment, pathway pathway, Species species) {
+  Pathway createPathway(Model m, String comment, pathway pathway, Species species) {
     if(geneSymbolMapper==null && geneIDKEGGmapper==null){
       initalizeMappers(species);
     }

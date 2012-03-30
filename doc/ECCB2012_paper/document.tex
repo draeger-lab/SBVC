@@ -128,7 +128,7 @@ Until now, there exists no BioPAX to SBML converter that is fully capable of tra
 Here we present the complete Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute in SBML qual format.
 All PID BioPAX Level~2 and Level~3 pathway files have been translated into the SBML format including both reactions and relations by using the new \qual{} extension package.
 Furthermore, we provide a webservice for the translation from BioPAX into SBML.
-{\TODO: LEVEL 3 einfuegen}
+{\TODO: {LEVEL 3 einfuegen}}
 \section{Availability:}
 The BioPAX2SBML webservice is freely available at \url{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 \section{Contact:}
@@ -181,7 +181,7 @@ The SBML core specification provides no possibility to define other relationship
 
 %%%%%%%%% SBML qual
 The SBML Qualitative Models extension (\qual) introduces qualitative elements, such as \qualitativeSpecies and \transition, providing the necessary means to describe relationships like enzyme-enzyme relations, protein-protein interactions, interactions of transcription factors and genes, protein-compound interaction, or links to other pathways \citep{QualSpecification}.
-(\TODO{: shorten because of repetition?})
+(\TODO{ shorten because of repetition?})
 %%%%%%%%%%%%% replaced version
 % Although, technically, those processes are chemical reactions, too, it can
 % often be far more useful to represent them by logical states and transitions.
@@ -391,9 +391,9 @@ BioPAX \Controller & BioPAX \Controlled               & Converted\\
 \midrule
 PhysicalEntity & BiochemicalReaction                & reaction\\
 PhysicalEntity & ComplexAssembly                    & reaction\\
-PhysicalEntity & Conversion                            & transition\\
-PhysicalEntity & Degradation                        & transition\\
-PhysicalEntity & Transport                          & transition\\
+PhysicalEntity & Conversion                         & transition\\
+PhysicalEntity & Degradation                        & reaction\\
+PhysicalEntity & Transport                          & reaction\\
 PhysicalEntity & TransportWithBiochemicalReaction   & reaction\\
 PhysicalEntity & Pathway                            & transition\\
 PhysicalEntity & TemplateReaction                   & transition\\
@@ -414,7 +414,7 @@ physicalEntity & biochemicalReaction                & reaction\\
 physicalEntity & complexAssembly                    & reaction\\
 physicalEntity & interaction                        & transition\\
 physicalEntity & pathway                            & transition\\
-physicalEntity & transport                          & transition\\
+physicalEntity & transport                          & reaction\\
 physicalEntity & transportWithBiochemicalReaction   & reaction\\
 \\
 pathway         & biochemicalReaction               & transition\\
@@ -437,7 +437,7 @@ The table gives an overview of this conversion regarding BioPAX Level~2 and BioP
 The conversion was implemented with Java\TTra, using JSBML \citep{Draeger2011} with the Qualitative Models extension, PaxTools \citep{Demir2010}, and the KEGG API \citep{Kanehisa2006}.
 PaxTools was used to read the BioPAX files and to manipulate the information content.
 This information was extended with MIRIAM identifiers \citep{Novere2005} from the following databases: Entrez Gene, Omim, Ensembl, UniProt, ChEBI, DrugBank, Gene Ontology, HGNC, PubChem, 3DMET, NCBI Taxonomy, PDBeChem, GlycomeDB, LipidBank, EC-Numbers (enzyme nomenclature) and various KEGG databases (gene, glycan, reaction, compound, drug, pathway, orthology).
-{\TODO: redundant loeschen=}
+{\TODO{ redundant loeschen}}
 
 
 
@@ -515,7 +515,7 @@ Relations between \Entity's (which correspond to edges in a pathway graph) are a
 These can be transports, biochemical reactions, complex assemblies, etc.
 At this point, most translations to SBML usually produce errors or have a massive loss of information.
 The SBML core specification only provides reactions, which represents real biochemical reactions with substrates, products and enzymes.
-Processes, such as transport mechanisms {\TODO:Gegebenenfalls loeschen} or modulation of an entity by another one, can not directly be encoded as a reaction, at least not without knowing the exact chemical equation.
+Processes, such as transport mechanisms {\TODO{Gegebenenfalls loeschen}} or modulation of an entity by another one, can not directly be encoded as a reaction, at least not without knowing the exact chemical equation.
 Hence, former conversions approaches from BioPAX to SBML did either incorrectly convert those relations to reactions or simply removed them during the translation.
 To fill this gap, the SBML community has recently developed the \qual{} specification, which allows users to model arbitrary transitions between species.
 Using this extension, we produced error-free SBML and minimized or even eliminated the loss of information during the translation.
@@ -531,7 +531,12 @@ This results in comprehensive and correct SBML models, created for all pathways 
 These models can easily be used, e.g., for further simulation and modeling steps, without having to deal with incorrect input file formats or error-prone conversions.
 
 \section*{Acknowledgements}
-We especially thank Johannes Eichner for the support in establishing the webservice, and the Qual and the JSBML team, which made this work possible.
+We especially thank Johannes Eichner for help and support during the webservice establishment. 
+%Additional thanks goes to the qualitative models and the JSBML team, which made this work possible.
+Furthermore, we wish to acknowledge the qualitative models and the JSBML team.
+% Special thanks should be given to ...
+% I wish to acknowledge
+
 \paragraph{Funding\textcolon}
 Federal Ministry of Education and Research (BMBF, Germany) in the National
 Genome Research Network (NGFN+) under grant number 01GS08134 and Virtual Liver

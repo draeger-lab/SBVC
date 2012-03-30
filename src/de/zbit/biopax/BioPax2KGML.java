@@ -410,15 +410,14 @@ public abstract class BioPax2KGML {
       }
 
       String comment = getRDFScomment(fileName);
-      
-      
+     
       // BioPax Level 2 
       if (m.getLevel().equals(BioPAXLevel.L2)) {
         BioPaxL22KGML bp = new BioPaxL22KGML();
         Set<pathway> pathways = m.getObjects(pathway.class);
-        // if (pathways!=null && pathways.size()>0) {
-        if (!singleMode) {
-          keggPWs = bp.parsePathways(m, comment, pathways);
+        // if we want to split the incomming file
+        if (!singleMode && pathways!=null && pathways.size()>0) {
+          keggPWs = bp.createPathways(m, comment, pathways);
         } else {
           de.zbit.kegg.parser.pathway.Pathway keggPW = 
             bp.createPathwayFromBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()));
@@ -428,9 +427,9 @@ public abstract class BioPax2KGML {
         else if (m.getLevel().equals(BioPAXLevel.L3)) {
         BioPaxL32KGML bp = new BioPaxL32KGML();
         Set<Pathway> pathways = m.getObjects(Pathway.class);
-        
-        if (!singleMode) {
-          keggPWs = bp.parsePathways(m, comment, pathways);
+        // if we want to split the incomming file
+        if (!singleMode && pathways!=null && pathways.size()>0) {
+          keggPWs = bp.createPathways(m, comment, pathways);
         } else {
           de.zbit.kegg.parser.pathway.Pathway keggPW = bp.createPathwayFromBioPaxFile
           (m, comment, FileTools.removeFileExtension(f.getName()));

@@ -74,7 +74,7 @@ public class SBVC extends Launcher{
   }
 
   public SBVC() {
-    this(new String[0]);
+    //this(new String[0]);
   }
 
   @Override
