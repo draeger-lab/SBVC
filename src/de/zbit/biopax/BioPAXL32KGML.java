@@ -333,6 +333,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
    */
   private EntryExtended parseEntity(Entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
+    if (entity==null) return null;
     EntryExtended keggEntry = null;
     if (PhysicalEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = parsePhysicalEntity((PhysicalEntity) entity, keggPW, m, species);
@@ -743,7 +744,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
    * @param species
    */
   private void parseInteraction(Interaction entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
-      Model m, Species species) {
+    Model m, Species species) {
     if (Control.class.isAssignableFrom(entity.getClass())) {
       parseControl((Control) entity, keggPW, m, species);
     } else if (Conversion.class.isAssignableFrom(entity.getClass())) {
@@ -753,12 +754,12 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       createKEGGEntry((Pathway) entity, keggPW, m, species, EntryType.map, null, ",", null);
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
-          Utils.iterableToList(((GeneticInteraction) entity).getParticipant()), keggPW, m,
-          species, RelationType.GErel, new SubType(SubType.ASSOCIATION));
+        Utils.iterableToList(((GeneticInteraction) entity).getParticipant()), keggPW, m,
+        species, RelationType.GErel, new SubType(SubType.ASSOCIATION));
     } else if (MolecularInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
-          Utils.iterableToList(((MolecularInteraction) entity).getParticipant()), keggPW, m,
-          species, RelationType.PPrel, new SubType(SubType.INDIRECT_EFFECT));
+        Utils.iterableToList(((MolecularInteraction) entity).getParticipant()), keggPW, m,
+        species, RelationType.PPrel, new SubType(SubType.INDIRECT_EFFECT));
     } else if (TemplateReaction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForTemplateReaction((TemplateReaction) entity, keggPW, m, species);
     } else if (Interaction.class.isAssignableFrom(entity.getClass())){
@@ -790,8 +791,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         } else if (PhysicalEntity.class.isAssignableFrom(participants.get(i).getClass())) {
           keggEntry1 = parseEntity(((PhysicalEntity) participants.get(i)), keggPW, m, species);
         } else {
-          log.log(Level.SEVERE, "1 This should not happen: '"
-              + participants.get(i).getModelInterface() + "'.");
+          log.log(Level.SEVERE, "1 This should not happen: '" + participants.get(i).getModelInterface() + "'.");
           System.exit(1);
         }
         for (int j = 1; j < participants.size(); j++) {
@@ -801,15 +801,16 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           } else if (PhysicalEntity.class.isAssignableFrom(participants.get(j).getClass())) {
             keggEntry2 = parseEntity(((PhysicalEntity) participants.get(j)), keggPW, m, species);
           } else {
-            log.log(Level.SEVERE, "2 This should not happen: '" 
-                + participants.get(j).getModelInterface() + "'.");
+            log.log(Level.SEVERE, "2 This should not happen: '"  + participants.get(j).getModelInterface() + "'.");
             System.exit(1);
           }
 
-          createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.maplink,
-              null);
-          createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink,
-              null);
+          if (keggEntry1!=null && keggEntry2!=null) {
+            createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.maplink, null);
+          }
+          if (baseEntry!=null && keggEntry1!=null) {
+            createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink, null);
+          }
         }
 
       }
@@ -819,12 +820,12 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       } else if (PhysicalEntity.class.isAssignableFrom(participants.get(0).getClass())) {
         keggEntry1 = parseEntity(((PhysicalEntity) participants.get(0)), keggPW, m, species);
       } else {
-        log.log(Level.SEVERE, "3 - This should not happen: '"
-            + participants.get(0).getModelInterface() + "'.");
+        log.log(Level.SEVERE, "3 - This should not happen: '" + participants.get(0).getModelInterface() + "'.");
         System.exit(1);
       }
-      createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink,
-          null);
+      if (baseEntry!=null && keggEntry1!=null) {
+        createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink, null);
+      }
     } else {
       // creating new KEGG entry
       String keggname = getKEGGUnkownName();
@@ -872,8 +873,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         }
       }
       
-      createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink,
-          null);
+      if (baseEntry!=null && keggEntry1!=null) {
+        createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink, null);
+      }
     }
   }
 

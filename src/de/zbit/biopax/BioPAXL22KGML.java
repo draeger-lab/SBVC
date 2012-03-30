@@ -418,6 +418,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   private EntryExtended parseEntity(entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species) {
+    if (entity==null) return null;
     EntryExtended keggEntry = null;
     if (physicalEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = parsePhysicalEntity((physicalEntity) entity, keggPW, m, species);
@@ -803,7 +804,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         }
         keggEntry1 = parseEntity(controller.getPHYSICAL_ENTITY(), keggPW, m, species);
         
-        if(keggEntry1.getType().equals(EntryType.map)){
+        if(keggEntry1!=null && keggEntry1.getType().equals(EntryType.map)){
           relType = RelationType.maplink;
         } else {
           relType = RelationType.PPrel;
@@ -929,10 +930,12 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             System.exit(1);
           }
 
-          createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other,
-              null);
-          createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other,
-              null);
+          if (keggEntry1!=null && keggEntry2!=null) {
+            createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), RelationType.other, null);
+          }
+          if (baseEntry!=null && keggEntry1!=null) {
+            createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other, null);
+          }
         }
 
       }
@@ -948,8 +951,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             + participants.get(0).getModelInterface() + "'.");
         System.exit(1);
       }
-      createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other,
-          null);
+      if (baseEntry!=null && keggEntry1!=null) {
+        createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other, null);
+      }
     } else {
       // creating new KEGG entry
       String keggname = getKEGGUnkownName();
@@ -965,7 +969,6 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       graphName = names;
 
       Graphics graphics = Graphics.createGraphicsForPathwayReference(graphName);
-      ;
       EntryType eType = EntryType.map;
 
       keggEntry1 = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, graphics);
@@ -993,8 +996,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         }
       }
       
-      createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other,
-          null);
+      if (baseEntry!=null && keggEntry1!=null) {
+        createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.other, null);
+      }
     }
   }
 

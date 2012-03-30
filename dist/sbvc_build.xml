@@ -87,7 +87,7 @@
     	      <filelist dir="${base}" files="libquaqua.jnilib,libquaqua64.jnilib"/>
     	     
            <!-- PaxTools -->
-    	   <zipfileset excludes="META-INF/*" src="${base}/lib/paxtools-4.0.1.jar"/>
+    	   <zipfileset excludes="META-INF/*" src="${base}/lib/paxtools-4.1.1.jar"/>
     	
            <fileset dir="${SysBioPath}/bin">
               <exclude name="de/zbit/resources/liftover/*"/>

@@ -40,9 +40,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.biopax.paxtools.io.BioPAXIOHandler;
-import org.biopax.paxtools.io.SimpleIOHandler;
+import org.biopax.paxtools.io.jena.JenaIOHandler;
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
@@ -61,6 +63,7 @@ import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.ArrayUtils;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.Species;
+import de.zbit.util.StringUtil;
 import de.zbit.util.Utils;
 import de.zbit.util.objectwrapper.ValuePair;
 
@@ -238,7 +241,7 @@ public abstract class BioPAX2KGML {
    * @return
    */
   public static Model getModel(InputStream io) {
-    BioPAXIOHandler handler = new SimpleIOHandler();
+    BioPAXIOHandler handler = new JenaIOHandler();
     Model m = null;
     try {
       m = handler.convertFromOWL(io);
@@ -249,9 +252,9 @@ public abstract class BioPAX2KGML {
   }
 
   /**
-   * The {@link BioPAX2KGML}{@link #geneSymbolMapper} and
-   * {@link BioPAX2KGML#geneIDKEGGmapper} are initialized for the entered
-   * species
+   * The {@link #geneSymbolMapper} and
+   * {@link BioPAX2KGML#geneIDKEGGmapper} are initialized for the
+   * given species
    * 
    * @param species
    */
@@ -500,30 +503,31 @@ public abstract class BioPAX2KGML {
 
   /**
    * In this method the <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">
-   * ...</rdfs:comment> is parse  
+   * ...</rdfs:comment> is parsed
    * @return
    */
   public static String getRDFScomment(String file) {
-    String comment = "", line = "";
-    String pattern = ".*<rdfs:comment.*?\">.*?</rdfs:comment>.*";
-    BufferedReader br;
+    String line;
+    StringBuilder lines = new StringBuilder(128);
     try {
-      br = OpenFile.openFile(file);
+      BufferedReader br = OpenFile.openFile(file);
       while ((line = br.readLine())!=null){
-        if (line.matches(pattern))
+        lines.append(line);
+        if (StringUtil.containsIgnoreCase(line, "</rdfs:comment>")) {
           break;
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
     
-    line = line.replaceFirst(".*<rdfs:comment.*?\">", "");
-    line = line.replaceFirst("</rdfs:comment>.*", "");
+    Pattern pattern = Pattern.compile(".*<rdfs:comment.*?\">(.*?)</rdfs:comment>.*", Pattern.MULTILINE);
+    Matcher m = pattern.matcher(lines.toString());
+    if (m.find()) {
+      return m.group(1);
+    }
     
-    if (!line.isEmpty())
-      return line;
-    
-    return comment;
+    return "";
   }
 
   /**
