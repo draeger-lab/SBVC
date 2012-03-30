@@ -51,8 +51,8 @@ public class BioPax2KGMLTest {
   
 
   private void testCreateKGMLsFromBioCartaModel(String file, String destinationFolder, 
-      boolean singleMode, boolean writeEntryExtended) {   
-    BioPax2KGML.createPathwaysFromModel(file, destinationFolder, singleMode, writeEntryExtended);    
+      boolean writeEntryExtended) {   
+    BioPAX2KGML.createPathwaysFromModel(file, destinationFolder, writeEntryExtended);    
   }  
   
   private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
@@ -61,27 +61,27 @@ public class BioPax2KGMLTest {
     if (f.isDirectory()) {
       String[] files = f.list();
       for (String file : files) {
-        BioPax2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, singleMode, writeEntryExtended);    
+        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, writeEntryExtended);    
       }      
     }       
   }
   
   /**
-   * method to test the {@link BioPaxL32KGML#getPathwaysWithGeneID(String, Model)}
-   * Be carefull this method uses a {@link BioPaxL32KGML#getModel(String)} call where a local BioCarta file
+   * method to test the {@link BioPAXL32KGML#getPathwaysWithGeneID(String, Model)}
+   * Be carefull this method uses a {@link BioPAXL32KGML#getModel(String)} call where a local BioCarta file
    * of level 3 is needed. The file could be downloaded from http://pid.nci.nih.gov/download.shtml
    */
   private void testGetPathwaysWithGeneID(String file) {
     String species = "human";    
-    Model m = BioPax2KGML.getModel(file);
+    Model m = BioPAX2KGML.getModel(file);
     if (m!=null && m.getLevel().equals(BioPAXLevel.L2)) {
 //      for (BioPaxPathwayHolder pw : bc2.getPathwaysWithEntrezGeneID(species, m)) {
 //        System.out.println(pw.getRDFid() + "\t" + pw.getName());
 //      }
       System.out.println("up to known not implemented for level2");
     } else if (m!=null && m.getLevel().equals(BioPAXLevel.L3)){
-      BioPaxL32KGML bc3 = new BioPaxL32KGML();
-      for (BioPaxPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
+      BioPAXL32KGML bc3 = new BioPAXL32KGML();
+      for (BioPAXPathwayHolder pw : bc3.getPathwaysWithEntrezGeneID(species, m)) {
         System.out.println(pw.getRDFid() + "\t" + pw.getName());
       }
     } else if (m==null){
@@ -112,8 +112,8 @@ public class BioPax2KGMLTest {
        * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
        */
       public boolean isLoggable(LogRecord record) {
-        if ((record.getSourceClassName().equals(BioPaxL32KGML.class.getName()) || record
-            .getLoggerName().equals(BioPaxL32KGML.class.getName()))
+        if ((record.getSourceClassName().equals(BioPAXL32KGML.class.getName()) || record
+            .getLoggerName().equals(BioPAXL32KGML.class.getName()))
             && record.getLevel().equals(Level.INFO)
             && record.getSourceMethodName().equals("addRelationsToPathway")) {
 
@@ -124,7 +124,7 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
 
-    Model m = BioPax2KGML.getModel(file);    
+    Model m = BioPAX2KGML.getModel(file);    
     if(m!=null){
       for (String filename : fileList) {
         List<Pathway> pathways = null;
@@ -133,7 +133,7 @@ public class BioPax2KGMLTest {
         } catch (Exception e) {
           log.log(Level.SEVERE, "Doof.");
         }
-        BioPaxL32KGML bp2k = new BioPaxL32KGML();
+        BioPAXL32KGML bp2k = new BioPAXL32KGML();
         for (Pathway p : pathways) {
           bp2k.addRelationsToPathway(p, m);
           String fn = filename.replace(".xml", "_extended.xml");
@@ -149,20 +149,20 @@ public class BioPax2KGMLTest {
   
 
   private void parseAndWritePathway(String file, String destinationFolder, String pwName) {
-    Model m = BioPax2KGML.getModel(file);
+    Model m = BioPAX2KGML.getModel(file);
     if (m!=null){
       Pathway keggPW = null;
       if(m.getLevel().equals(BioPAXLevel.L2)){
-        BioPaxL22KGML b22 = new BioPaxL22KGML();
+        BioPAXL22KGML b22 = new BioPAXL22KGML();
         pathway pw = b22.getPathwayByName(m, pwName);      
         if(pw!=null)
-          keggPW = b22.createPathway(m, BioPax2KGML.getRDFScomment(file), 
+          keggPW = b22.createPathway(m, BioPAX2KGML.getRDFScomment(file), 
               pw, b22.determineSpecies(pw.getORGANISM()));
       } else if(m.getLevel().equals(BioPAXLevel.L3)){
-        BioPaxL32KGML b23 = new BioPaxL32KGML();
+        BioPAXL32KGML b23 = new BioPAXL32KGML();
         org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
         if(pw!=null)
-          keggPW = b23.createPathway(m, BioPax2KGML.getRDFScomment(file),
+          keggPW = b23.createPathway(m, BioPAX2KGML.getRDFScomment(file),
               pw, b23.determineSpecies(pw.getOrganism()));
       }
       
@@ -181,13 +181,13 @@ public class BioPax2KGMLTest {
    * @param file
    */
   private void printPathwayList(String file) {
-    Model m = BioPax2KGML.getModel(file);
+    Model m = BioPAX2KGML.getModel(file);
     List<String> pws = null;
     if(m.getLevel().equals(BioPAXLevel.L2)){
-      BioPaxL22KGML b22 = new BioPaxL22KGML();
+      BioPAXL22KGML b22 = new BioPAXL22KGML();
       pws = b22.getListOfPathways(m);
     } else if(m.getLevel().equals(BioPAXLevel.L3)){
-      BioPaxL32KGML b23 = new BioPaxL32KGML();
+      BioPAXL32KGML b23 = new BioPAXL32KGML();
       pws = b23.getPathways(m);
     }
     
@@ -204,7 +204,7 @@ public class BioPax2KGMLTest {
  * @param file
  */
   private void logUnificationXRefs(String file) {
-   Model m = BioPax2KGML.getModel(file);
+   Model m = BioPAX2KGML.getModel(file);
     if (m != null && m.getLevel().equals(BioPAXLevel.L2)) {
       Set<unificationXref> refs = m.getObjects(unificationXref.class);
       for (unificationXref ur : refs) {

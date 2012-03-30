@@ -8,7 +8,7 @@
  * These files can then be visualized, either using a simple graph
  * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
  * Some currently supported IO formats are SBML (+qual, +layout), KGML,
- * BioPax, SBGN, etc. Please visit the project homepage at
+ * BioPAX, SBGN, etc. Please visit the project homepage at
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
@@ -94,7 +94,7 @@ import de.zbit.util.progressbar.ProgressBar;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public class BioPaxL22KGML extends BioPAX2KGML {
+public class BioPAXL22KGML extends BioPAX2KGML {
   
   public static final Logger log = Logger.getLogger(BioPAXL22KGML.class.getName());
  

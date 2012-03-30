@@ -8,7 +8,7 @@
  * These files can then be visualized, either using a simple graph
  * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
  * Some currently supported IO formats are SBML (+qual, +layout), KGML,
- * BioPax, SBGN, etc. Please visit the project homepage at
+ * BioPAX, SBGN, etc. Please visit the project homepage at
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
@@ -38,18 +38,18 @@ import org.biopax.paxtools.model.level3.Entity;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public class BioPaxPathwayHolder {
+public class BioPAXPathwayHolder {
 
   Set<BioPAXElement> entities = null;
   Set<Integer> geneIDs = null;
   String biopaxRDFid;
   String name = null;
   
-  public BioPaxPathwayHolder(String id){
+  public BioPAXPathwayHolder(String id){
     this.biopaxRDFid = id;
   }
   
-  public BioPaxPathwayHolder(String id, String name){
+  public BioPAXPathwayHolder(String id, String name){
     this(id);
     setPathwayName(name);
   }

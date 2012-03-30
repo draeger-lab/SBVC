@@ -8,7 +8,7 @@
  * These files can then be visualized, either using a simple graph
  * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
  * Some currently supported IO formats are SBML (+qual, +layout), KGML,
- * BioPax, SBGN, etc. Please visit the project homepage at
+ * BioPAX, SBGN, etc. Please visit the project homepage at
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
@@ -102,7 +102,7 @@ import de.zbit.util.progressbar.ProgressBar;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public class BioPaxL32KGML extends BioPAX2KGML {
+public class BioPAXL32KGML extends BioPAX2KGML {
   
   public static final Logger log = Logger.getLogger(BioPAXL32KGML.class.getName());
 
@@ -1077,7 +1077,7 @@ public class BioPaxL32KGML extends BioPAX2KGML {
 //   * This method maps to all gene symbols of the entered entities the
 //   * corresponding gene id It's an advantage to preprocess the entities to
 //   * exclusively having entities with a name call therefore the method
-//   * {@link BioPaxL32KGML#getEntitiesWithName(Entity)} This method also considers
+//   * {@link BioPAXL32KGML#getEntitiesWithName(Entity)} This method also considers
 //   * 
 //   * @link {@link Complex} classes. NOTE: the method is not so clean and should
 //   *       be rewritten!!

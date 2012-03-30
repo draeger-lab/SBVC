@@ -8,7 +8,7 @@
  * These files can then be visualized, either using a simple graph
  * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
  * Some currently supported IO formats are SBML (+qual, +layout), KGML,
- * BioPax, SBGN, etc. Please visit the project homepage at
+ * BioPAX, SBGN, etc. Please visit the project homepage at
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *

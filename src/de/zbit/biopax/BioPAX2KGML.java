@@ -71,7 +71,7 @@ import de.zbit.util.objectwrapper.ValuePair;
  * @author Finja B&uuml;chel
  * @version $Rev$
  */
-public abstract class BioPax2KGML {
+public abstract class BioPAX2KGML {
 
   public static final Logger log = Logger.getLogger(BioPAX2KGML.class.getName());
 
@@ -429,7 +429,7 @@ public abstract class BioPax2KGML {
           keggPWs.add(keggPW);          
         }
       } else {
-        log.log(Level.SEVERE, "Unkown BioPax Level '" + m.getLevel().toString()
+        log.log(Level.SEVERE, "Unkown BioPAX Level '" + m.getLevel().toString()
             + "' is not supported.");
         System.exit(1);
       }
@@ -643,7 +643,7 @@ public abstract class BioPax2KGML {
     de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
         sourceDB + String.valueOf(number), species.getKeggAbbr(), number, pwName);
     keggPW.setComment(comment);
-    keggPW.setOriginFormatName("BioPax");
+    keggPW.setOriginFormatName("BioPAX");
     
     if(link!=null) {
       keggPW.setLink(link);
