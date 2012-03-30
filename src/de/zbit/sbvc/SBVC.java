@@ -38,10 +38,13 @@ import java.util.logging.Logger;
 import de.zbit.AppConf;
 import de.zbit.Launcher;
 import de.zbit.biopax.BioPax2KGML;
+import de.zbit.gui.GUIOptions;
+import de.zbit.kegg.KEGGtranslatorOptions;
 import de.zbit.kegg.KEGGtranslatorOptions.NODE_NAMING;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.api.cache.KeggInfoManagement;
+import de.zbit.kegg.gui.TranslatorPanel;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.KEGG2SBMLqual;
 import de.zbit.sbvc.io.SBVCIOOptions;
@@ -81,20 +84,20 @@ public class SBVC extends Launcher{
     String input = SBVCIOOptions.INPUT.getValue(props).getPath();
     boolean splitMode = (boolean)(SBVCIOOptions.SPLIT_MODE.getValue(props)); 
     
-    parseInputFile(input, folderName, splitMode);
+    convertBioPAXToSBML(input, folderName, splitMode);
   }
 
   /**
    * 
    * @param input <code>BioPAX</code> file.
-   * @param folderName Result folder in which the created file should be put.
+   * @param outputFolderName Result folder in which the created file should be put.
    * @param splitMode <code>TRUE</code> if separate files for each pathway should
    * be created. <code>FALSE</code> to create a single output file.
    */
-  public void parseInputFile(String input, String folderName, boolean splitMode) {
+  public void convertBioPAXToSBML(String input, String outputFolderName, boolean splitMode) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPax2KGML.createPathwaysFromModel(input, folderName, !splitMode, false);
+      BioPax2KGML.createPathwaysFromModel(input, outputFolderName, !splitMode, false);
     
     // translation to sbml
     KEGG2SBMLqual k2s = null;
@@ -124,7 +127,7 @@ public class SBVC extends Launcher{
     k2s.setCheckAtomBalance(false);
     
     for (de.zbit.kegg.parser.pathway.Pathway p : keggPWs) {
-      k2s.translate(p, Utils.ensureSlash(folderName) + KGMLWriter.createFileName(p));
+      k2s.translate(p, Utils.ensureSlash(outputFolderName) + KGMLWriter.createFileName(p));
     }
     
     // Remember already queried objects (save cache)
@@ -138,6 +141,7 @@ public class SBVC extends Launcher{
     //XXX: we can add further IOOptions later, for example those of KEGG translator
     List<Class<? extends KeyProvider>> configList = new ArrayList<Class<? extends KeyProvider>>(3);
     configList.add(SBVCIOOptions.class);
+    configList.add(GUIOptions.class);
     return configList;
   }
 
@@ -145,6 +149,23 @@ public class SBVC extends Launcher{
   public List<Class<? extends KeyProvider>> getInteractiveOptions() {
     // TODO Auto-generated method stub
     return null;
+  }
+  
+  /* (non-Javadoc)
+   * @see de.zbit.Launcher#getAppName()
+   */
+  @Override
+  public String getAppName() {
+    // TODO: Change the name
+    return "BioPAX2SBML";
+  }
+  
+  /* (non-Javadoc)
+   * @see de.zbit.Launcher#addCopyrightToSplashScreen()
+   */
+  @Override
+  protected boolean addCopyrightToSplashScreen() {
+    return false;
   }
 
   @Override
@@ -160,7 +181,11 @@ public class SBVC extends Launcher{
 
   @Override
   public URL getURLOnlineUpdate() {
-    // TODO Auto-generated method stub
+    try {
+      return new URL("http://www.cogsys.cs.uni-tuebingen.de/software/SBVC/downloads/");
+    } catch (MalformedURLException e) {
+      log.log(Level.FINE, e.getLocalizedMessage(), e);
+    }
     return null;
   }
 
@@ -190,8 +215,29 @@ public class SBVC extends Launcher{
    * @param args
    */
   public static void main(String args[]) {
-    // --input files/KGMLsamplefiles/hsa00010.xml --format GraphML --output test.txt
+    // "Merge" other applications with this one
+    // Must be done first, because option defaults are changed
+    integrateIntoKEGGtranslator();
+    GUIOptions.GUI.setDefaultValue(Boolean.FALSE);
+    // Make an instance of this application
     new SBVC(args);
+  }
+  
+  /**
+   * This method changes some default values of KEGGtranslator,
+   * option visibilities, logos, etc. to look like it would be
+   * the {@link SBVC} application.
+   */
+  public static void integrateIntoKEGGtranslator() {
+    // Set default values for KEGGtranslator
+    KEGGtranslatorOptions.REMOVE_ORPHANS.setDefaultValue(false);
+    KEGGtranslatorOptions.REMOVE_WHITE_GENE_NODES.setDefaultValue(false);
+    KEGGtranslatorOptions.AUTOCOMPLETE_REACTIONS.setDefaultValue(false);
+    KEGGtranslatorOptions.AUTOCOMPLETE_REACTIONS.setVisible(false);
+    // TODO: Modify all options further to fit the needs of SBVC.
+    // Also set the real values (not only the default values) e.g. for autocomplete r.
+    
+    TranslatorPanel.logoResourcePath = "img/logo.png";
   }
 
 }

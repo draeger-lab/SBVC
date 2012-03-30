@@ -26,9 +26,6 @@ package de.zbit.biopax;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,6 +52,7 @@ import org.biopax.paxtools.model.level3.Provenance;
 import org.biopax.paxtools.util.IllegalBioPAXArgumentException;
 
 import de.zbit.io.FileTools;
+import de.zbit.io.OpenFile;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.api.KeggInfos;
 import de.zbit.mapper.GeneID2KeggIDMapper;
@@ -332,11 +330,15 @@ public abstract class BioPax2KGML {
    * @param file
    * @return Model
    */
-  public static Model getModel(String file) {
+  public static Model getModel(final String file) {
     InputStream io = null;
     try {
-      io = new FileInputStream(new File(file));
-    } catch (FileNotFoundException e) {
+      io = new InputStream() {
+        public int read() throws IOException {
+          return OpenFile.openFile(file).read();
+        }
+      };
+    } catch (Exception e) {
       log.log(Level.SEVERE, "Could not parse file: " + file + ".", e);
     }
 
@@ -407,7 +409,7 @@ public abstract class BioPax2KGML {
         destinationFolder = createDefaultFolder(m.getLevel());
       }
 
-      String comment = getRDFScomment(f);
+      String comment = getRDFScomment(fileName);
       
       
       // BioPax Level 2 
@@ -499,19 +501,17 @@ public abstract class BioPax2KGML {
    * ...</rdfs:comment> is parse  
    * @return
    */
-  public static String getRDFScomment(File f) {
+  public static String getRDFScomment(String file) {
     String comment = "", line = "";
     String pattern = ".*<rdfs:comment.*?\">.*?</rdfs:comment>.*";
     BufferedReader br;
     try {
-      br = new BufferedReader(new FileReader(f));
+      br = OpenFile.openFile(file);
       while ((line = br.readLine())!=null){
         if (line.matches(pattern))
           break;
       }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     
