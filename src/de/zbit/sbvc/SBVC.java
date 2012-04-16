@@ -35,11 +35,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.sbml.jsbml.SBMLDocument;
-
 import de.zbit.AppConf;
 import de.zbit.Launcher;
 import de.zbit.biopax.BioPAX2KGML;
+import de.zbit.graph.gui.TranslatorGraphLayerPanel;
+import de.zbit.graph.gui.TranslatorPanel;
 import de.zbit.gui.GUIOptions;
 import de.zbit.io.FileTools;
 import de.zbit.kegg.KEGGtranslatorOptions;
@@ -47,7 +47,8 @@ import de.zbit.kegg.KEGGtranslatorOptions.NODE_NAMING;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.api.cache.KeggInfoManagement;
-import de.zbit.kegg.gui.TranslatorPanel;
+import de.zbit.kegg.ext.KEGGTranslatorPanelOptions;
+import de.zbit.kegg.gui.TranslatorUI;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.KEGG2SBMLqual;
 import de.zbit.sbvc.io.SBVCIOOptions;
@@ -254,7 +255,9 @@ public class SBVC extends Launcher{
     // TODO: Modify all options further to fit the needs of SBVC.
     // Also set the real values (not only the default values) e.g. for autocomplete r.
     
-    TranslatorPanel.logoResourcePath = "img/logo.png";
+    TranslatorUI.watermarkLogoResource = "img/logo.png";
+    // TODO: BackgroundImageProviders? on Graphs...
+    //TranslatorGraphLayerPanel.optionClass = KEGGTranslatorPanelOptions.class;    
   }
 
 }
