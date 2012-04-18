@@ -128,7 +128,7 @@ With the SBML Qualitative Models extension (\qual), it has recently also become 
 Before the \qual{} creation, relations could not be translated into SBML at all or were erroneously converted to reactions.
 Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations.
 \section{Results:}
-The entire Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute has been converted from BioPAX into SBML.
+The entire Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute has been converted from BioPAX into SBML. 
 All available PID BioPAX pathway files (Level~2 and Level~3) have been translated into the SBML format (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
 Additionally, we present the new webtool BioPAX2SBML, which can be used for further BioPAX to SBML conversions.
 \section{Availability:}
@@ -154,7 +154,7 @@ Before the creation of the Qualitative Models extension for SBML (\qual, \citeal
 %relevance
 Furthermore, the combination or exchange of information between different databases is hardly feasible if one database uses the BioPAX format and the other one the SBML format.
 %literature review
-So far, there exist several visualization tools, such as Cytoscape \citep{Zinovyev2008, Smoot2011a} or CellDesigner \citep{Funahashi2007, Mi2011}, which can handle BioPAX and SBML by using plugins. But the combination of both formats or conversion of one format into the other is difficult even with these plugins.
+So far, there exist several visualization tools, such as Cytoscape \citep{Zinovyev2008, Smoot2011a} or CellDesigner \citep{Funahashi2007, Mi2011}, which can handle BioPAX and SBML by using plugins. But the combination of both formats or conversion of one format into the other is difficult even with these plugins. 
 Hence, converters are needed.
 
 Today, there exist mainly converters from SBML to BioPAX like \emph{The System Biology Format Converter} \citep[see][]{SBFC}, but no converter for BioPAX to SBML that is capable of properly including relations.
@@ -215,7 +215,7 @@ In addition to Level~2, gene-regulatory networks and genetic interactions can be
 For this purpose the \Control{} subclass \TemplateReactionRegulation, the \Conversion{} subclass \Degradation{}, \TemplateReaction, \GeneticInteraction, and \MolecularInteraction{} have been added.
 Furthermore, \PhysicalEntity{} is now able to define \DNAregion{} and \RNAregion.
 Level~3 is not downwards compatible with Level~2, but Level~2 is downwards compatible with Level~1 \citep{Demir2010}.
-The BioPAX specification of Level~2 denotes all classes in lower case typewriter font and the specification of Level~3 denotes them in upper case typewriter font. For better readability of this paper, all BioPAX element names begin with capital letters and refer to Level~2 and 3. In contrast, SBML classes are written in lower case.
+The BioPAX specification of Level~2 denotes all classes in lower case typewriter font and the specification of Level~3 denotes them in upper case typewriter font. For better readability of this paper, all BioPAX element names begin with capital letters and refer to Level~2 and 3. In contrast, SBML classes are written in lower case. 
 
 
 
@@ -263,7 +263,7 @@ Both models correspond to the complete pathway represented in the BioPAX file.
 {\begin{tabular}{llll}\toprule
 \textbf{BioPAX \Entity} & \textbf{Assigned SBO term} & \textbf{SBO name} \\
 \midrule
-Gene            & SBO:0000354 & informational molecule segment \\
+Gene            & SBO:0000240 & informational molecule segment \\
 Complex         & SBO:0000253 & non-covalent complex \\
 Protein         & SBO:0000252 & polypeptide chain \\
 Dna             & SBO:0000251 & deoxyribonucleic acid \\
