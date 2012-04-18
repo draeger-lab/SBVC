@@ -90,7 +90,7 @@
     	   <zipfileset excludes="META-INF/*" src="${base}/lib/paxtools-4.1.1_customJenaFix.jar"/>
     	
            <fileset dir="${SysBioPath}/bin">
-              <exclude name="de/zbit/resources/liftover/*"/>
+              <exclude name="de/zbit/resources/liftover/**/*"/>
             	<exclude name="**/package.html"/>
            	  <exclude name="overview.html"/>
            </fileset>
