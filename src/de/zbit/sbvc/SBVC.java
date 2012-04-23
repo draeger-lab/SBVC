@@ -38,8 +38,6 @@ import java.util.logging.Logger;
 import de.zbit.AppConf;
 import de.zbit.Launcher;
 import de.zbit.biopax.BioPAX2KGML;
-import de.zbit.graph.gui.TranslatorGraphLayerPanel;
-import de.zbit.graph.gui.TranslatorPanel;
 import de.zbit.gui.GUIOptions;
 import de.zbit.io.FileTools;
 import de.zbit.kegg.KEGGtranslatorOptions;
@@ -47,10 +45,10 @@ import de.zbit.kegg.KEGGtranslatorOptions.NODE_NAMING;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.api.cache.KeggInfoManagement;
-import de.zbit.kegg.ext.KEGGTranslatorPanelOptions;
 import de.zbit.kegg.gui.TranslatorUI;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.KEGG2SBMLqual;
+import de.zbit.sbvc.gui.SBVCUI;
 import de.zbit.sbvc.io.SBVCIOOptions;
 import de.zbit.util.Utils;
 import de.zbit.util.prefs.KeyProvider;
@@ -73,12 +71,12 @@ public class SBVC extends Launcher{
    */
   private static final transient Logger log = Logger.getLogger(Translator.class.getName());
 
-  public SBVC(String[] args) {
-    super(args);
+  public SBVC() {
+    // this(new String[0]);
   }
 
-  public SBVC() {
-    //this(new String[0]);
+  public SBVC(String[] args) {
+    super(args);
   }
 
   @Override
@@ -86,9 +84,9 @@ public class SBVC extends Launcher{
     SBProperties props = appConf.getCmdArgs();
     String folderName = SBVCIOOptions.OUTPUT.getValue(props).getPath();
     String input = SBVCIOOptions.INPUT.getValue(props).getPath();
-    boolean splitMode = (boolean)(SBVCIOOptions.SPLIT_MODE.getValue(props)); 
     
-    convertBioPAXToSBML(input, folderName, splitMode);
+    
+    convertBioPAXToSBML(input, folderName);
   }
 
   /**
@@ -98,7 +96,7 @@ public class SBVC extends Launcher{
    * @param splitMode <code>TRUE</code> if separate files for each pathway should
    * be created. <code>FALSE</code> to create a single output file.
    */
-  public void convertBioPAXToSBML(String input, String outputFolderName, boolean splitMode) {
+  public void convertBioPAXToSBML(String input, String outputFolderName) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       BioPAX2KGML.createPathwaysFromModel(input, outputFolderName, false);
@@ -131,7 +129,7 @@ public class SBVC extends Launcher{
     k2s.setCheckAtomBalance(false);
     
     // Translate and write output
-    if (keggPWs.size()==1 && !splitMode && !new File(outputFolderName).isDirectory()) {
+    if (keggPWs.size()==1 && !new File(outputFolderName).isDirectory()) {
       // Single in and single out file, no split mode.
       de.zbit.kegg.parser.pathway.Pathway p = keggPWs.iterator().next();
       String title = FileTools.removeFileExtension(outputFolderName);
@@ -174,8 +172,7 @@ public class SBVC extends Launcher{
    */
   @Override
   public String getAppName() {
-    // TODO: Change the name
-    return "BioPAX2SBML";
+    return "System Biology Visualizer and Converter";
   }
   
   /* (non-Javadoc)
@@ -224,8 +221,7 @@ public class SBVC extends Launcher{
 
   @Override
   public Window initGUI(AppConf appConf) {
-    // TODO Auto-generated method stub
-    return null;
+    return new SBVCUI(appConf);
   }
   
   /**
@@ -236,7 +232,7 @@ public class SBVC extends Launcher{
     // "Merge" other applications with this one
     // Must be done first, because option defaults are changed
     integrateIntoKEGGtranslator();
-    GUIOptions.GUI.setDefaultValue(Boolean.FALSE);
+    GUIOptions.GUI.setDefaultValue(Boolean.TRUE);
     // Make an instance of this application
     new SBVC(args);
   }

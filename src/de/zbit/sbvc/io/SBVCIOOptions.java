@@ -27,6 +27,7 @@ package de.zbit.sbvc.io;
 import java.io.File;
 
 import de.zbit.io.filefilter.SBFileFilter;
+import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
 import de.zbit.util.prefs.KeyProvider;
 import de.zbit.util.prefs.Option;
 import de.zbit.util.prefs.OptionGroup;
@@ -41,7 +42,7 @@ import de.zbit.util.prefs.Range;
  */
 public interface SBVCIOOptions  extends KeyProvider{
 
-  
+
   /*
    * Most important options: input, output and file format.
    */
@@ -52,7 +53,9 @@ public interface SBVCIOOptions  extends KeyProvider{
   public static final Option<File> INPUT = new Option<File>("INPUT",
       File.class,
       "Path and name of the source, OWL formatted, XML-file.",
-      new Range<File>(File.class, SBFileFilter.createBioPAXFileFilter()), (short) 2, "-i" );
+//      TODO: Create range that accepts multiple file filter
+//      KGML, SBML, PID XML, BioPAX      
+      new Range<File>(File.class, SBFileFilter.createAllFileFilter()), (short) 2, "-i" );
       //new File(System.getProperty("user.dir")));
 
   /**
@@ -66,11 +69,19 @@ public interface SBVCIOOptions  extends KeyProvider{
   /**
    * Target file format for the translation.
    */
-  public static final Option<Boolean> SPLIT_MODE = new Option<Boolean>("SPLIT_MODE",
-      Boolean.class, "If this option is set true and the input file consists of several " +
-      		"pathways, for each pathway a result file is created. These files are returned " +
-      		"in one ZIP file.",
-      (short) 2, "-s", false);
+  public static final Option<Format> FORMAT = new Option<Format>("FORMAT",
+      Format.class, "Target file format for the translation.",
+      new Range<Format>(Format.class, Range.toRangeString(Format.class)),
+      (short) 2, "-f", Format.SBML);
+  
+//  /**
+//   * if the file should be splitted
+//   */
+//  public static final Option<Boolean> SPLIT_MODE = new Option<Boolean>("SPLIT_MODE",
+//      Boolean.class, "If this option is set true and the input file consists of several " +
+//      		"pathways, for each pathway a result file is created. These files are returned " +
+//      		"in one ZIP file.",
+//      (short) 2, "-s", false);
 
   /**
    * Define the default input/ output files and the default output format.
@@ -79,6 +90,6 @@ public interface SBVCIOOptions  extends KeyProvider{
   public static final OptionGroup<Object> BASE_OPTIONS = new OptionGroup<Object>(
       "Base options",
       "Define the default input/ output files and the conversion option.",
-      INPUT, OUTPUT, SPLIT_MODE);
+      INPUT, OUTPUT, FORMAT);
   
 }

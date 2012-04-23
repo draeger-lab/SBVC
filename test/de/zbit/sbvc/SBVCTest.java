@@ -41,24 +41,24 @@ public class SBVCTest {
     SBVC sbvc = new SBVC();
     
     
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", true);
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 3/", true);
-    
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 2/", true);
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 3/", true);
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 2/", true);
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", true);
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp3.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 3/", true);
+//    
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 2/", true);
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp3.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 3/", true);
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 2/", true);
     
     sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 3/", true);
+        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 3/");
   }
 
 }
