@@ -154,7 +154,10 @@ public class SBVC extends Launcher{
 
   @Override
   public List<Class<? extends KeyProvider>> getCmdLineOptions() {
-    //XXX: we can add further IOOptions later, for example those of KEGG translator
+    /*
+     * XXX: we can add further IOOptions later, for example those of KEGG translator
+     * TODO: getPublicationXref() in KEGG2BioPAX - find a way to insert other publications?
+     */
     List<Class<? extends KeyProvider>> configList = new ArrayList<Class<? extends KeyProvider>>(3);
     configList.add(SBVCIOOptions.class);
     configList.add(GUIOptions.class);
