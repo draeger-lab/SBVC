@@ -654,7 +654,11 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       if (!keggname.startsWith(keggUnknownName)){
         // Search an existing kegg entry, that contains this keggname
         Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(keggname);
-        keggEntry = (EntryExtended) de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);        
+        Entry ke = de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);
+        if (ke!=null && !(ke instanceof EntryExtended)) {
+          ke = new EntryExtended(ke);
+        }
+        keggEntry = (EntryExtended) ke;
       }
     }            
 

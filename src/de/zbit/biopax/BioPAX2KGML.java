@@ -704,4 +704,20 @@ public abstract class BioPAX2KGML {
     
     return new ValuePair<String, String>(source, link);
   }
+  
+  public int getNewAddedRelations() {
+    return newAddedRelations;
+  }
+
+  public void setNewAddedRelations(int newAddedRelations) {
+    this.newAddedRelations = newAddedRelations;
+  }
+  
+  public int getAddedSubTypes() {
+    return addedSubTypes;
+  }
+
+  public void setAddedSubTypes(int addedSubTypes) {
+    this.addedSubTypes = addedSubTypes;
+  }
 }

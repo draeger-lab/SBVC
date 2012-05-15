@@ -19,6 +19,7 @@ package de.zbit.biopax;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.FileHandler;
@@ -33,6 +34,9 @@ import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level3.UnificationXref;
 
+import de.zbit.io.DirectoryParser;
+import de.zbit.io.FileWalker;
+import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.KeggParser;
 import de.zbit.kegg.parser.pathway.Pathway;
@@ -92,11 +96,12 @@ public class BioPax2KGMLTest {
   
   /**
    * for extending existing KGML files with further information for the relations
-   * @param fileList
-   * @param file
-   * @param writeEntryExtended
+   * @param fileList (just the filename)
+   * @param informationFile containing new relation information, i.e. BioCarta data
+   * @param writeEntryExtended 
    */
-  private static void createExtendedKGML(List<String> fileList, String file, boolean writeEntryExtended) {
+  private static void createExtendedKGML(List<String> fileList, String informationFile,
+      String sourceDir, String destDir, boolean writeEntryExtended) {
     FileHandler h = null;
     try {
       h = new FileHandler("relationsAdded.txt");
@@ -124,27 +129,30 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
 
-    Model m = BioPAX2KGML.getModel(file);    
+    Model m = BioPAX2KGML.getModel(informationFile);    
     if(m!=null){
       for (String filename : fileList) {
         List<Pathway> pathways = null;
         try {
-          pathways = KeggParser.parse(filename);
+          pathways = KeggParser.parse(sourceDir + "/" + filename);
         } catch (Exception e) {
           log.log(Level.SEVERE, "Doof.");
         }
         BioPAXL32KGML bp2k = new BioPAXL32KGML();
         for (Pathway p : pathways) {
           bp2k.addRelationsToPathway(p, m);
-          String fn = filename.replace(".xml", "_extended.xml");
-          KGMLWriter.writeKGML(p, fn, false);  
+          if (bp2k.getNewAddedRelations()>0 || bp2k.getAddedSubTypes()>0){
+            p.setAdditionalText("Pathway information was augmented with BioCarta information " +
+            "(2010-08-10)");
+            String fn = filename.replace(".xml", "_extended.xml");
+            KGMLWriter.writeKGML(p, destDir + "/" + fn, writeEntryExtended);  
+          }
+            
         }    
       }  
     } else {
       log.log(Level.SEVERE, "Could not continue, because the model is null.");
     }
-
-      
   }
   
 
@@ -268,6 +276,26 @@ public class BioPax2KGMLTest {
     
     BioPax2KGMLTest bft = new BioPax2KGMLTest();
     
+    String subPID = "PID_Pathways/";    
+    List<String> fileList = new ArrayList<String>();
+   
+    DirectoryParser d = new DirectoryParser("W:/metabolic/organisms/hsa", "xml");
+    while (d.hasNext())
+      fileList.add(d.next());
+    
+    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
+        "W:/metabolic/organisms/hsa", 
+        "C:/Users/buechel/Desktop/KGML_extended_hsa/metabolic/organisms/hsa/", true); 
+    
+    fileList = new ArrayList<String>();
+    d = new DirectoryParser("W:/non-metabolic/organisms/hsa", "xml");
+    while (d.hasNext())
+      fileList.add(d.next());
+    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
+        "W:/non-metabolic/organisms/hsa", 
+        "C:/Users/buechel/Desktop/KGML_extended_hsa/non-metabolic/organisms/hsa", true); 
+    
+    if (true) return;
     
     // Database testing of the parser
     
@@ -340,7 +368,7 @@ public class BioPax2KGMLTest {
 //        "Kinase_substrates.owl");
    
     // PID 
-    String subPID = "PID_Pathways/";
+//    String subPID = "PID_Pathways/";
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
 //        "ceramidepathway.owl", 
 //        fileFolder + subPID, true, false);
@@ -355,7 +383,7 @@ public class BioPax2KGMLTest {
 //        "BioCarta.bp2_part.owl", fileFolder + subPID, false, false);    
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
 //        "BioCarta.bp3.owl", fileFolder + subPID, true, false);
-    bft.parseAndWritePathway(fileFolder + subPID + "BioCarta.bp3.owl", fileFolder + subPID, "ceramide signaling pathway");
+//    bft.parseAndWritePathway(fileFolder + subPID + "BioCarta.bp3.owl", fileFolder + subPID, "ceramide signaling pathway");
 //    
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp3.owl");
 //    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp2.owl");
