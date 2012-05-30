@@ -503,7 +503,67 @@ Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations 
 % Kommentiert da info bereits oben erwähnt wird.
 %Since, the models are augmented with additional database information, stored as MIRIAM annotations, the models can easily be used for further simulation purposes. These annotations enable extensive visualization and data exchange between researchers.
 
+\subsection{Comparison to other KEGG converters}
 
+%%%%%%%%%%%%%%%%% Converter Comparison TABLE %%%%%%%%%%%%%%%%%
+\newcolumntype{C}{>{\centering\arraybackslash}p{2cm}}
+\begin{table*}[htb]
+\caption{Comparison of different available converters for KEGG pathways.}
+\label{tab:AppVergleich}
+%\rowcolors{1}{white}{tableShade2}
+\makebox[\textwidth]{
+\begin{tabular}{lcccccC}
+\toprule
+& \multicolumn{2}{c}{KEGGtranslator} & KEGGconverter & KEGG2SBML & BN++ & KGML2BioPAX KGML2SBML \\
+Version & 2.0 & 1.2 & n/a & 1.5.0 & 1.1 & n/a \\
+Release date & \TODO{2012-05-15} & 2011-07-04 & 2009-12-18 & 2008-07-28 & 2009-04-22 & 2010-06-03\\
+Authors & \multicolumn{2}{c}{\citeauthor{Wrzodek2011}} & \citeauthor{KEGGconverter} & \citeauthor{KEGG2SBML} & \citeauthor{Kuentzer2007} & \citeauthor{KEGG2BioPAX_and_SBML} \\
+%Authors & \multicolumn{2}{c}{Wrzodek \emph{et al.}} & Moutselos \emph{et al.} & Funahashi \emph{et al.} & K\"untzer \emph{et al.} & Lee \emph{et al.} \\
+%URL & \multicolumn{2}{c}{http://tinyurl.com/crlmeeo} & http://tinyurl.com/d7npkfv & http://tinyurl.com/bpca4rd & http://tinyurl.com/cu6ze8e & http://tinyurl.com/bmgucdu \\
+\midrule
+
+\multicolumn{7}{l}{\textbf{Supported model formats}} \\
+%Available?
+%Stand-alone
+~~SBML & \checkmark & \checkmark & \checkmark & \checkmark & $\circ$ & \checkmark \\
+%\rowcolor{tableShade2}
+~~BioPAX & \checkmark & $\times$ & $\times$ & $\times$ & \checkmark & \checkmark \\
+
+\multicolumn{7}{l}{\textbf{Generic translation features}} \\
+~~Machine interpretable & \checkmark & \checkmark & $\circ$ & $\circ$ & \checkmark & \checkmark \\
+~~Human interpretable & \checkmark & \checkmark & \checkmark & \checkmark & $\times$ & $\times$ \\
+~~Signaling pathways & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+~~Complete & \checkmark & \checkmark & \checkmark & $\times$ & \checkmark & $\times$ \\
+~~No duplicate entries & \checkmark & $\times$ & \checkmark  & \checkmark & \checkmark & \checkmark \\
+~~No duplicate reactions & \checkmark & \checkmark & \checkmark  & \checkmark & $\times$ & \checkmark \\
+~~Unbundle reactions & \checkmark & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ \\
+~~Revision of reactions & \checkmark & \checkmark & $\times$ & \checkmark & $\times$ & $\times$ \\
+~~Stoichiometry & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ \\
+
+\multicolumn{7}{l}{\textbf{SBML}} \\
+~~Valid & \checkmark & \checkmark & $\times$ & \checkmark & n/a & \checkmark \\
+~~Level.Version & 2.4, 3.1 & 2.4 & 2.1 & 1.1 up to 2.3 & n/a & 2.4 \\
+~~SBO terms & \checkmark & \checkmark & $\times$ & $\times$ & n/a & $\times$ \\
+~~Notes & \checkmark & \checkmark & $\times$ & $\times$ & n/a & $\times$ \\
+~~Annotations & \checkmark & \checkmark & $\times$ & $\times$ & n/a & $\times$ \\
+
+\multicolumn{7}{l}{\textbf{BioPAX}} \\
+~~Valid & \checkmark & n/a & n/a & n/a & $\times$ & $\times$ \\
+~~Level & 2, 3 & n/a & n/a & n/a & 2 & 2 \\
+~~Appropriate classes & \checkmark & n/a & n/a & n/a & \checkmark & $\times$ \\
+~~Notes & \checkmark & n/a & n/a & n/a & $\times$ & $\times$ \\
+~~Annotations & \checkmark & n/a & n/a & n/a & \checkmark & $\times$ \\
+~~SM annotations & \checkmark & n/a & n/a & n/a & $\times$ & $\times$ \\
+\bottomrule
+\end{tabular}
+}
+{
+
+This table compares various applications that can convert KEGG pathways to BioPAX or SBML models. A checkmark (\checkmark) is given, if the corresponding converter completely fulfills all requirements, a circle ($\circ$) states that the requirements are only met partially or incorrect and a cross indicates features, that are not contained at all ($\times$). ``n/a" indicates that a criterion is not applicable to a converter.
+A model is \emph{Machine interpretable} if entities in the model can directly be mapped to a database. The criterion \emph{Human interpretable} indicates that a model somehow assigns human readable names or gene symbols to entities. \emph{Signaling pathways} are supported if the converters can read and convert KEGG models with relations. A conversion is \emph{complete} if every relevant reaction of a KGML also occurs in any form in the translated document. For visualization purposes, KGML files often contain multiple copies of entries or reactions. These \emph{duplicates} should be removed. The contained reactions are often \emph{bundled} (multiple reactions are summarized as one) or miss some reaction participants. \emph{Revision of reactions} refers to the completion of missing reaction participants. The \emph{stoichiometry} is not contained in KGML documents and must be parsed from reaction equations in the KEGG REACTION database. To test the validity of the models, we used the corresponding validators from \href{http://sbml.org/Facilities/Validator/}{SBML.org} and \href{http://www.biopax.org/biopax-validator/}{BioPAX.org}. A model is marked as \emph{valid}, if the validator does not return any errors. For SBML, we further inspect if the models contain \emph{SBO terms}. It is further recommended to include \emph{notes}, such as human readable descriptions, and \emph{annotations} (e.g., cross-references in form of CV terms, MIRIAM URNs, \Xrefs). Only for BioPAX, it is important to use the \emph{appropriate classes} (instances of \smallMolecule{} for small molecules and instances of \protein{} for proteins) and a nice feature to fill the available BioPAX fields for chemical formula or molecular weight of small molecules (\emph{SM annotations}).
+%Cytoscape using KGMLReader, BiNOM (Version und Date korrespondieren zu den beiden Plugins).
+}
+\end{table*}
 
 \section{Conclusion}
 Conversion between different formats is important in all parts of computer science.
