@@ -41,10 +41,9 @@ import de.zbit.gui.JLabeledComponent;
 import de.zbit.gui.layout.LayoutHelper;
 import de.zbit.gui.prefs.PreferencesPanel;
 import de.zbit.kegg.Translator;
-import de.zbit.kegg.gui.PathwaySelector;
 import de.zbit.kegg.gui.TranslatorPanelTools;
-import de.zbit.kegg.io.KEGGtranslatorIOOptions;
 import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
+import de.zbit.sbvc.io.SBVCIOOptions;
 import de.zbit.util.Reflect;
 import de.zbit.util.prefs.SBProperties;
 
@@ -73,7 +72,7 @@ public class TranslatePathwayDialog extends JPanel {
   /**
    * The pathway selector (includes an organism selector).
    */
-  PathwaySelector selector=null;
+  DatabasePathwaySelector selector=null;
   
   /**
    * Allows to initialize a {@link TranslatorPanel} of a certain type. 
@@ -111,11 +110,11 @@ public class TranslatePathwayDialog extends JPanel {
    */
   public void showDownloadPanel(LayoutHelper lh) {
     try {
-      selector = PathwaySelector.createPathwaySelectorPanel(Translator.getFunctionManager(), lh);
+      selector = DatabasePathwaySelector.createDatabasePathwaySelectorPanel(Translator.getFunctionManager(), lh);
       JComponent oFormat=null;
       if ((outputFormat == null) || (outputFormat == null)) {
         oFormat = PreferencesPanel.createJComponentForOption(
-          KEGGtranslatorIOOptions.FORMAT, (SBProperties) null, null);
+          SBVCIOOptions.FORMAT, (SBProperties) null, null);
         oFormat =((JLabeledComponent) oFormat).getColumnChooser(); // Trim
         lh.add("Please select the output format", oFormat, false);
       }
