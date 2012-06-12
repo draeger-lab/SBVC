@@ -554,8 +554,6 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     } 
     
     if (cv!=null && cv.getTERM().size()>0) {
-    //TODO delete
-      System.out.println(cv.getTERM().iterator().next());
       keggEntry.setCompartment(cv.getTERM().iterator().next());
     }
 
@@ -581,9 +579,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         keggEntry = (EntryExtended) de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);        
       }
     }        
-    
-    //TODO delete
-    System.out.println("- "  + keggEntry.getCompartment());
+
     return keggEntry;
   }
 
@@ -597,30 +593,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       EntryType eType, EntryTypeExtended gType) {    
     Map<IdentifierDatabases, Collection<String>> map = 
       new HashMap<DatabaseIdentifiers.IdentifierDatabases, Collection<String>>();
-    // data source
-    Set<dataSource> ds = entity.getDATA_SOURCE();
-    Set<xref> xrefs = entity.getXREF();
-//    if (ds.size() != 0) {
-//      for (dataSource d : ds) {
-//        if (d.getNAME().size()>0){
-//          String db = Utils.collectionToList(d.getNAME()).get(0);
-//          IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getDatabase(db);          
-//          if (dbIdentifier != null){
-//            List<String> comments = Utils.collectionToList(d.getCOMMENT());
-//            if (comments!=null && comments.size()>0) {
-//              String comment = comments.get(0);
-//              if(!comment.isEmpty())
-//                Utils.addToMapOfSets(map, dbIdentifier, comment);  
-//            }            
-//          } else {
-//            String comment = Utils.collectionToList(d.getCOMMENT()).get(0);
-//            System.out.println(comment);
-//          }
-//        }
-//      }
-//    } 
-    
+
     // xrefs
+    Set<xref> xrefs = entity.getXREF();
     if (xrefs.size() != 0) {
       for (xref d : xrefs) {
         if (!d.getDB().isEmpty()){
@@ -629,27 +604,23 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             dbIdentifier = DatabaseIdentifiers.getDatabase(d.getDB());
           }
           if (dbIdentifier != null) {
-            List<String> comments = Utils.collectionToList(d.getCOMMENT());
-            if (comments!=null && comments.size()>0) {
-              String comment = comments.get(0);
-              if(!comment.isEmpty())
-                Utils.addToMapOfSets(map, dbIdentifier, comment);
+            String id = d.getID();
+            if (id!=null && !id.isEmpty()){
+                Utils.addToMapOfSets(map, dbIdentifier, id);
             }
           } else if (d.getDB().equalsIgnoreCase("LL")) { // special case in PID database files
-            List<String> comments = Utils.collectionToList(d.getCOMMENT());
-            if (comments!=null && comments.size()>0) {
-              String comment = comments.get(0);
-              if (!comment.isEmpty())
-                Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, comment);              
+            if (d.getID()!=null) {
+              String id = d.getID();
+              if (!id.isEmpty())
+                Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, id);              
             }
           } else if (d.getDB().equalsIgnoreCase("KEGG")) { // Infer correct KEGG db
-            List<String> comments = Utils.collectionToList(d.getCOMMENT());
-            if (comments!=null && comments.size()>0) {
-              String comment = comments.get(0);
-              if (!comment.isEmpty()) {
-                IdentifierDatabases db = DatabaseIdentifierTools.getKEGGdbFromID(comment);
+            if (d.getID()!=null) {
+              String id = d.getID();
+              if (!id.isEmpty()){
+                IdentifierDatabases db = DatabaseIdentifierTools.getKEGGdbFromID(id);
                 if (db!=null) {
-                  Utils.addToMapOfSets(map, db, comment);
+                  Utils.addToMapOfSets(map, db, id);
                 }
               }
             }

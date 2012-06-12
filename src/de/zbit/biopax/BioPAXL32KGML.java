@@ -38,8 +38,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.publicationXref;
 import org.biopax.paxtools.model.level3.BioSource;
 import org.biopax.paxtools.model.level3.BiochemicalReaction;
 import org.biopax.paxtools.model.level3.Catalysis;
@@ -55,6 +58,7 @@ import org.biopax.paxtools.model.level3.Degradation;
 import org.biopax.paxtools.model.level3.Dna;
 import org.biopax.paxtools.model.level3.DnaRegion;
 import org.biopax.paxtools.model.level3.Entity;
+import org.biopax.paxtools.model.level3.EntityReference;
 import org.biopax.paxtools.model.level3.Gene;
 import org.biopax.paxtools.model.level3.GeneticInteraction;
 import org.biopax.paxtools.model.level3.Interaction;
@@ -89,6 +93,7 @@ import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
 import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
+import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.SortedArrayList;
 import de.zbit.util.Species;
 import de.zbit.util.Utils;
@@ -630,10 +635,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     if (entity instanceof PhysicalEntity) {
       cl = ((PhysicalEntity)entity).getCellularLocation();
     }
-    if (cl!=null && cl.getComment().size()>0) {
-      keggEntry.setCompartment(cl.getComment().iterator().next());
+    if (cl!=null && cl.getTerm().size()>0) {
+      keggEntry.setCompartment(cl.getTerm().iterator().next());
     }
-
 
     // checking if entry already exists
     if (!augmentOriginalKEGGpathway){
@@ -675,31 +679,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       EntryType eType, EntryTypeExtended gType) {
     Map<IdentifierDatabases, Collection<String>> map = 
       new HashMap<DatabaseIdentifiers.IdentifierDatabases, Collection<String>>();
-    
-    Set<Provenance> ds = entity.getDataSource();
-    Set<Xref> xrefs = entity.getXref();       
-    
-    // Provencance elements 
-    // this is commented because it is the source of databases, etc. no further information! 
-//    if(ds!=null && ds.size()>0){
-//      for (Provenance p : ds) {
-//        for (Xref d : p.getXref()) {
-//          if (!d.getDb().isEmpty()){          
-//            IdentifierDatabases dbIdentifier = DatabaseIdentifiers.getDatabase(d.getDb());
-//            if (dbIdentifier != null){
-//              if (Utils.collectionToList(d.getComment())!=null && 
-//                  Utils.collectionToList(d.getComment()).size()>0){
-//                String comment = Utils.collectionToList(d.getComment()).get(0);
-//                if(!comment.isEmpty())
-//                  Utils.addToMapOfSets(map, dbIdentifier, comment);  
-//              }
-//            }
-//          }
-//        }      
-//      }
-//    }
-    
+
     // xref elements
+    Set<Xref> xrefs = entity.getXref();
     if (xrefs != null && xrefs.size() > 0) {
       for (Xref x : xrefs) {
         if (!x.getDb().isEmpty()) {
@@ -708,17 +690,57 @@ public class BioPAXL32KGML extends BioPAX2KGML {
             dbIdentifier = DatabaseIdentifiers.getDatabase(x.getDb());
           }
           if (dbIdentifier != null) {
-            if (x.getComment()!=null && x.getComment().iterator().hasNext()) {
-              String comment = x.getComment().iterator().next();
-              if (!comment.isEmpty())
-                Utils.addToMapOfSets(map, dbIdentifier, comment);
+            if (x.getId()!=null) {
+              String id = x.getId();
+              if (!id.isEmpty())
+                Utils.addToMapOfSets(map, dbIdentifier, id);
             }           
           } else if (x.getDb().equalsIgnoreCase("LL")) {
-            if (Utils.collectionToList(x.getComment())!=null && 
-                Utils.collectionToList(x.getComment()).size()>0){
-              String comment = Utils.collectionToList(x.getComment()).get(0);
-              if (!comment.isEmpty())
-                Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, comment);  
+            if (x.getId()!=null) {
+              String id = x.getId();
+              if (!id.isEmpty())
+                Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, id);  
+            }
+          } else if (x.getDb().equalsIgnoreCase("KEGG")) { // Infer correct KEGG db
+            if (x.getId()!=null) {
+              String id = x.getId();
+              if (!id.isEmpty()){
+                IdentifierDatabases db = DatabaseIdentifierTools.getKEGGdbFromID(id);
+                if (db!=null) {
+                  Utils.addToMapOfSets(map, db, id);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    // Parsing of SmallMoleculeReferences
+    if (entity instanceof SmallMolecule){
+      EntityReference refs = ((SmallMolecule)entity).getEntityReference();
+      if (refs!=null){
+        xrefs = refs.getXref();
+        if (xrefs != null && xrefs.size() > 0) {
+          for (Xref x : xrefs) {
+            if (!x.getDb().isEmpty()) {
+              IdentifierDatabases dbIdentifier = null;
+              if (!x.getDb().equalsIgnoreCase("kegg")) {
+                dbIdentifier = DatabaseIdentifiers.getDatabase(x.getDb());
+              }
+              if (dbIdentifier != null) {
+                if (x.getId()!=null) {
+                  String id = x.getId();
+                  if (!id.isEmpty())
+                    Utils.addToMapOfSets(map, dbIdentifier, id);
+                }           
+              } else if (x.getDb().equalsIgnoreCase("LL")) { // special case in PID database files
+                if (x.getId()!=null) {
+                  String id = x.getId();
+                  if (!id.isEmpty())
+                    Utils.addToMapOfSets(map, IdentifierDatabases.EntrezGene, id);  
+                }
+              }
             }
           }
         }
