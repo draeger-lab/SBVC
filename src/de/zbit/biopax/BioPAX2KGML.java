@@ -633,7 +633,7 @@ public abstract class BioPAX2KGML {
       sourceDB = sAndl.getA();
       link = sAndl.getB();
       pwName = p.getNAME();
-    } else if (pathway instanceof Pathway) {
+    } else if (pathway instanceof Pathway) { // Level 3
       Pathway p = (Pathway) pathway;
       ValuePair<String, String> sAndl = getSourceDBL3(p.getDataSource());
       sourceDB = sAndl.getA();

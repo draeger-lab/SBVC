@@ -623,25 +623,25 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     } 
     
     // set further information to the entry
-    keggEntry.addDatabaseIdentifiers(identifiers);
+    keggEntry.addDatabaseIdentifiers(identifiers); 
     
-    if (keggEntry.isSetGeneType()) {
-      CellularLocationVocabulary cl = null;
-      if (entity instanceof PhysicalEntity) {
-        cl = ((PhysicalEntity)entity).getCellularLocation();
-      }
-      if (cl!=null && cl.getComment().size()>0) {
-        keggEntry.setCompartment(Utils.collectionToList(cl.getComment()).get(0));
-      }
-    } 
+    
+    CellularLocationVocabulary cl = null;
+    if (entity instanceof PhysicalEntity) {
+      cl = ((PhysicalEntity)entity).getCellularLocation();
+    }
+    if (cl!=null && cl.getComment().size()>0) {
+      keggEntry.setCompartment(cl.getComment().iterator().next());
+    }
+
 
     // checking if entry already exists
     if (!augmentOriginalKEGGpathway){
       Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();
       if (entries != null && entries.size() > 0) {
-        for (de.zbit.kegg.parser.pathway.Entry entry : entries) {        
+        for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
             // important to ignore id, because this can differ from file to file
-            if (entry.equalsWithoutIDNameReactionComparison(keggEntry)) {            
+            if (((EntryExtended)entry).equalsWithoutIDNameReactionComparison(keggEntry)) {            
               keggEntry = (EntryExtended) entry;
               return keggEntry;
             }        
@@ -679,7 +679,8 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     Set<Provenance> ds = entity.getDataSource();
     Set<Xref> xrefs = entity.getXref();       
     
-    // Provencance elements
+    // Provencance elements 
+    // this is commented because it is the source of databases, etc. no further information! 
 //    if(ds!=null && ds.size()>0){
 //      for (Provenance p : ds) {
 //        for (Xref d : p.getXref()) {
@@ -756,7 +757,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     } else if (Conversion.class.isAssignableFrom(entity.getClass())) {
       parseConversion((Conversion) entity, keggPW, m, species);
     } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
-      // TODO CW: Copied from Level2. Please confirm that this is correct here!
       createKEGGEntry((Pathway) entity, keggPW, m, species, EntryType.map, null, ",", null);
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
@@ -1502,7 +1502,10 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         for (Stoichiometry stoichi : stoichiometry) {
           if (stoichi.getPhysicalEntity()==null) continue;
           if (stoichi.getPhysicalEntity().equals(left)) {
-            rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
+            Integer stoich = (int)stoichi.getStoichiometricCoefficient();
+            if (stoich >0 && stoich<Integer.MAX_VALUE) {
+              rc.setStoichiometry(stoich);
+            }
             break;
           }
         }
@@ -1518,7 +1521,10 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         for (Stoichiometry stoichi : stoichiometry) {
           if (stoichi.getPhysicalEntity()==null) continue;
           if (stoichi.getPhysicalEntity().equals(right)) {
-            rc.setStoichiometry((int) stoichi.getStoichiometricCoefficient());
+            Integer stoich = (int)stoichi.getStoichiometricCoefficient();
+            if (stoich >0 && stoich<Integer.MAX_VALUE) {
+              rc.setStoichiometry(stoich);
+            }
             break;
           }
         }

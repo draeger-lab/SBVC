@@ -279,23 +279,32 @@ public class BioPax2KGMLTest {
     String subPID = "PID_Pathways/";    
     List<String> fileList = new ArrayList<String>();
    
-    DirectoryParser d = new DirectoryParser("W:/metabolic/organisms/hsa", "xml");
-    while (d.hasNext())
-      fileList.add(d.next());
+    // augment kgmls with BioCarta information
+//    DirectoryParser d = new DirectoryParser("W:/metabolic/organisms/hsa", "xml");
+//    while (d.hasNext())
+//      fileList.add(d.next());
+//    
+//    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
+//        "W:/metabolic/organisms/hsa", 
+//        "C:/Users/buechel/Desktop/KGML_extended_hsa/metabolic/organisms/hsa/", true); 
+//    
+//    fileList = new ArrayList<String>();
+//    d = new DirectoryParser("W:/non-metabolic/organisms/hsa", "xml");
+//    while (d.hasNext())
+//      fileList.add(d.next());
+//    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
+//        "W:/non-metabolic/organisms/hsa", 
+//        "C:/Users/buechel/Desktop/KGML_extended_hsa/non-metabolic/organisms/hsa", true); 
+//    
+//    if (true) return;
     
-    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
-        "W:/metabolic/organisms/hsa", 
-        "C:/Users/buechel/Desktop/KGML_extended_hsa/metabolic/organisms/hsa/", true); 
     
-    fileList = new ArrayList<String>();
-    d = new DirectoryParser("W:/non-metabolic/organisms/hsa", "xml");
-    while (d.hasNext())
-      fileList.add(d.next());
-    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
-        "W:/non-metabolic/organisms/hsa", 
-        "C:/Users/buechel/Desktop/KGML_extended_hsa/non-metabolic/organisms/hsa", true); 
+    // writing of one pathway
+    bft.parseAndWritePathway(subPID, subPID, "ceramidepathway");
     
-    if (true) return;
+    
+    
+    
     
     // Database testing of the parser
     

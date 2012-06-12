@@ -24,7 +24,10 @@
  */
 package de.zbit.sbvc;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import de.zbit.util.logging.LogUtil;
 
 /**
  * @author Finja B&uuml;chel
@@ -37,7 +40,7 @@ public class SBVCTest {
    * @param args
    */
   public static void main(String[] args) {
-    
+    LogUtil.initializeLogging(Level.FINE);
     SBVC sbvc = new SBVC();
     
     
@@ -57,8 +60,12 @@ public class SBVCTest {
 //    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp2.owl",
 //        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 2/", true);
     
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 3/");
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Desktop/workspace/SBVC/doc/Bioinformatics_paper/Comparision/Homarus americanus.owl",
+//        "C:/Users/buechel/Desktop/workspace/SBVC/doc/Bioinformatics_paper/Comparision/");
+//    
+    sbvc.convertBioPAXToSBML("C:/Users/buechel/Desktop/workspace/SBVC/doc/Bioinformatics_paper/Comparision/ceramidepathway_level2.owl",
+    "C:/Users/buechel/Desktop/workspace/SBVC/doc/Bioinformatics_paper/Comparision/");
+    
   }
 
 }
