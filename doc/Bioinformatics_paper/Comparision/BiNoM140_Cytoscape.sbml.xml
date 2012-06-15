@@ -1,0 +1,2313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml level="2" version="1" xmlns="http://www.sbml.org/sbml/level2">
+  <model id="noname">
+    <annotation>re1)	path:hsa00140-256-&gt;path:hsa00140-48	,	
+re2)	path:hsa00140-253-&gt;path:hsa00140-46	,	
+re3)	path:hsa00140-259-&gt;path:hsa00140-37	,	
+re4)	path:hsa00140-257-&gt;path:hsa00140-344	,	
+re5)	path:hsa00140-258-&gt;path:hsa00140-37	,	
+re6)	path:hsa00140-251-&gt;path:hsa00140-47	,	
+re7)	path:hsa00140-265-&gt;path:hsa00140-23	,	
+re8)	path:hsa00140-266-&gt;path:hsa00140-26	,	
+re9)	path:hsa00140-267-&gt;path:hsa00140-27	,	
+re10)	path:hsa00140-261-&gt;path:hsa00140-34	,	
+re11)	path:hsa00140-260-&gt;path:hsa00140-335	,	
+re12)	path:hsa00140-263-&gt;path:hsa00140-31	,	
+re13)	path:hsa00140-262-&gt;path:hsa00140-30	,	
+re14)	path:hsa00140-237-&gt;path:hsa00140-333	,	
+re15)	path:hsa00140-238-&gt;path:hsa00140-343	,	
+re16)	path:hsa00140-235-&gt;path:hsa00140-56	,	
+re17)	path:hsa00140-236-&gt;path:hsa00140-57	,	
+re18)	path:hsa00140-233-&gt;path:hsa00140-345	,	
+re19)	path:hsa00140-234-&gt;path:hsa00140-54	,	
+re20)	path:hsa00140-232-&gt;path:hsa00140-60	,	
+re21)	path:hsa00140-230-&gt;path:hsa00140-10	,	
+re22)	path:hsa00140-246-&gt;path:hsa00140-38	,	
+re23)	path:hsa00140-247-&gt;path:hsa00140-333	,	
+re24)	path:hsa00140-248-&gt;path:hsa00140-44	,	
+re25)	path:hsa00140-243-&gt;path:hsa00140-50	,	
+re26)	path:hsa00140-244-&gt;path:hsa00140-50	,	
+re27)	path:hsa00140-199-&gt;path:hsa00140-10	,	
+re28)	path:hsa00140-199-&gt;path:hsa00140-68	,	
+re29)	path:hsa00140-198-&gt;path:hsa00140-338	,	
+re30)	path:hsa00140-193-&gt;path:hsa00140-61	,	
+re31)	path:hsa00140-196-&gt;path:hsa00140-63	,	
+re32)	path:hsa00140-197-&gt;path:hsa00140-338	,	
+re33)	path:hsa00140-194-&gt;path:hsa00140-61	,	
+re34)	path:hsa00140-195-&gt;path:hsa00140-63	,	
+re35)	path:hsa00140-241-&gt;path:hsa00140-51	,	
+re36)	path:hsa00140-299-&gt;path:hsa00140-103	,	
+re37)	path:hsa00140-297-&gt;path:hsa00140-101	,	
+re38)	path:hsa00140-291-&gt;path:hsa00140-109	,	
+re39)	path:hsa00140-292-&gt;path:hsa00140-99	,	
+re40)	path:hsa00140-292-&gt;path:hsa00140-100	,	
+re41)	path:hsa00140-290-&gt;path:hsa00140-100	,	
+re42)	path:hsa00140-295-&gt;path:hsa00140-93	,	
+re43)	path:hsa00140-296-&gt;path:hsa00140-94	,	
+re44)	path:hsa00140-293-&gt;path:hsa00140-91	,	
+re45)	path:hsa00140-294-&gt;path:hsa00140-92	,	
+re46)	path:hsa00140-91-&gt;path:hsa00140-294	,	
+re47)	path:hsa00140-100-&gt;path:hsa00140-291	,	
+re48)	path:hsa00140-103-&gt;path:hsa00140-300	,	
+re49)	path:hsa00140-104-&gt;path:hsa00140-301	,	
+re50)	path:hsa00140-279-&gt;path:hsa00140-83	,	
+re51)	path:hsa00140-278-&gt;path:hsa00140-80	,	
+re52)	path:hsa00140-277-&gt;path:hsa00140-79	,	
+re53)	path:hsa00140-275-&gt;path:hsa00140-339	,	
+re54)	path:hsa00140-275-&gt;path:hsa00140-340	,	
+re55)	path:hsa00140-273-&gt;path:hsa00140-339	,	
+re56)	path:hsa00140-273-&gt;path:hsa00140-340	,	
+re57)	path:hsa00140-272-&gt;path:hsa00140-38	,	
+re58)	path:hsa00140-270-&gt;path:hsa00140-25	,	
+re59)	path:hsa00140-287-&gt;path:hsa00140-99	,	
+re60)	path:hsa00140-286-&gt;path:hsa00140-87	,	
+re61)	path:hsa00140-289-&gt;path:hsa00140-89	,	
+re62)	path:hsa00140-282-&gt;path:hsa00140-84	,	
+re63)	path:hsa00140-283-&gt;path:hsa00140-82	,	
+re64)	path:hsa00140-284-&gt;path:hsa00140-85	,	
+re65)	path:hsa00140-285-&gt;path:hsa00140-86	,	
+re66)	path:hsa00140-280-&gt;path:hsa00140-81	,	
+re67)	path:hsa00140-52-&gt;path:hsa00140-243	,	
+re68)	path:hsa00140-44-&gt;path:hsa00140-251	,	
+re69)	path:hsa00140-45-&gt;path:hsa00140-256	,	
+re70)	path:hsa00140-62-&gt;path:hsa00140-197	,	
+re71)	path:hsa00140-62-&gt;path:hsa00140-195	,	
+re72)	path:hsa00140-62-&gt;path:hsa00140-194	,	
+re73)	path:hsa00140-62-&gt;path:hsa00140-193	,	
+re74)	path:hsa00140-64-&gt;path:hsa00140-200	,	
+re75)	path:hsa00140-64-&gt;path:hsa00140-198	,	
+re76)	path:hsa00140-64-&gt;path:hsa00140-196	,	
+re77)	path:hsa00140-56-&gt;path:hsa00140-236	,	
+re78)	path:hsa00140-59-&gt;path:hsa00140-232	,	
+re79)	path:hsa00140-75-&gt;path:hsa00140-224	,	
+re80)	path:hsa00140-75-&gt;path:hsa00140-223	,	
+re81)	path:hsa00140-73-&gt;path:hsa00140-327	,	
+re82)	path:hsa00140-73-&gt;path:hsa00140-229	,	
+re83)	path:hsa00140-73-&gt;path:hsa00140-228	,	
+re84)	path:hsa00140-73-&gt;path:hsa00140-221	,	
+re85)	path:hsa00140-73-&gt;path:hsa00140-219	,	
+re86)	path:hsa00140-307-&gt;path:hsa00140-329	,	
+re87)	path:hsa00140-305-&gt;path:hsa00140-111	,	
+re88)	path:hsa00140-306-&gt;path:hsa00140-110	,	
+re89)	path:hsa00140-303-&gt;path:hsa00140-117	,	
+re90)	path:hsa00140-301-&gt;path:hsa00140-105	,	
+re91)	path:hsa00140-300-&gt;path:hsa00140-104	,	
+re92)	path:hsa00140-69-&gt;path:hsa00140-62	,	
+re93)	path:hsa00140-85-&gt;path:hsa00140-285	,	
+re94)	path:hsa00140-81-&gt;path:hsa00140-279	,	
+re95)	path:hsa00140-83-&gt;path:hsa00140-282	,	
+re96)	path:hsa00140-82-&gt;path:hsa00140-284	,	
+re97)	path:hsa00140-111-&gt;path:hsa00140-303	,	
+re98)	path:hsa00140-110-&gt;path:hsa00140-305	,	
+re99)	path:hsa00140-78-&gt;path:hsa00140-226	,	
+re100)	path:hsa00140-78-&gt;path:hsa00140-225	,	
+re101)	path:hsa00140-79-&gt;path:hsa00140-278	,	
+re102)	path:hsa00140-10-&gt;path:hsa00140-227	,	
+re103)	path:hsa00140-320-&gt;path:hsa00140-346	,	
+re104)	path:hsa00140-229-&gt;path:hsa00140-339	,	
+re105)	path:hsa00140-228-&gt;path:hsa00140-339	,	
+re106)	path:hsa00140-227-&gt;path:hsa00140-337	,	
+re107)	path:hsa00140-329-&gt;path:hsa00140-299	,	
+re108)	path:hsa00140-329-&gt;path:hsa00140-297	,	
+re109)	path:hsa00140-329-&gt;path:hsa00140-287	,	
+re110)	path:hsa00140-226-&gt;path:hsa00140-340	,	
+re111)	path:hsa00140-328-&gt;path:hsa00140-320	,	
+re112)	path:hsa00140-225-&gt;path:hsa00140-340	,	
+re113)	path:hsa00140-327-&gt;path:hsa00140-326	,	
+re114)	path:hsa00140-224-&gt;path:hsa00140-76	,	
+re115)	path:hsa00140-223-&gt;path:hsa00140-76	,	
+re116)	path:hsa00140-221-&gt;path:hsa00140-75	,	
+re117)	path:hsa00140-220-&gt;path:hsa00140-73	,	
+re118)	path:hsa00140-20-&gt;path:hsa00140-216	,	
+re119)	path:hsa00140-20-&gt;path:hsa00140-215	,	
+re120)	path:hsa00140-11-&gt;path:hsa00140-205	,	
+re121)	path:hsa00140-11-&gt;path:hsa00140-204	,	
+re122)	path:hsa00140-312-&gt;path:hsa00140-115	,	
+re123)	path:hsa00140-217-&gt;path:hsa00140-20	,	
+re124)	path:hsa00140-219-&gt;path:hsa00140-332	,	
+re125)	path:hsa00140-214-&gt;path:hsa00140-335	,	
+re126)	path:hsa00140-213-&gt;path:hsa00140-335	,	
+re127)	path:hsa00140-216-&gt;path:hsa00140-23	,	
+re128)	path:hsa00140-215-&gt;path:hsa00140-23	,	
+re129)	path:hsa00140-210-&gt;path:hsa00140-341	,	
+re130)	path:hsa00140-210-&gt;path:hsa00140-330	,	
+re131)	path:hsa00140-212-&gt;path:hsa00140-344	,	
+re132)	path:hsa00140-212-&gt;path:hsa00140-10	,	
+re133)	path:hsa00140-211-&gt;path:hsa00140-344	,	
+re134)	path:hsa00140-211-&gt;path:hsa00140-10	,	
+re135)	path:hsa00140-340-&gt;path:hsa00140-296	,	
+re136)	path:hsa00140-340-&gt;path:hsa00140-295	,	
+re137)	path:hsa00140-340-&gt;path:hsa00140-293	,	
+re138)	path:hsa00140-340-&gt;path:hsa00140-289	,	
+re139)	path:hsa00140-30-&gt;path:hsa00140-263	,	
+re140)	path:hsa00140-3-&gt;path:hsa00140-329	,	
+re141)	path:hsa00140-3-&gt;path:hsa00140-336	,	
+re142)	path:hsa00140-209-&gt;path:hsa00140-341	,	
+re143)	path:hsa00140-209-&gt;path:hsa00140-330	,	
+re144)	path:hsa00140-208-&gt;path:hsa00140-65	,	
+re145)	path:hsa00140-207-&gt;path:hsa00140-65	,	
+re146)	path:hsa00140-346-&gt;path:hsa00140-244	,	
+re147)	path:hsa00140-26-&gt;path:hsa00140-267	,	
+re148)	path:hsa00140-206-&gt;path:hsa00140-66	,	
+re149)	path:hsa00140-345-&gt;path:hsa00140-235	,	
+re150)	path:hsa00140-25-&gt;path:hsa00140-266	,	
+re151)	path:hsa00140-344-&gt;path:hsa00140-260	,	
+re152)	path:hsa00140-344-&gt;path:hsa00140-258	,	
+re153)	path:hsa00140-343-&gt;path:hsa00140-237	,	
+re154)	path:hsa00140-343-&gt;path:hsa00140-233	,	
+re155)	path:hsa00140-23-&gt;path:hsa00140-270	,	
+re156)	path:hsa00140-23-&gt;path:hsa00140-262	,	
+re157)	path:hsa00140-23-&gt;path:hsa00140-259	,	
+re158)	path:hsa00140-342-&gt;path:hsa00140-253	,	
+re159)	path:hsa00140-341-&gt;path:hsa00140-257	,	
+re160)	path:hsa00140-341-&gt;path:hsa00140-248	,	
+re161)	path:hsa00140-341-&gt;path:hsa00140-246	,	
+re162)	path:hsa00140-341-&gt;path:hsa00140-238	,	
+re163)	path:hsa00140-200-&gt;path:hsa00140-330	,	
+re164)	path:hsa00140-200-&gt;path:hsa00140-68	,	
+re165)	path:hsa00140-205-&gt;path:hsa00140-343	,	
+re166)	path:hsa00140-204-&gt;path:hsa00140-343	,	
+re167)	path:hsa00140-203-&gt;path:hsa00140-11	,	
+re168)	path:hsa00140-202-&gt;path:hsa00140-331	,	
+re169)	path:hsa00140-38-&gt;path:hsa00140-247	,	
+re170)	path:hsa00140-335-&gt;path:hsa00140-265	,	
+re171)	path:hsa00140-37-&gt;path:hsa00140-272	,	
+re172)	path:hsa00140-334-&gt;path:hsa00140-307	,	
+re173)	path:hsa00140-337-&gt;path:hsa00140-217	,	
+re174)	path:hsa00140-337-&gt;path:hsa00140-214	,	
+re175)	path:hsa00140-337-&gt;path:hsa00140-213	,	
+re176)	path:hsa00140-336-&gt;path:hsa00140-312	,	
+re177)	path:hsa00140-336-&gt;path:hsa00140-306	,	
+re178)	path:hsa00140-336-&gt;path:hsa00140-290	,	
+re179)	path:hsa00140-331-&gt;path:hsa00140-199	,	
+re180)	path:hsa00140-330-&gt;path:hsa00140-230	,	
+re181)	path:hsa00140-330-&gt;path:hsa00140-208	,	
+re182)	path:hsa00140-330-&gt;path:hsa00140-207	,	
+re183)	path:hsa00140-330-&gt;path:hsa00140-206	,	
+re184)	path:hsa00140-330-&gt;path:hsa00140-203	,	
+re185)	path:hsa00140-33-&gt;path:hsa00140-261	,	
+re186)	path:hsa00140-333-&gt;path:hsa00140-241	,	
+re187)	path:hsa00140-333-&gt;path:hsa00140-234	,	
+re188)	path:hsa00140-332-&gt;path:hsa00140-220	,	
+re189)	path:hsa00140-339-&gt;path:hsa00140-286	,	
+re190)	path:hsa00140-339-&gt;path:hsa00140-283	,	
+re191)	path:hsa00140-339-&gt;path:hsa00140-280	,	
+re192)	path:hsa00140-339-&gt;path:hsa00140-277	,	
+re193)	path:hsa00140-338-&gt;path:hsa00140-202	,</annotation>
+    <listOfCompartments>
+      <compartment id="default" name="default"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="path_hsa00140_256" compartment="default" name="path:hsa00140-256"/>
+      <species id="path_hsa00140_48" compartment="default" name="path:hsa00140-48"/>
+      <species id="path_hsa00140_253" compartment="default" name="path:hsa00140-253"/>
+      <species id="path_hsa00140_46" compartment="default" name="path:hsa00140-46"/>
+      <species id="path_hsa00140_259" compartment="default" name="path:hsa00140-259"/>
+      <species id="path_hsa00140_37" compartment="default" name="path:hsa00140-37"/>
+      <species id="path_hsa00140_257" compartment="default" name="path:hsa00140-257"/>
+      <species id="path_hsa00140_344" compartment="default" name="path:hsa00140-344"/>
+      <species id="path_hsa00140_258" compartment="default" name="path:hsa00140-258"/>
+      <species id="path_hsa00140_251" compartment="default" name="path:hsa00140-251"/>
+      <species id="path_hsa00140_47" compartment="default" name="path:hsa00140-47"/>
+      <species id="path_hsa00140_265" compartment="default" name="path:hsa00140-265"/>
+      <species id="path_hsa00140_23" compartment="default" name="path:hsa00140-23"/>
+      <species id="path_hsa00140_266" compartment="default" name="path:hsa00140-266"/>
+      <species id="path_hsa00140_26" compartment="default" name="path:hsa00140-26"/>
+      <species id="path_hsa00140_267" compartment="default" name="path:hsa00140-267"/>
+      <species id="path_hsa00140_27" compartment="default" name="path:hsa00140-27"/>
+      <species id="path_hsa00140_261" compartment="default" name="path:hsa00140-261"/>
+      <species id="path_hsa00140_34" compartment="default" name="path:hsa00140-34"/>
+      <species id="path_hsa00140_260" compartment="default" name="path:hsa00140-260"/>
+      <species id="path_hsa00140_335" compartment="default" name="path:hsa00140-335"/>
+      <species id="path_hsa00140_263" compartment="default" name="path:hsa00140-263"/>
+      <species id="path_hsa00140_31" compartment="default" name="path:hsa00140-31"/>
+      <species id="path_hsa00140_262" compartment="default" name="path:hsa00140-262"/>
+      <species id="path_hsa00140_30" compartment="default" name="path:hsa00140-30"/>
+      <species id="path_hsa00140_237" compartment="default" name="path:hsa00140-237"/>
+      <species id="path_hsa00140_333" compartment="default" name="path:hsa00140-333"/>
+      <species id="path_hsa00140_238" compartment="default" name="path:hsa00140-238"/>
+      <species id="path_hsa00140_343" compartment="default" name="path:hsa00140-343"/>
+      <species id="path_hsa00140_235" compartment="default" name="path:hsa00140-235"/>
+      <species id="path_hsa00140_56" compartment="default" name="path:hsa00140-56"/>
+      <species id="path_hsa00140_236" compartment="default" name="path:hsa00140-236"/>
+      <species id="path_hsa00140_57" compartment="default" name="path:hsa00140-57"/>
+      <species id="path_hsa00140_233" compartment="default" name="path:hsa00140-233"/>
+      <species id="path_hsa00140_345" compartment="default" name="path:hsa00140-345"/>
+      <species id="path_hsa00140_234" compartment="default" name="path:hsa00140-234"/>
+      <species id="path_hsa00140_54" compartment="default" name="path:hsa00140-54"/>
+      <species id="path_hsa00140_232" compartment="default" name="path:hsa00140-232"/>
+      <species id="path_hsa00140_60" compartment="default" name="path:hsa00140-60"/>
+      <species id="path_hsa00140_230" compartment="default" name="path:hsa00140-230"/>
+      <species id="path_hsa00140_10" compartment="default" name="path:hsa00140-10"/>
+      <species id="path_hsa00140_246" compartment="default" name="path:hsa00140-246"/>
+      <species id="path_hsa00140_38" compartment="default" name="path:hsa00140-38"/>
+      <species id="path_hsa00140_247" compartment="default" name="path:hsa00140-247"/>
+      <species id="path_hsa00140_248" compartment="default" name="path:hsa00140-248"/>
+      <species id="path_hsa00140_44" compartment="default" name="path:hsa00140-44"/>
+      <species id="path_hsa00140_243" compartment="default" name="path:hsa00140-243"/>
+      <species id="path_hsa00140_50" compartment="default" name="path:hsa00140-50"/>
+      <species id="path_hsa00140_244" compartment="default" name="path:hsa00140-244"/>
+      <species id="path_hsa00140_199" compartment="default" name="path:hsa00140-199"/>
+      <species id="path_hsa00140_68" compartment="default" name="path:hsa00140-68"/>
+      <species id="path_hsa00140_198" compartment="default" name="path:hsa00140-198"/>
+      <species id="path_hsa00140_338" compartment="default" name="path:hsa00140-338"/>
+      <species id="path_hsa00140_193" compartment="default" name="path:hsa00140-193"/>
+      <species id="path_hsa00140_61" compartment="default" name="path:hsa00140-61"/>
+      <species id="path_hsa00140_196" compartment="default" name="path:hsa00140-196"/>
+      <species id="path_hsa00140_63" compartment="default" name="path:hsa00140-63"/>
+      <species id="path_hsa00140_197" compartment="default" name="path:hsa00140-197"/>
+      <species id="path_hsa00140_194" compartment="default" name="path:hsa00140-194"/>
+      <species id="path_hsa00140_195" compartment="default" name="path:hsa00140-195"/>
+      <species id="path_hsa00140_241" compartment="default" name="path:hsa00140-241"/>
+      <species id="path_hsa00140_51" compartment="default" name="path:hsa00140-51"/>
+      <species id="path_hsa00140_299" compartment="default" name="path:hsa00140-299"/>
+      <species id="path_hsa00140_103" compartment="default" name="path:hsa00140-103"/>
+      <species id="path_hsa00140_297" compartment="default" name="path:hsa00140-297"/>
+      <species id="path_hsa00140_101" compartment="default" name="path:hsa00140-101"/>
+      <species id="path_hsa00140_291" compartment="default" name="path:hsa00140-291"/>
+      <species id="path_hsa00140_109" compartment="default" name="path:hsa00140-109"/>
+      <species id="path_hsa00140_292" compartment="default" name="path:hsa00140-292"/>
+      <species id="path_hsa00140_99" compartment="default" name="path:hsa00140-99"/>
+      <species id="path_hsa00140_100" compartment="default" name="path:hsa00140-100"/>
+      <species id="path_hsa00140_290" compartment="default" name="path:hsa00140-290"/>
+      <species id="path_hsa00140_295" compartment="default" name="path:hsa00140-295"/>
+      <species id="path_hsa00140_93" compartment="default" name="path:hsa00140-93"/>
+      <species id="path_hsa00140_296" compartment="default" name="path:hsa00140-296"/>
+      <species id="path_hsa00140_94" compartment="default" name="path:hsa00140-94"/>
+      <species id="path_hsa00140_293" compartment="default" name="path:hsa00140-293"/>
+      <species id="path_hsa00140_91" compartment="default" name="path:hsa00140-91"/>
+      <species id="path_hsa00140_294" compartment="default" name="path:hsa00140-294"/>
+      <species id="path_hsa00140_92" compartment="default" name="path:hsa00140-92"/>
+      <species id="path_hsa00140_300" compartment="default" name="path:hsa00140-300"/>
+      <species id="path_hsa00140_104" compartment="default" name="path:hsa00140-104"/>
+      <species id="path_hsa00140_301" compartment="default" name="path:hsa00140-301"/>
+      <species id="path_hsa00140_279" compartment="default" name="path:hsa00140-279"/>
+      <species id="path_hsa00140_83" compartment="default" name="path:hsa00140-83"/>
+      <species id="path_hsa00140_278" compartment="default" name="path:hsa00140-278"/>
+      <species id="path_hsa00140_80" compartment="default" name="path:hsa00140-80"/>
+      <species id="path_hsa00140_277" compartment="default" name="path:hsa00140-277"/>
+      <species id="path_hsa00140_79" compartment="default" name="path:hsa00140-79"/>
+      <species id="path_hsa00140_275" compartment="default" name="path:hsa00140-275"/>
+      <species id="path_hsa00140_339" compartment="default" name="path:hsa00140-339"/>
+      <species id="path_hsa00140_340" compartment="default" name="path:hsa00140-340"/>
+      <species id="path_hsa00140_273" compartment="default" name="path:hsa00140-273"/>
+      <species id="path_hsa00140_272" compartment="default" name="path:hsa00140-272"/>
+      <species id="path_hsa00140_270" compartment="default" name="path:hsa00140-270"/>
+      <species id="path_hsa00140_25" compartment="default" name="path:hsa00140-25"/>
+      <species id="path_hsa00140_287" compartment="default" name="path:hsa00140-287"/>
+      <species id="path_hsa00140_286" compartment="default" name="path:hsa00140-286"/>
+      <species id="path_hsa00140_87" compartment="default" name="path:hsa00140-87"/>
+      <species id="path_hsa00140_289" compartment="default" name="path:hsa00140-289"/>
+      <species id="path_hsa00140_89" compartment="default" name="path:hsa00140-89"/>
+      <species id="path_hsa00140_282" compartment="default" name="path:hsa00140-282"/>
+      <species id="path_hsa00140_84" compartment="default" name="path:hsa00140-84"/>
+      <species id="path_hsa00140_283" compartment="default" name="path:hsa00140-283"/>
+      <species id="path_hsa00140_82" compartment="default" name="path:hsa00140-82"/>
+      <species id="path_hsa00140_284" compartment="default" name="path:hsa00140-284"/>
+      <species id="path_hsa00140_85" compartment="default" name="path:hsa00140-85"/>
+      <species id="path_hsa00140_285" compartment="default" name="path:hsa00140-285"/>
+      <species id="path_hsa00140_86" compartment="default" name="path:hsa00140-86"/>
+      <species id="path_hsa00140_280" compartment="default" name="path:hsa00140-280"/>
+      <species id="path_hsa00140_81" compartment="default" name="path:hsa00140-81"/>
+      <species id="path_hsa00140_52" compartment="default" name="path:hsa00140-52"/>
+      <species id="path_hsa00140_45" compartment="default" name="path:hsa00140-45"/>
+      <species id="path_hsa00140_62" compartment="default" name="path:hsa00140-62"/>
+      <species id="path_hsa00140_64" compartment="default" name="path:hsa00140-64"/>
+      <species id="path_hsa00140_200" compartment="default" name="path:hsa00140-200"/>
+      <species id="path_hsa00140_59" compartment="default" name="path:hsa00140-59"/>
+      <species id="path_hsa00140_75" compartment="default" name="path:hsa00140-75"/>
+      <species id="path_hsa00140_224" compartment="default" name="path:hsa00140-224"/>
+      <species id="path_hsa00140_223" compartment="default" name="path:hsa00140-223"/>
+      <species id="path_hsa00140_73" compartment="default" name="path:hsa00140-73"/>
+      <species id="path_hsa00140_327" compartment="default" name="path:hsa00140-327"/>
+      <species id="path_hsa00140_229" compartment="default" name="path:hsa00140-229"/>
+      <species id="path_hsa00140_228" compartment="default" name="path:hsa00140-228"/>
+      <species id="path_hsa00140_221" compartment="default" name="path:hsa00140-221"/>
+      <species id="path_hsa00140_219" compartment="default" name="path:hsa00140-219"/>
+      <species id="path_hsa00140_307" compartment="default" name="path:hsa00140-307"/>
+      <species id="path_hsa00140_329" compartment="default" name="path:hsa00140-329"/>
+      <species id="path_hsa00140_305" compartment="default" name="path:hsa00140-305"/>
+      <species id="path_hsa00140_111" compartment="default" name="path:hsa00140-111"/>
+      <species id="path_hsa00140_306" compartment="default" name="path:hsa00140-306"/>
+      <species id="path_hsa00140_110" compartment="default" name="path:hsa00140-110"/>
+      <species id="path_hsa00140_303" compartment="default" name="path:hsa00140-303"/>
+      <species id="path_hsa00140_117" compartment="default" name="path:hsa00140-117"/>
+      <species id="path_hsa00140_105" compartment="default" name="path:hsa00140-105"/>
+      <species id="path_hsa00140_69" compartment="default" name="path:hsa00140-69"/>
+      <species id="path_hsa00140_78" compartment="default" name="path:hsa00140-78"/>
+      <species id="path_hsa00140_226" compartment="default" name="path:hsa00140-226"/>
+      <species id="path_hsa00140_225" compartment="default" name="path:hsa00140-225"/>
+      <species id="path_hsa00140_227" compartment="default" name="path:hsa00140-227"/>
+      <species id="path_hsa00140_320" compartment="default" name="path:hsa00140-320"/>
+      <species id="path_hsa00140_346" compartment="default" name="path:hsa00140-346"/>
+      <species id="path_hsa00140_337" compartment="default" name="path:hsa00140-337"/>
+      <species id="path_hsa00140_328" compartment="default" name="path:hsa00140-328"/>
+      <species id="path_hsa00140_326" compartment="default" name="path:hsa00140-326"/>
+      <species id="path_hsa00140_76" compartment="default" name="path:hsa00140-76"/>
+      <species id="path_hsa00140_220" compartment="default" name="path:hsa00140-220"/>
+      <species id="path_hsa00140_20" compartment="default" name="path:hsa00140-20"/>
+      <species id="path_hsa00140_216" compartment="default" name="path:hsa00140-216"/>
+      <species id="path_hsa00140_215" compartment="default" name="path:hsa00140-215"/>
+      <species id="path_hsa00140_11" compartment="default" name="path:hsa00140-11"/>
+      <species id="path_hsa00140_205" compartment="default" name="path:hsa00140-205"/>
+      <species id="path_hsa00140_204" compartment="default" name="path:hsa00140-204"/>
+      <species id="path_hsa00140_312" compartment="default" name="path:hsa00140-312"/>
+      <species id="path_hsa00140_115" compartment="default" name="path:hsa00140-115"/>
+      <species id="path_hsa00140_217" compartment="default" name="path:hsa00140-217"/>
+      <species id="path_hsa00140_332" compartment="default" name="path:hsa00140-332"/>
+      <species id="path_hsa00140_214" compartment="default" name="path:hsa00140-214"/>
+      <species id="path_hsa00140_213" compartment="default" name="path:hsa00140-213"/>
+      <species id="path_hsa00140_210" compartment="default" name="path:hsa00140-210"/>
+      <species id="path_hsa00140_341" compartment="default" name="path:hsa00140-341"/>
+      <species id="path_hsa00140_330" compartment="default" name="path:hsa00140-330"/>
+      <species id="path_hsa00140_212" compartment="default" name="path:hsa00140-212"/>
+      <species id="path_hsa00140_211" compartment="default" name="path:hsa00140-211"/>
+      <species id="path_hsa00140_3" compartment="default" name="path:hsa00140-3"/>
+      <species id="path_hsa00140_336" compartment="default" name="path:hsa00140-336"/>
+      <species id="path_hsa00140_209" compartment="default" name="path:hsa00140-209"/>
+      <species id="path_hsa00140_208" compartment="default" name="path:hsa00140-208"/>
+      <species id="path_hsa00140_65" compartment="default" name="path:hsa00140-65"/>
+      <species id="path_hsa00140_207" compartment="default" name="path:hsa00140-207"/>
+      <species id="path_hsa00140_206" compartment="default" name="path:hsa00140-206"/>
+      <species id="path_hsa00140_66" compartment="default" name="path:hsa00140-66"/>
+      <species id="path_hsa00140_342" compartment="default" name="path:hsa00140-342"/>
+      <species id="path_hsa00140_203" compartment="default" name="path:hsa00140-203"/>
+      <species id="path_hsa00140_202" compartment="default" name="path:hsa00140-202"/>
+      <species id="path_hsa00140_331" compartment="default" name="path:hsa00140-331"/>
+      <species id="path_hsa00140_334" compartment="default" name="path:hsa00140-334"/>
+      <species id="path_hsa00140_33" compartment="default" name="path:hsa00140-33"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="re1" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_48"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_256"/>
+        </listOfReactants>
+        <notes>path:hsa00140-256-&amp;gt;path:hsa00140-48</notes>
+      </reaction>
+      <reaction id="re2" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_46"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_253"/>
+        </listOfReactants>
+        <notes>path:hsa00140-253-&amp;gt;path:hsa00140-46</notes>
+      </reaction>
+      <reaction id="re3" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_37"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_259"/>
+        </listOfReactants>
+        <notes>path:hsa00140-259-&amp;gt;path:hsa00140-37</notes>
+      </reaction>
+      <reaction id="re4" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_344"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_257"/>
+        </listOfReactants>
+        <notes>path:hsa00140-257-&amp;gt;path:hsa00140-344</notes>
+      </reaction>
+      <reaction id="re5" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_37"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_258"/>
+        </listOfReactants>
+        <notes>path:hsa00140-258-&amp;gt;path:hsa00140-37</notes>
+      </reaction>
+      <reaction id="re6" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_47"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_251"/>
+        </listOfReactants>
+        <notes>path:hsa00140-251-&amp;gt;path:hsa00140-47</notes>
+      </reaction>
+      <reaction id="re7" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_265"/>
+        </listOfReactants>
+        <notes>path:hsa00140-265-&amp;gt;path:hsa00140-23</notes>
+      </reaction>
+      <reaction id="re8" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_26"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_266"/>
+        </listOfReactants>
+        <notes>path:hsa00140-266-&amp;gt;path:hsa00140-26</notes>
+      </reaction>
+      <reaction id="re9" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_27"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_267"/>
+        </listOfReactants>
+        <notes>path:hsa00140-267-&amp;gt;path:hsa00140-27</notes>
+      </reaction>
+      <reaction id="re10" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_34"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_261"/>
+        </listOfReactants>
+        <notes>path:hsa00140-261-&amp;gt;path:hsa00140-34</notes>
+      </reaction>
+      <reaction id="re11" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_335"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_260"/>
+        </listOfReactants>
+        <notes>path:hsa00140-260-&amp;gt;path:hsa00140-335</notes>
+      </reaction>
+      <reaction id="re12" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_31"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_263"/>
+        </listOfReactants>
+        <notes>path:hsa00140-263-&amp;gt;path:hsa00140-31</notes>
+      </reaction>
+      <reaction id="re13" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_30"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_262"/>
+        </listOfReactants>
+        <notes>path:hsa00140-262-&amp;gt;path:hsa00140-30</notes>
+      </reaction>
+      <reaction id="re14" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_333"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_237"/>
+        </listOfReactants>
+        <notes>path:hsa00140-237-&amp;gt;path:hsa00140-333</notes>
+      </reaction>
+      <reaction id="re15" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_343"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_238"/>
+        </listOfReactants>
+        <notes>path:hsa00140-238-&amp;gt;path:hsa00140-343</notes>
+      </reaction>
+      <reaction id="re16" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_56"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_235"/>
+        </listOfReactants>
+        <notes>path:hsa00140-235-&amp;gt;path:hsa00140-56</notes>
+      </reaction>
+      <reaction id="re17" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_57"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_236"/>
+        </listOfReactants>
+        <notes>path:hsa00140-236-&amp;gt;path:hsa00140-57</notes>
+      </reaction>
+      <reaction id="re18" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_345"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_233"/>
+        </listOfReactants>
+        <notes>path:hsa00140-233-&amp;gt;path:hsa00140-345</notes>
+      </reaction>
+      <reaction id="re19" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_54"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_234"/>
+        </listOfReactants>
+        <notes>path:hsa00140-234-&amp;gt;path:hsa00140-54</notes>
+      </reaction>
+      <reaction id="re20" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_60"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_232"/>
+        </listOfReactants>
+        <notes>path:hsa00140-232-&amp;gt;path:hsa00140-60</notes>
+      </reaction>
+      <reaction id="re21" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_10"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_230"/>
+        </listOfReactants>
+        <notes>path:hsa00140-230-&amp;gt;path:hsa00140-10</notes>
+      </reaction>
+      <reaction id="re22" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_38"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_246"/>
+        </listOfReactants>
+        <notes>path:hsa00140-246-&amp;gt;path:hsa00140-38</notes>
+      </reaction>
+      <reaction id="re23" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_333"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_247"/>
+        </listOfReactants>
+        <notes>path:hsa00140-247-&amp;gt;path:hsa00140-333</notes>
+      </reaction>
+      <reaction id="re24" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_44"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_248"/>
+        </listOfReactants>
+        <notes>path:hsa00140-248-&amp;gt;path:hsa00140-44</notes>
+      </reaction>
+      <reaction id="re25" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_50"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_243"/>
+        </listOfReactants>
+        <notes>path:hsa00140-243-&amp;gt;path:hsa00140-50</notes>
+      </reaction>
+      <reaction id="re26" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_50"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_244"/>
+        </listOfReactants>
+        <notes>path:hsa00140-244-&amp;gt;path:hsa00140-50</notes>
+      </reaction>
+      <reaction id="re27" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_10"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_199"/>
+        </listOfReactants>
+        <notes>path:hsa00140-199-&amp;gt;path:hsa00140-10</notes>
+      </reaction>
+      <reaction id="re28" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_68"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_199"/>
+        </listOfReactants>
+        <notes>path:hsa00140-199-&amp;gt;path:hsa00140-68</notes>
+      </reaction>
+      <reaction id="re29" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_338"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_198"/>
+        </listOfReactants>
+        <notes>path:hsa00140-198-&amp;gt;path:hsa00140-338</notes>
+      </reaction>
+      <reaction id="re30" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_61"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_193"/>
+        </listOfReactants>
+        <notes>path:hsa00140-193-&amp;gt;path:hsa00140-61</notes>
+      </reaction>
+      <reaction id="re31" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_63"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_196"/>
+        </listOfReactants>
+        <notes>path:hsa00140-196-&amp;gt;path:hsa00140-63</notes>
+      </reaction>
+      <reaction id="re32" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_338"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_197"/>
+        </listOfReactants>
+        <notes>path:hsa00140-197-&amp;gt;path:hsa00140-338</notes>
+      </reaction>
+      <reaction id="re33" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_61"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_194"/>
+        </listOfReactants>
+        <notes>path:hsa00140-194-&amp;gt;path:hsa00140-61</notes>
+      </reaction>
+      <reaction id="re34" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_63"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_195"/>
+        </listOfReactants>
+        <notes>path:hsa00140-195-&amp;gt;path:hsa00140-63</notes>
+      </reaction>
+      <reaction id="re35" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_51"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_241"/>
+        </listOfReactants>
+        <notes>path:hsa00140-241-&amp;gt;path:hsa00140-51</notes>
+      </reaction>
+      <reaction id="re36" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_103"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_299"/>
+        </listOfReactants>
+        <notes>path:hsa00140-299-&amp;gt;path:hsa00140-103</notes>
+      </reaction>
+      <reaction id="re37" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_101"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_297"/>
+        </listOfReactants>
+        <notes>path:hsa00140-297-&amp;gt;path:hsa00140-101</notes>
+      </reaction>
+      <reaction id="re38" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_109"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_291"/>
+        </listOfReactants>
+        <notes>path:hsa00140-291-&amp;gt;path:hsa00140-109</notes>
+      </reaction>
+      <reaction id="re39" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_99"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_292"/>
+        </listOfReactants>
+        <notes>path:hsa00140-292-&amp;gt;path:hsa00140-99</notes>
+      </reaction>
+      <reaction id="re40" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_100"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_292"/>
+        </listOfReactants>
+        <notes>path:hsa00140-292-&amp;gt;path:hsa00140-100</notes>
+      </reaction>
+      <reaction id="re41" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_100"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_290"/>
+        </listOfReactants>
+        <notes>path:hsa00140-290-&amp;gt;path:hsa00140-100</notes>
+      </reaction>
+      <reaction id="re42" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_93"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_295"/>
+        </listOfReactants>
+        <notes>path:hsa00140-295-&amp;gt;path:hsa00140-93</notes>
+      </reaction>
+      <reaction id="re43" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_94"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_296"/>
+        </listOfReactants>
+        <notes>path:hsa00140-296-&amp;gt;path:hsa00140-94</notes>
+      </reaction>
+      <reaction id="re44" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_91"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_293"/>
+        </listOfReactants>
+        <notes>path:hsa00140-293-&amp;gt;path:hsa00140-91</notes>
+      </reaction>
+      <reaction id="re45" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_92"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_294"/>
+        </listOfReactants>
+        <notes>path:hsa00140-294-&amp;gt;path:hsa00140-92</notes>
+      </reaction>
+      <reaction id="re46" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_294"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_91"/>
+        </listOfReactants>
+        <notes>path:hsa00140-91-&amp;gt;path:hsa00140-294</notes>
+      </reaction>
+      <reaction id="re47" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_291"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_100"/>
+        </listOfReactants>
+        <notes>path:hsa00140-100-&amp;gt;path:hsa00140-291</notes>
+      </reaction>
+      <reaction id="re48" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_300"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_103"/>
+        </listOfReactants>
+        <notes>path:hsa00140-103-&amp;gt;path:hsa00140-300</notes>
+      </reaction>
+      <reaction id="re49" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_301"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_104"/>
+        </listOfReactants>
+        <notes>path:hsa00140-104-&amp;gt;path:hsa00140-301</notes>
+      </reaction>
+      <reaction id="re50" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_83"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_279"/>
+        </listOfReactants>
+        <notes>path:hsa00140-279-&amp;gt;path:hsa00140-83</notes>
+      </reaction>
+      <reaction id="re51" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_80"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_278"/>
+        </listOfReactants>
+        <notes>path:hsa00140-278-&amp;gt;path:hsa00140-80</notes>
+      </reaction>
+      <reaction id="re52" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_79"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_277"/>
+        </listOfReactants>
+        <notes>path:hsa00140-277-&amp;gt;path:hsa00140-79</notes>
+      </reaction>
+      <reaction id="re53" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_275"/>
+        </listOfReactants>
+        <notes>path:hsa00140-275-&amp;gt;path:hsa00140-339</notes>
+      </reaction>
+      <reaction id="re54" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_275"/>
+        </listOfReactants>
+        <notes>path:hsa00140-275-&amp;gt;path:hsa00140-340</notes>
+      </reaction>
+      <reaction id="re55" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_273"/>
+        </listOfReactants>
+        <notes>path:hsa00140-273-&amp;gt;path:hsa00140-339</notes>
+      </reaction>
+      <reaction id="re56" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_273"/>
+        </listOfReactants>
+        <notes>path:hsa00140-273-&amp;gt;path:hsa00140-340</notes>
+      </reaction>
+      <reaction id="re57" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_38"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_272"/>
+        </listOfReactants>
+        <notes>path:hsa00140-272-&amp;gt;path:hsa00140-38</notes>
+      </reaction>
+      <reaction id="re58" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_25"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_270"/>
+        </listOfReactants>
+        <notes>path:hsa00140-270-&amp;gt;path:hsa00140-25</notes>
+      </reaction>
+      <reaction id="re59" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_99"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_287"/>
+        </listOfReactants>
+        <notes>path:hsa00140-287-&amp;gt;path:hsa00140-99</notes>
+      </reaction>
+      <reaction id="re60" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_87"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_286"/>
+        </listOfReactants>
+        <notes>path:hsa00140-286-&amp;gt;path:hsa00140-87</notes>
+      </reaction>
+      <reaction id="re61" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_89"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_289"/>
+        </listOfReactants>
+        <notes>path:hsa00140-289-&amp;gt;path:hsa00140-89</notes>
+      </reaction>
+      <reaction id="re62" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_84"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_282"/>
+        </listOfReactants>
+        <notes>path:hsa00140-282-&amp;gt;path:hsa00140-84</notes>
+      </reaction>
+      <reaction id="re63" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_82"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_283"/>
+        </listOfReactants>
+        <notes>path:hsa00140-283-&amp;gt;path:hsa00140-82</notes>
+      </reaction>
+      <reaction id="re64" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_85"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_284"/>
+        </listOfReactants>
+        <notes>path:hsa00140-284-&amp;gt;path:hsa00140-85</notes>
+      </reaction>
+      <reaction id="re65" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_86"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_285"/>
+        </listOfReactants>
+        <notes>path:hsa00140-285-&amp;gt;path:hsa00140-86</notes>
+      </reaction>
+      <reaction id="re66" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_81"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_280"/>
+        </listOfReactants>
+        <notes>path:hsa00140-280-&amp;gt;path:hsa00140-81</notes>
+      </reaction>
+      <reaction id="re67" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_243"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_52"/>
+        </listOfReactants>
+        <notes>path:hsa00140-52-&amp;gt;path:hsa00140-243</notes>
+      </reaction>
+      <reaction id="re68" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_251"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_44"/>
+        </listOfReactants>
+        <notes>path:hsa00140-44-&amp;gt;path:hsa00140-251</notes>
+      </reaction>
+      <reaction id="re69" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_256"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_45"/>
+        </listOfReactants>
+        <notes>path:hsa00140-45-&amp;gt;path:hsa00140-256</notes>
+      </reaction>
+      <reaction id="re70" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_197"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_62"/>
+        </listOfReactants>
+        <notes>path:hsa00140-62-&amp;gt;path:hsa00140-197</notes>
+      </reaction>
+      <reaction id="re71" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_195"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_62"/>
+        </listOfReactants>
+        <notes>path:hsa00140-62-&amp;gt;path:hsa00140-195</notes>
+      </reaction>
+      <reaction id="re72" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_194"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_62"/>
+        </listOfReactants>
+        <notes>path:hsa00140-62-&amp;gt;path:hsa00140-194</notes>
+      </reaction>
+      <reaction id="re73" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_193"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_62"/>
+        </listOfReactants>
+        <notes>path:hsa00140-62-&amp;gt;path:hsa00140-193</notes>
+      </reaction>
+      <reaction id="re74" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_200"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_64"/>
+        </listOfReactants>
+        <notes>path:hsa00140-64-&amp;gt;path:hsa00140-200</notes>
+      </reaction>
+      <reaction id="re75" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_198"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_64"/>
+        </listOfReactants>
+        <notes>path:hsa00140-64-&amp;gt;path:hsa00140-198</notes>
+      </reaction>
+      <reaction id="re76" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_196"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_64"/>
+        </listOfReactants>
+        <notes>path:hsa00140-64-&amp;gt;path:hsa00140-196</notes>
+      </reaction>
+      <reaction id="re77" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_236"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_56"/>
+        </listOfReactants>
+        <notes>path:hsa00140-56-&amp;gt;path:hsa00140-236</notes>
+      </reaction>
+      <reaction id="re78" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_232"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_59"/>
+        </listOfReactants>
+        <notes>path:hsa00140-59-&amp;gt;path:hsa00140-232</notes>
+      </reaction>
+      <reaction id="re79" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_224"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_75"/>
+        </listOfReactants>
+        <notes>path:hsa00140-75-&amp;gt;path:hsa00140-224</notes>
+      </reaction>
+      <reaction id="re80" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_223"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_75"/>
+        </listOfReactants>
+        <notes>path:hsa00140-75-&amp;gt;path:hsa00140-223</notes>
+      </reaction>
+      <reaction id="re81" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_327"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfReactants>
+        <notes>path:hsa00140-73-&amp;gt;path:hsa00140-327</notes>
+      </reaction>
+      <reaction id="re82" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_229"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfReactants>
+        <notes>path:hsa00140-73-&amp;gt;path:hsa00140-229</notes>
+      </reaction>
+      <reaction id="re83" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_228"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfReactants>
+        <notes>path:hsa00140-73-&amp;gt;path:hsa00140-228</notes>
+      </reaction>
+      <reaction id="re84" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_221"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfReactants>
+        <notes>path:hsa00140-73-&amp;gt;path:hsa00140-221</notes>
+      </reaction>
+      <reaction id="re85" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_219"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfReactants>
+        <notes>path:hsa00140-73-&amp;gt;path:hsa00140-219</notes>
+      </reaction>
+      <reaction id="re86" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_329"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_307"/>
+        </listOfReactants>
+        <notes>path:hsa00140-307-&amp;gt;path:hsa00140-329</notes>
+      </reaction>
+      <reaction id="re87" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_111"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_305"/>
+        </listOfReactants>
+        <notes>path:hsa00140-305-&amp;gt;path:hsa00140-111</notes>
+      </reaction>
+      <reaction id="re88" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_110"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_306"/>
+        </listOfReactants>
+        <notes>path:hsa00140-306-&amp;gt;path:hsa00140-110</notes>
+      </reaction>
+      <reaction id="re89" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_117"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_303"/>
+        </listOfReactants>
+        <notes>path:hsa00140-303-&amp;gt;path:hsa00140-117</notes>
+      </reaction>
+      <reaction id="re90" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_105"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_301"/>
+        </listOfReactants>
+        <notes>path:hsa00140-301-&amp;gt;path:hsa00140-105</notes>
+      </reaction>
+      <reaction id="re91" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_104"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_300"/>
+        </listOfReactants>
+        <notes>path:hsa00140-300-&amp;gt;path:hsa00140-104</notes>
+      </reaction>
+      <reaction id="re92" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_62"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_69"/>
+        </listOfReactants>
+        <notes>path:hsa00140-69-&amp;gt;path:hsa00140-62</notes>
+      </reaction>
+      <reaction id="re93" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_285"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_85"/>
+        </listOfReactants>
+        <notes>path:hsa00140-85-&amp;gt;path:hsa00140-285</notes>
+      </reaction>
+      <reaction id="re94" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_279"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_81"/>
+        </listOfReactants>
+        <notes>path:hsa00140-81-&amp;gt;path:hsa00140-279</notes>
+      </reaction>
+      <reaction id="re95" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_282"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_83"/>
+        </listOfReactants>
+        <notes>path:hsa00140-83-&amp;gt;path:hsa00140-282</notes>
+      </reaction>
+      <reaction id="re96" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_284"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_82"/>
+        </listOfReactants>
+        <notes>path:hsa00140-82-&amp;gt;path:hsa00140-284</notes>
+      </reaction>
+      <reaction id="re97" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_303"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_111"/>
+        </listOfReactants>
+        <notes>path:hsa00140-111-&amp;gt;path:hsa00140-303</notes>
+      </reaction>
+      <reaction id="re98" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_305"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_110"/>
+        </listOfReactants>
+        <notes>path:hsa00140-110-&amp;gt;path:hsa00140-305</notes>
+      </reaction>
+      <reaction id="re99" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_226"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_78"/>
+        </listOfReactants>
+        <notes>path:hsa00140-78-&amp;gt;path:hsa00140-226</notes>
+      </reaction>
+      <reaction id="re100" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_225"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_78"/>
+        </listOfReactants>
+        <notes>path:hsa00140-78-&amp;gt;path:hsa00140-225</notes>
+      </reaction>
+      <reaction id="re101" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_278"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_79"/>
+        </listOfReactants>
+        <notes>path:hsa00140-79-&amp;gt;path:hsa00140-278</notes>
+      </reaction>
+      <reaction id="re102" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_227"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_10"/>
+        </listOfReactants>
+        <notes>path:hsa00140-10-&amp;gt;path:hsa00140-227</notes>
+      </reaction>
+      <reaction id="re103" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_346"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_320"/>
+        </listOfReactants>
+        <notes>path:hsa00140-320-&amp;gt;path:hsa00140-346</notes>
+      </reaction>
+      <reaction id="re104" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_229"/>
+        </listOfReactants>
+        <notes>path:hsa00140-229-&amp;gt;path:hsa00140-339</notes>
+      </reaction>
+      <reaction id="re105" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_228"/>
+        </listOfReactants>
+        <notes>path:hsa00140-228-&amp;gt;path:hsa00140-339</notes>
+      </reaction>
+      <reaction id="re106" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_337"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_227"/>
+        </listOfReactants>
+        <notes>path:hsa00140-227-&amp;gt;path:hsa00140-337</notes>
+      </reaction>
+      <reaction id="re107" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_299"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_329"/>
+        </listOfReactants>
+        <notes>path:hsa00140-329-&amp;gt;path:hsa00140-299</notes>
+      </reaction>
+      <reaction id="re108" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_297"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_329"/>
+        </listOfReactants>
+        <notes>path:hsa00140-329-&amp;gt;path:hsa00140-297</notes>
+      </reaction>
+      <reaction id="re109" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_287"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_329"/>
+        </listOfReactants>
+        <notes>path:hsa00140-329-&amp;gt;path:hsa00140-287</notes>
+      </reaction>
+      <reaction id="re110" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_226"/>
+        </listOfReactants>
+        <notes>path:hsa00140-226-&amp;gt;path:hsa00140-340</notes>
+      </reaction>
+      <reaction id="re111" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_320"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_328"/>
+        </listOfReactants>
+        <notes>path:hsa00140-328-&amp;gt;path:hsa00140-320</notes>
+      </reaction>
+      <reaction id="re112" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_225"/>
+        </listOfReactants>
+        <notes>path:hsa00140-225-&amp;gt;path:hsa00140-340</notes>
+      </reaction>
+      <reaction id="re113" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_326"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_327"/>
+        </listOfReactants>
+        <notes>path:hsa00140-327-&amp;gt;path:hsa00140-326</notes>
+      </reaction>
+      <reaction id="re114" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_76"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_224"/>
+        </listOfReactants>
+        <notes>path:hsa00140-224-&amp;gt;path:hsa00140-76</notes>
+      </reaction>
+      <reaction id="re115" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_76"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_223"/>
+        </listOfReactants>
+        <notes>path:hsa00140-223-&amp;gt;path:hsa00140-76</notes>
+      </reaction>
+      <reaction id="re116" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_75"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_221"/>
+        </listOfReactants>
+        <notes>path:hsa00140-221-&amp;gt;path:hsa00140-75</notes>
+      </reaction>
+      <reaction id="re117" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_73"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_220"/>
+        </listOfReactants>
+        <notes>path:hsa00140-220-&amp;gt;path:hsa00140-73</notes>
+      </reaction>
+      <reaction id="re118" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_216"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_20"/>
+        </listOfReactants>
+        <notes>path:hsa00140-20-&amp;gt;path:hsa00140-216</notes>
+      </reaction>
+      <reaction id="re119" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_215"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_20"/>
+        </listOfReactants>
+        <notes>path:hsa00140-20-&amp;gt;path:hsa00140-215</notes>
+      </reaction>
+      <reaction id="re120" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_205"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_11"/>
+        </listOfReactants>
+        <notes>path:hsa00140-11-&amp;gt;path:hsa00140-205</notes>
+      </reaction>
+      <reaction id="re121" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_204"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_11"/>
+        </listOfReactants>
+        <notes>path:hsa00140-11-&amp;gt;path:hsa00140-204</notes>
+      </reaction>
+      <reaction id="re122" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_115"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_312"/>
+        </listOfReactants>
+        <notes>path:hsa00140-312-&amp;gt;path:hsa00140-115</notes>
+      </reaction>
+      <reaction id="re123" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_20"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_217"/>
+        </listOfReactants>
+        <notes>path:hsa00140-217-&amp;gt;path:hsa00140-20</notes>
+      </reaction>
+      <reaction id="re124" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_332"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_219"/>
+        </listOfReactants>
+        <notes>path:hsa00140-219-&amp;gt;path:hsa00140-332</notes>
+      </reaction>
+      <reaction id="re125" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_335"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_214"/>
+        </listOfReactants>
+        <notes>path:hsa00140-214-&amp;gt;path:hsa00140-335</notes>
+      </reaction>
+      <reaction id="re126" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_335"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_213"/>
+        </listOfReactants>
+        <notes>path:hsa00140-213-&amp;gt;path:hsa00140-335</notes>
+      </reaction>
+      <reaction id="re127" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_216"/>
+        </listOfReactants>
+        <notes>path:hsa00140-216-&amp;gt;path:hsa00140-23</notes>
+      </reaction>
+      <reaction id="re128" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_215"/>
+        </listOfReactants>
+        <notes>path:hsa00140-215-&amp;gt;path:hsa00140-23</notes>
+      </reaction>
+      <reaction id="re129" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_210"/>
+        </listOfReactants>
+        <notes>path:hsa00140-210-&amp;gt;path:hsa00140-341</notes>
+      </reaction>
+      <reaction id="re130" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_210"/>
+        </listOfReactants>
+        <notes>path:hsa00140-210-&amp;gt;path:hsa00140-330</notes>
+      </reaction>
+      <reaction id="re131" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_344"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_212"/>
+        </listOfReactants>
+        <notes>path:hsa00140-212-&amp;gt;path:hsa00140-344</notes>
+      </reaction>
+      <reaction id="re132" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_10"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_212"/>
+        </listOfReactants>
+        <notes>path:hsa00140-212-&amp;gt;path:hsa00140-10</notes>
+      </reaction>
+      <reaction id="re133" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_344"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_211"/>
+        </listOfReactants>
+        <notes>path:hsa00140-211-&amp;gt;path:hsa00140-344</notes>
+      </reaction>
+      <reaction id="re134" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_10"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_211"/>
+        </listOfReactants>
+        <notes>path:hsa00140-211-&amp;gt;path:hsa00140-10</notes>
+      </reaction>
+      <reaction id="re135" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_296"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfReactants>
+        <notes>path:hsa00140-340-&amp;gt;path:hsa00140-296</notes>
+      </reaction>
+      <reaction id="re136" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_295"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfReactants>
+        <notes>path:hsa00140-340-&amp;gt;path:hsa00140-295</notes>
+      </reaction>
+      <reaction id="re137" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_293"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfReactants>
+        <notes>path:hsa00140-340-&amp;gt;path:hsa00140-293</notes>
+      </reaction>
+      <reaction id="re138" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_289"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_340"/>
+        </listOfReactants>
+        <notes>path:hsa00140-340-&amp;gt;path:hsa00140-289</notes>
+      </reaction>
+      <reaction id="re139" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_263"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_30"/>
+        </listOfReactants>
+        <notes>path:hsa00140-30-&amp;gt;path:hsa00140-263</notes>
+      </reaction>
+      <reaction id="re140" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_329"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_3"/>
+        </listOfReactants>
+        <notes>path:hsa00140-3-&amp;gt;path:hsa00140-329</notes>
+      </reaction>
+      <reaction id="re141" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_336"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_3"/>
+        </listOfReactants>
+        <notes>path:hsa00140-3-&amp;gt;path:hsa00140-336</notes>
+      </reaction>
+      <reaction id="re142" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_209"/>
+        </listOfReactants>
+        <notes>path:hsa00140-209-&amp;gt;path:hsa00140-341</notes>
+      </reaction>
+      <reaction id="re143" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_209"/>
+        </listOfReactants>
+        <notes>path:hsa00140-209-&amp;gt;path:hsa00140-330</notes>
+      </reaction>
+      <reaction id="re144" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_65"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_208"/>
+        </listOfReactants>
+        <notes>path:hsa00140-208-&amp;gt;path:hsa00140-65</notes>
+      </reaction>
+      <reaction id="re145" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_65"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_207"/>
+        </listOfReactants>
+        <notes>path:hsa00140-207-&amp;gt;path:hsa00140-65</notes>
+      </reaction>
+      <reaction id="re146" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_244"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_346"/>
+        </listOfReactants>
+        <notes>path:hsa00140-346-&amp;gt;path:hsa00140-244</notes>
+      </reaction>
+      <reaction id="re147" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_267"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_26"/>
+        </listOfReactants>
+        <notes>path:hsa00140-26-&amp;gt;path:hsa00140-267</notes>
+      </reaction>
+      <reaction id="re148" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_66"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_206"/>
+        </listOfReactants>
+        <notes>path:hsa00140-206-&amp;gt;path:hsa00140-66</notes>
+      </reaction>
+      <reaction id="re149" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_235"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_345"/>
+        </listOfReactants>
+        <notes>path:hsa00140-345-&amp;gt;path:hsa00140-235</notes>
+      </reaction>
+      <reaction id="re150" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_266"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_25"/>
+        </listOfReactants>
+        <notes>path:hsa00140-25-&amp;gt;path:hsa00140-266</notes>
+      </reaction>
+      <reaction id="re151" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_260"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_344"/>
+        </listOfReactants>
+        <notes>path:hsa00140-344-&amp;gt;path:hsa00140-260</notes>
+      </reaction>
+      <reaction id="re152" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_258"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_344"/>
+        </listOfReactants>
+        <notes>path:hsa00140-344-&amp;gt;path:hsa00140-258</notes>
+      </reaction>
+      <reaction id="re153" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_237"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_343"/>
+        </listOfReactants>
+        <notes>path:hsa00140-343-&amp;gt;path:hsa00140-237</notes>
+      </reaction>
+      <reaction id="re154" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_233"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_343"/>
+        </listOfReactants>
+        <notes>path:hsa00140-343-&amp;gt;path:hsa00140-233</notes>
+      </reaction>
+      <reaction id="re155" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_270"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfReactants>
+        <notes>path:hsa00140-23-&amp;gt;path:hsa00140-270</notes>
+      </reaction>
+      <reaction id="re156" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_262"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfReactants>
+        <notes>path:hsa00140-23-&amp;gt;path:hsa00140-262</notes>
+      </reaction>
+      <reaction id="re157" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_259"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_23"/>
+        </listOfReactants>
+        <notes>path:hsa00140-23-&amp;gt;path:hsa00140-259</notes>
+      </reaction>
+      <reaction id="re158" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_253"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_342"/>
+        </listOfReactants>
+        <notes>path:hsa00140-342-&amp;gt;path:hsa00140-253</notes>
+      </reaction>
+      <reaction id="re159" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_257"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfReactants>
+        <notes>path:hsa00140-341-&amp;gt;path:hsa00140-257</notes>
+      </reaction>
+      <reaction id="re160" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_248"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfReactants>
+        <notes>path:hsa00140-341-&amp;gt;path:hsa00140-248</notes>
+      </reaction>
+      <reaction id="re161" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_246"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfReactants>
+        <notes>path:hsa00140-341-&amp;gt;path:hsa00140-246</notes>
+      </reaction>
+      <reaction id="re162" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_238"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_341"/>
+        </listOfReactants>
+        <notes>path:hsa00140-341-&amp;gt;path:hsa00140-238</notes>
+      </reaction>
+      <reaction id="re163" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_200"/>
+        </listOfReactants>
+        <notes>path:hsa00140-200-&amp;gt;path:hsa00140-330</notes>
+      </reaction>
+      <reaction id="re164" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_68"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_200"/>
+        </listOfReactants>
+        <notes>path:hsa00140-200-&amp;gt;path:hsa00140-68</notes>
+      </reaction>
+      <reaction id="re165" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_343"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_205"/>
+        </listOfReactants>
+        <notes>path:hsa00140-205-&amp;gt;path:hsa00140-343</notes>
+      </reaction>
+      <reaction id="re166" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_343"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_204"/>
+        </listOfReactants>
+        <notes>path:hsa00140-204-&amp;gt;path:hsa00140-343</notes>
+      </reaction>
+      <reaction id="re167" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_11"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_203"/>
+        </listOfReactants>
+        <notes>path:hsa00140-203-&amp;gt;path:hsa00140-11</notes>
+      </reaction>
+      <reaction id="re168" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_331"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_202"/>
+        </listOfReactants>
+        <notes>path:hsa00140-202-&amp;gt;path:hsa00140-331</notes>
+      </reaction>
+      <reaction id="re169" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_247"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_38"/>
+        </listOfReactants>
+        <notes>path:hsa00140-38-&amp;gt;path:hsa00140-247</notes>
+      </reaction>
+      <reaction id="re170" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_265"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_335"/>
+        </listOfReactants>
+        <notes>path:hsa00140-335-&amp;gt;path:hsa00140-265</notes>
+      </reaction>
+      <reaction id="re171" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_272"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_37"/>
+        </listOfReactants>
+        <notes>path:hsa00140-37-&amp;gt;path:hsa00140-272</notes>
+      </reaction>
+      <reaction id="re172" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_307"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_334"/>
+        </listOfReactants>
+        <notes>path:hsa00140-334-&amp;gt;path:hsa00140-307</notes>
+      </reaction>
+      <reaction id="re173" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_217"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_337"/>
+        </listOfReactants>
+        <notes>path:hsa00140-337-&amp;gt;path:hsa00140-217</notes>
+      </reaction>
+      <reaction id="re174" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_214"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_337"/>
+        </listOfReactants>
+        <notes>path:hsa00140-337-&amp;gt;path:hsa00140-214</notes>
+      </reaction>
+      <reaction id="re175" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_213"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_337"/>
+        </listOfReactants>
+        <notes>path:hsa00140-337-&amp;gt;path:hsa00140-213</notes>
+      </reaction>
+      <reaction id="re176" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_312"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_336"/>
+        </listOfReactants>
+        <notes>path:hsa00140-336-&amp;gt;path:hsa00140-312</notes>
+      </reaction>
+      <reaction id="re177" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_306"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_336"/>
+        </listOfReactants>
+        <notes>path:hsa00140-336-&amp;gt;path:hsa00140-306</notes>
+      </reaction>
+      <reaction id="re178" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_290"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_336"/>
+        </listOfReactants>
+        <notes>path:hsa00140-336-&amp;gt;path:hsa00140-290</notes>
+      </reaction>
+      <reaction id="re179" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_199"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_331"/>
+        </listOfReactants>
+        <notes>path:hsa00140-331-&amp;gt;path:hsa00140-199</notes>
+      </reaction>
+      <reaction id="re180" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_230"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfReactants>
+        <notes>path:hsa00140-330-&amp;gt;path:hsa00140-230</notes>
+      </reaction>
+      <reaction id="re181" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_208"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfReactants>
+        <notes>path:hsa00140-330-&amp;gt;path:hsa00140-208</notes>
+      </reaction>
+      <reaction id="re182" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_207"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfReactants>
+        <notes>path:hsa00140-330-&amp;gt;path:hsa00140-207</notes>
+      </reaction>
+      <reaction id="re183" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_206"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfReactants>
+        <notes>path:hsa00140-330-&amp;gt;path:hsa00140-206</notes>
+      </reaction>
+      <reaction id="re184" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_203"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_330"/>
+        </listOfReactants>
+        <notes>path:hsa00140-330-&amp;gt;path:hsa00140-203</notes>
+      </reaction>
+      <reaction id="re185" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_261"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_33"/>
+        </listOfReactants>
+        <notes>path:hsa00140-33-&amp;gt;path:hsa00140-261</notes>
+      </reaction>
+      <reaction id="re186" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_241"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_333"/>
+        </listOfReactants>
+        <notes>path:hsa00140-333-&amp;gt;path:hsa00140-241</notes>
+      </reaction>
+      <reaction id="re187" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_234"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_333"/>
+        </listOfReactants>
+        <notes>path:hsa00140-333-&amp;gt;path:hsa00140-234</notes>
+      </reaction>
+      <reaction id="re188" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_220"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_332"/>
+        </listOfReactants>
+        <notes>path:hsa00140-332-&amp;gt;path:hsa00140-220</notes>
+      </reaction>
+      <reaction id="re189" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_286"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfReactants>
+        <notes>path:hsa00140-339-&amp;gt;path:hsa00140-286</notes>
+      </reaction>
+      <reaction id="re190" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_283"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfReactants>
+        <notes>path:hsa00140-339-&amp;gt;path:hsa00140-283</notes>
+      </reaction>
+      <reaction id="re191" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_280"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfReactants>
+        <notes>path:hsa00140-339-&amp;gt;path:hsa00140-280</notes>
+      </reaction>
+      <reaction id="re192" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_277"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_339"/>
+        </listOfReactants>
+        <notes>path:hsa00140-339-&amp;gt;path:hsa00140-277</notes>
+      </reaction>
+      <reaction id="re193" reversible="false">
+        <listOfModifiers/>
+        <listOfProducts>
+          <speciesReference species="path_hsa00140_202"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="path_hsa00140_338"/>
+        </listOfReactants>
+        <notes>path:hsa00140-338-&amp;gt;path:hsa00140-202</notes>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

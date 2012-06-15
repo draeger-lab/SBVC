@@ -62,6 +62,7 @@ import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.ArrayUtils;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
+import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.Species;
 import de.zbit.util.StringUtil;
 import de.zbit.util.Utils;
@@ -139,7 +140,7 @@ public abstract class BioPAX2KGML {
   public static final String keggUnknownName = "unknown";
 
   /**
-   * TODO: If these mappers are static, we must somehow distinguish instances for different species!
+   * TODO: If these mappers are static, we must somehow distinguish instances for different !
    * mapper to map gene symbols to gene ids
    */
   protected static GeneSymbol2GeneIDMapper geneSymbolMapper = null;
@@ -197,17 +198,19 @@ public abstract class BioPAX2KGML {
    */
   protected static String mapGeneIDToKEGGID(Integer geneID, Species species) {
     String keggName = null;
-    try {
-      keggName = geneIDKEGGmapper.map(geneID);
-    } catch (Exception e) {
-      log.log(Level.WARNING, "Could not map geneid: '" + geneID.toString() + "' to a KEGG id, "
-          + "'speciesAbbreviation:geneID will be used instead.", e);
-    }
+    if (geneIDKEGGmapper != null && !species.getKeggAbbr().isEmpty()){
+      try {
+        keggName = geneIDKEGGmapper.map(geneID);
+      } catch (Exception e) {
+        log.log(Level.WARNING, "Could not map geneid: '" + geneID.toString() + "' to a KEGG id, "
+            + "'speciesAbbreviation:geneID will be used instead.", e);
+      }
 
-    if (keggName == null) {
-      keggName = species.getKeggAbbr() + ":" + geneID.toString();
+      if (keggName == null) {
+        keggName = species.getKeggAbbr() + ":" + geneID.toString();
+      }  
     }
-
+    
     return keggName;
   }
 
@@ -259,20 +262,24 @@ public abstract class BioPAX2KGML {
    * @param species
    */
   public static void initalizeMappers(Species species) {
-    try {
-      geneSymbolMapper = new GeneSymbol2GeneIDMapper(species.getCommonName());
-    } catch (IOException e) {
-      log.log(Level.SEVERE, "Could not initalize mapper for species '" + species.toString() + "'!",
-          e);
-      System.exit(1);
-    }
+    if (species != null){
+      try {
+        geneSymbolMapper = new GeneSymbol2GeneIDMapper(species.getCommonName());
+      } catch (IOException e) {
+        log.log(Level.SEVERE, "Could not initalize mapper for species '" + species.toString() + "'!",
+            e);
+        System.exit(1);
+      }
 
-    try {
-      geneIDKEGGmapper = new GeneID2KeggIDMapper(species);
-    } catch (IOException e) {
-      log.log(Level.SEVERE, "Error while initializing gene id to KEGG ID mapper for species '"
-          + species.toString() + "'.", e);
-      System.exit(1);
+      if (species.getKeggAbbr()!=null){
+        try {
+          geneIDKEGGmapper = new GeneID2KeggIDMapper(species);
+        } catch (IOException e) {
+          log.log(Level.SEVERE, "Error while initializing gene id to KEGG ID mapper for species '"
+              + species.toString() + "'.", e);
+          System.exit(1);
+        }  
+      }
     }
   }
 
@@ -354,23 +361,26 @@ public abstract class BioPAX2KGML {
     log.finest("getGeneIDOverGeneSymbol");
     Integer geneID = null;
 
-    for (String symbol : geneSymbols) {
-      try {
-        geneID = geneSymbolMapper.map(symbol);
-      } catch (Exception e) {
-        log.log(Level.WARNING, "Error while mapping name: " + symbol + ".", e);
-      }
+    if (geneSymbolMapper!=null){
+      for (String symbol : geneSymbols) {
+        try {
+          geneID = geneSymbolMapper.map(symbol);
+        } catch (Exception e) {
+          log.log(Level.WARNING, "Error while mapping name: " + symbol + ".", e);
+        }
 
-      if (geneID != null) {
-        return geneID;
-      } else if (symbol.contains("-")) {
-        return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace("-", "")));
-      } else if (symbol.contains(" ")) {
-        return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace(" ", "_")));
-      } else {
-        log.log(Level.FINER, "----- not found " + symbol);
-      }
+        if (geneID != null) {
+          return geneID;
+        } else if (symbol.contains("-")) {
+          return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace("-", "")));
+        } else if (symbol.contains(" ")) {
+          return getEntrezGeneIDForGeneSymbol(Collections.singleton(symbol.replace(" ", "_")));
+        } else {
+          log.log(Level.FINER, "----- not found " + symbol);
+        }
+      }  
     }
+    
     return geneID;
   }
   
@@ -382,9 +392,9 @@ public abstract class BioPAX2KGML {
    * @return
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (String fileName, String destinationFolder, boolean writeEntryExtended) {
+    (String fileName, String destinationFolder, boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
-    return createPathwaysFromModel(m, fileName, destinationFolder, writeEntryExtended); 
+    return createPathwaysFromModel(m, fileName, destinationFolder, writeEntryExtended, species); 
   }
   
   /**
@@ -393,7 +403,7 @@ public abstract class BioPAX2KGML {
    * @param m
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (Model m, String fileName, String destinationFolder, boolean writeEntryExtended) {
+    (Model m, String fileName, String destinationFolder, boolean writeEntryExtended, Species species) {
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       new ArrayList<de.zbit.kegg.parser.pathway.Pathway>(); 
        
@@ -404,31 +414,32 @@ public abstract class BioPAX2KGML {
       }
 
       String comment = getRDFScomment(fileName);
+      
      
       // BioPax Level 2 
       if (m.getLevel().equals(BioPAXLevel.L2)) {
         BioPAXL22KGML bp = new BioPAXL22KGML();
         Set<pathway> pathways = m.getObjects(pathway.class);
-        // if we want to split the incomming file
+        // if we want to split the incoming file
         if (pathways!=null && pathways.size()>0) {
           // Split mode and we have pathway objects
-          keggPWs = bp.createPathways(m, comment, pathways);
+          keggPWs = bp.createPathways(m, comment, pathways, species);
         } else {
           // All modes, but we have NO pathway objects (use the model)
           de.zbit.kegg.parser.pathway.Pathway keggPW = 
-            bp.createPathwayFromBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()));
+            bp.createPathwayFromBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()), species);
           keggPWs.add(keggPW);   
         }
       } //BioPax Level 3
         else if (m.getLevel().equals(BioPAXLevel.L3)) {
         BioPAXL32KGML bp = new BioPAXL32KGML();
         Set<Pathway> pathways = m.getObjects(Pathway.class);
-        // if we want to split the incomming file
+        // if we want to split the incoming file
         if (pathways!=null && pathways.size()>0) {
-          keggPWs = bp.createPathways(m, comment, pathways);
+          keggPWs = bp.createPathways(m, comment, pathways, species);
         } else {
           de.zbit.kegg.parser.pathway.Pathway keggPW = bp.createPathwayFromBioPaxFile
-          (m, comment, FileTools.removeFileExtension(f.getName()));
+          (m, comment, FileTools.removeFileExtension(f.getName()), species);
           keggPWs.add(keggPW);          
         }
       } else {
@@ -462,11 +473,11 @@ public abstract class BioPAX2KGML {
    * @param writeEntryExtended
    */
   public static void writeKGMLsForPathways(String fileName, String destinationFolder,
-      boolean writeEntryExtended) {
+      boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       BioPAX2KGML.createPathwaysFromModel(m, fileName, destinationFolder,
-      writeEntryExtended);
+      writeEntryExtended, species);
     BioPAX2KGML.writeKGMLsForPathways(m, destinationFolder, keggPWs, writeEntryExtended);
   }
   
@@ -508,12 +519,14 @@ public abstract class BioPAX2KGML {
    */
   public static String getRDFScomment(String file) {
     String line;
+    int lineCounter = 0;
     StringBuilder lines = new StringBuilder(128);
     try {
       BufferedReader br = OpenFile.openFile(file);
-      while ((line = br.readLine())!=null){
+      while ((line = br.readLine()) != null){
+        lineCounter++;
         lines.append(line);
-        if (StringUtil.containsIgnoreCase(line, "</rdfs:comment>")) {
+        if (StringUtil.containsIgnoreCase(line, "</owl:Ontology>") || lineCounter>50) {
           break;
         }
       }
@@ -521,7 +534,7 @@ public abstract class BioPAX2KGML {
       e.printStackTrace();
     }
     
-    Pattern pattern = Pattern.compile(".*<rdfs:comment.*?\">(.*?)</rdfs:comment>.*", Pattern.MULTILINE);
+    Pattern pattern = Pattern.compile(".*<rdfs:comment.*?>(.*?)</rdfs:comment>.*", Pattern.MULTILINE);
     Matcher m = pattern.matcher(lines.toString());
     if (m.find()) {
       return m.group(1);
@@ -613,11 +626,8 @@ public abstract class BioPAX2KGML {
   }
 
   public de.zbit.kegg.parser.pathway.Pathway createPathwayInstance(String comment, Object pathway,
-      Species speciespathwayName) {
-    return createPathwayInstance(comment, pathway, speciespathwayName, null);
-  }
-  public de.zbit.kegg.parser.pathway.Pathway createPathwayInstance(String comment, Object pathway,
-      Species species, String pathwayName) {
+      Species species, String pathwayName, 
+      Map<DatabaseIdentifiers.IdentifierDatabases, Collection<String>> identifiers) {
     // create the pathway
     
     int number = pathway.hashCode();
@@ -632,7 +642,7 @@ public abstract class BioPAX2KGML {
       ValuePair<String, String> sAndl = getSourceDBL2(p.getDATA_SOURCE());
       sourceDB = sAndl.getA();
       link = sAndl.getB();
-      pwName = p.getNAME();
+      pwName = p.getNAME();      
     } else if (pathway instanceof Pathway) { // Level 3
       Pathway p = (Pathway) pathway;
       ValuePair<String, String> sAndl = getSourceDBL3(p.getDataSource());
@@ -644,10 +654,17 @@ public abstract class BioPAX2KGML {
       pwName = pathwayName;
     }
     
+    String org = "";
+    if (species!=null && species.getKeggAbbr()!=null){
+      org = species.getKeggAbbr();
+    }
     de.zbit.kegg.parser.pathway.Pathway keggPW = new de.zbit.kegg.parser.pathway.Pathway(
-        sourceDB + String.valueOf(number), species.getKeggAbbr(), number, pwName);
+        sourceDB + String.valueOf(number), org, number, pwName);
     keggPW.setComment(comment);
     keggPW.setOriginFormatName("BioPAX");
+    if (identifiers!=null && !identifiers.isEmpty()){
+      keggPW.addDatabaseIdentifiers(identifiers);
+    }
     
     if(link!=null) {
       keggPW.setLink(link);

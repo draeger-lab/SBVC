@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml level="2" version="1" xmlns="http://www.sbml.org/sbml/level2">
+  <model>
+    <listOfCompartments>
+      <compartment id="default"/>
+      <compartment id="c1" name="cytosol"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="cGMP_dependent_protein_kinase_at_cytosol" name="cGMP_dependent_protein_kinase@cytosol" compartment="c1">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body>Reactome DB_ID: 427304</body>
+          </html>
+        </notes>
+      </species>
+      <species id="Cyclic_GMP_at_cytosol" name="Cyclic_GMP@cytosol" compartment="c1">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body>Reactome DB_ID: 30991</body>
+          </html>
+        </notes>
+      </species>
+      <species id="Cyclic_GMP_cGMP_dependent_protein_kinase_at_cytosol" name="Cyclic_GMP:cGMP_dependent_protein_kinase@cytosol" compartment="c1">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body>Reactome DB_ID: 427305</body>
+          </html>
+        </notes>
+      </species>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="cGMP_stimulates_Protein_Kinase_G">
+        <listOfProducts>
+          <speciesReference species="Cyclic_GMP_cGMP_dependent_protein_kinase_at_cytosol"/>
+        </listOfProducts>
+        <listOfReactants>
+          <speciesReference species="Cyclic_GMP_at_cytosol"/>
+          <speciesReference species="cGMP_dependent_protein_kinase_at_cytosol"/>
+        </listOfReactants>
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body>Authored: Akkerman, JW, 2009-06-03 ; 
+Reviewed: Kunapuli, SP, 2010-06-07 ; 
+Protein Kinase G (PKG) is a homodimer held together by a leucine zipper present in the N terminus. Each member of the dimer has two cyclic GMP (cGMP) binding sites, one low affinity and one high affinity. PKG was first described in various arthropods. Mammals have two PKG genes, prkg1 and prkg2, that encode PKG1 (cGKI) and PKG2 (cGKII). The N terminus (the first 90-100 residues) of PKG1 is encoded by two alternatively spliced exons that produce the isoforms PKG1alpha and PKG1beta. Both are cytosolic. PKG1 is present in high concentrations (>0.1 Ã?ÂµM) in all smooth muscles, platelets, cerebellum, hippocampus, dorsal root ganglia, neuromuscular endplate, and kidney. PKG1beta is the predominant PKG isoform in platelets. PKG1 is required for the inhibition of platelet activation by NO/cGMP. PKG2 is anchored at the plasma membrane by myristoylation of the N-terminal Gly-2 residue. PKG2 phosphorylates cystic fibrosis transmembrane conductance regulator. ; 
+Edited: Jupe, S, 2010-06-07  ; BIOPAX_REACTION_TYPE : biochemicalReaction</body>
+          </html>
+        </notes>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

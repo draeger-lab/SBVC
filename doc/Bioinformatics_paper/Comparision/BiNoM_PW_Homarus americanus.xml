@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml level="2" version="1" xmlns="http://www.sbml.org/sbml/level2">
+  <model>
+    <listOfCompartments>
+      <compartment id="default"/>
+      <compartment id="c1" name="cytosol"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="cGMP_dependent_protein_kinase_at_cytosol" name="cGMP_dependent_protein_kinase@cytosol" compartment="c1">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body>Reactome DB_ID: 427304</body>
+          </html>
+        </notes>
+      </species>
+    </listOfSpecies>
+    <listOfReactions/>
+  </model>
+</sbml>

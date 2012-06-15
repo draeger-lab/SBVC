@@ -40,6 +40,7 @@ import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.KeggParser;
 import de.zbit.kegg.parser.pathway.Pathway;
+import de.zbit.util.Species;
 import de.zbit.util.logging.LogUtil;
 import de.zbit.util.logging.OneLineFormatter;
 
@@ -55,17 +56,18 @@ public class BioPax2KGMLTest {
   
 
   private void testCreateKGMLsFromBioCartaModel(String file, String destinationFolder, 
-      boolean writeEntryExtended) {   
-    BioPAX2KGML.createPathwaysFromModel(file, destinationFolder, writeEntryExtended);    
+      boolean writeEntryExtended, Species species) {   
+    BioPAX2KGML.createPathwaysFromModel(file, destinationFolder, writeEntryExtended, species);    
   }  
   
   private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
-      boolean singleMode, boolean writeEntryExtended) {
+      boolean singleMode, boolean writeEntryExtended, Species species) {
     File f = new File(fileFolder);
     if (f.isDirectory()) {
       String[] files = f.list();
       for (String file : files) {
-        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, writeEntryExtended);    
+        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, 
+            writeEntryExtended, species);    
       }      
     }       
   }

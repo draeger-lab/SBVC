@@ -761,15 +761,6 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
   }
 
   /* (non-Javadoc)
-   * @see de.zbit.gui.BaseFrame#openFile(de.zbit.sbml.io.OpenedFile<org.sbml.jsbml.SBMLDocument>[])
-   */
-  @Override
-  protected OpenedFile<SBMLDocument>[] openFile(OpenedFile<SBMLDocument>... files) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
    * @see de.zbit.gui.BaseFrame#saveFileAs()
    */
   @Override

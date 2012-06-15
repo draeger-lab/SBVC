@@ -25,8 +25,10 @@
 package de.zbit.sbvc;
 
 import java.awt.Window;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,9 +50,12 @@ import de.zbit.kegg.api.cache.KeggInfoManagement;
 import de.zbit.kegg.gui.TranslatorUI;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.KEGG2SBMLqual;
+import de.zbit.resources.Resource;
 import de.zbit.sbvc.gui.SBVCUI;
 import de.zbit.sbvc.io.SBVCIOOptions;
+import de.zbit.util.Species;
 import de.zbit.util.Utils;
+import de.zbit.util.logging.LogUtil;
 import de.zbit.util.prefs.KeyProvider;
 import de.zbit.util.prefs.SBProperties;
 
@@ -84,9 +89,28 @@ public class SBVC extends Launcher{
     SBProperties props = appConf.getCmdArgs();
     String folderName = SBVCIOOptions.OUTPUT.getValue(props).getPath();
     String input = SBVCIOOptions.INPUT.getValue(props).getPath();
+    Integer speciesInput = SBVCIOOptions.SPECIES.getValue(props);
+
+    Species species = null;
+    if (speciesInput != null) {
+      int tax = speciesInput.intValue();
+      if (tax == 9606) {
+        species = new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606);  
+      } else if (tax == 10090) {
+        species = new Species("Mus musculus", "_MOUSE", "mouse", "mmu", 10090);  
+      } else {
+        species = Species.getSpeciesWithTaxonomyIDInList(speciesInput, new BufferedReader( 
+            new InputStreamReader(Resource.class.getResourceAsStream("speclist.txt"))), false);  
+      }
+    }
     
+    if(species == null){
+      log.warning("Taxonomy id '" + speciesInput + "' could not be assigned to a species.");
+    } else {
+      log.info("Entered species '" + species.getCommonName() + "' was identified.");
+    }
     
-    convertBioPAXToSBML(input, folderName);
+    convertBioPAXToSBML(input, folderName, species);
   }
 
   /**
@@ -96,10 +120,10 @@ public class SBVC extends Launcher{
    * @param splitMode <code>TRUE</code> if separate files for each pathway should
    * be created. <code>FALSE</code> to create a single output file.
    */
-  public void convertBioPAXToSBML(String input, String outputFolderName) {
+  public void convertBioPAXToSBML(String input, String outputFolderName, Species species) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPAX2KGML.createPathwaysFromModel(input, outputFolderName, false);
+      BioPAX2KGML.createPathwaysFromModel(input, outputFolderName, false, species);
     
     // translation to sbml
     KEGG2SBMLqual k2s = null;
@@ -115,6 +139,19 @@ public class SBVC extends Launcher{
     } else {
       k2s = new KEGG2SBMLqual();
     }
+    
+//    // original version
+//    // necessary that both reactions and relations are written to the file
+//    k2s.setConsiderReactions(true);
+//    k2s.setAddCellDesignerAnnots(false);
+//    k2s.setNameToAssign(NODE_NAMING.INTELLIGENT);
+//    k2s.setRemoveOrphans(false);
+//    k2s.setAutocompleteReactions(false);
+//    k2s.setRemoveWhiteNodes(false);
+//    k2s.setShowFormulaForCompounds(false);
+//    k2s.setRemovePathwayReferences(false);
+//    k2s.setAddLayoutExtension(false);
+//    k2s.setCheckAtomBalance(false);
     
     // necessary that both reactions and relations are written to the file
     k2s.setConsiderReactions(true);
@@ -161,6 +198,7 @@ public class SBVC extends Launcher{
     List<Class<? extends KeyProvider>> configList = new ArrayList<Class<? extends KeyProvider>>(3);
     configList.add(SBVCIOOptions.class);
     configList.add(GUIOptions.class);
+    configList.add(KEGGtranslatorOptions.class);
     return configList;
   }
 
@@ -175,7 +213,8 @@ public class SBVC extends Launcher{
    */
   @Override
   public String getAppName() {
-    return "System Biology Visualizer and Converter";
+    return "System Biology Visualizer and Converter"; 
+//    return "BioPAX2SBML"; // XXX: This is for the BioPAX2SBML converter
   }
   
   /* (non-Javadoc)
@@ -232,10 +271,11 @@ public class SBVC extends Launcher{
    * @param args
    */
   public static void main(String args[]) {
+    LogUtil.initializeLogging(Level.INFO);
     // "Merge" other applications with this one
     // Must be done first, because option defaults are changed
     integrateIntoKEGGtranslator();
-    GUIOptions.GUI.setDefaultValue(Boolean.TRUE);
+    GUIOptions.GUI.setDefaultValue(Boolean.FALSE);
     // Make an instance of this application
     new SBVC(args);
   }
@@ -251,6 +291,9 @@ public class SBVC extends Launcher{
     KEGGtranslatorOptions.REMOVE_WHITE_GENE_NODES.setDefaultValue(false);
     KEGGtranslatorOptions.AUTOCOMPLETE_REACTIONS.setDefaultValue(false);
     KEGGtranslatorOptions.AUTOCOMPLETE_REACTIONS.setVisible(false);
+    
+    KEGGtranslatorOptions.REMOVE_PATHWAY_REFERENCES.setDefaultValue(false);
+    
     // TODO: Modify all options further to fit the needs of SBVC.
     // Also set the real values (not only the default values) e.g. for autocomplete r.
     

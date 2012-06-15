@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+  <model>
+    <listOfCompartments>
+      <compartment metaid="mitochondria" id="mitochondria" name="mitochondria"/>
+      <compartment metaid="cytoplasm" id="cytoplasm" name="cytoplasm"/>
+      <compartment metaid="extracellular" id="extracellular" name="extracellular"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species metaid="CYCS_mitochondria" id="CYCS_mitochondria" name="CYCS in the mitochondria" compartment="mitochondria"/>
+      <species metaid="CYCS_cytoplasm" id="CYCS_cytoplasm" name="CYCS in the cytoplasm" compartment="cytoplasm"/>
+      <species metaid="TNF_extracellular" id="TNF_extracellular" name="TNF in the extracellular" compartment="extracellular"/>
+      <species metaid="PDCD8_mitochondria" id="PDCD8_mitochondria" name="PDCD8 in the mitochondria" compartment="mitochondria"/>
+      <species metaid="PDCD8_cytoplasm" id="PDCD8_cytoplasm" name="PDCD8 in the cytoplasm" compartment="cytoplasm"/>
+      <species metaid="MAPK3_cytoplasm" id="MAPK3_cytoplasm" name="MAPK3 in the cytoplasm" compartment="cytoplasm"/>
+      <species metaid="MAPK1_cytoplasm" id="MAPK1_cytoplasm" name="MAPK1 in the cytoplasm" compartment="cytoplasm"/>
+      <species metaid="MAPK1_cytoplasm2" id="MAPK1_cytoplasm2" name="MAPK1 in the cytoplasm" compartment="cytoplasm"/>
+      <species metaid="MAPK3_cytoplasm2" id="MAPK3_cytoplasm2" name="MAPK3 in the cytoplasm" compartment="cytoplasm"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction metaid="pid_i_103145" id="pid_i_103145" name="pid_i_103145">
+        <listOfReactants>
+          <speciesReference species="BAX2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="BAX3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103126" id="pid_i_103126" name="pid_i_103126">
+        <listOfReactants>
+          <speciesReference species="CRADD2"/>
+          <speciesReference species="BIRC32"/>
+          <speciesReference species="RIPK12"/>
+          <speciesReference species="TNF_TNF_R_SODD2"/>
+          <speciesReference species="MADD2"/>
+          <speciesReference species="TRAF22"/>
+          <speciesReference species="TRADD2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TNF_TNF_R_TRADD_MADD_cIAP_RIP_TRAF2_RAIDD2"/>
+          <speciesReference species="BAG42"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103133" id="pid_i_103133" name="pid_i_103133">
+        <listOfReactants>
+          <speciesReference species="NSMAF2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NSMAF3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_100341" id="pid_i_100341" name="pid_i_100341">
+        <listOfReactants>
+          <speciesReference species="MAP2K42"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAP2K43"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103132" id="pid_i_103132" name="pid_i_103132">
+        <listOfReactants>
+          <speciesReference species="CASP82"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="CASP83"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_100267" id="pid_i_100267" name="pid_i_100267">
+        <listOfReactants>
+          <speciesReference species="MAP2K22"/>
+          <speciesReference species="MAP2K12"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAP2K23"/>
+          <speciesReference species="MAP2K13"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103135" id="pid_i_103135" name="pid_i_103135">
+        <listOfReactants>
+          <speciesReference species="KSR2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="KSR3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103140" id="pid_i_103140" name="pid_i_103140">
+        <listOfReactants>
+          <speciesReference species="SMPD12"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="SMPD13"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103127" id="pid_i_103127" name="pid_i_103127">
+        <listOfReactants>
+          <speciesReference species="FADD_Caspase_82"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="FADD2"/>
+          <speciesReference species="CASP82"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103103" id="pid_i_103103" name="pid_i_103103">
+        <listOfReactants>
+          <speciesReference species="CYCS_mitochondria"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="CYCS_cytoplasm"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103129" id="pid_i_103129" name="pid_i_103129">
+        <listOfReactants>
+          <speciesReference species="IKKs2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="IKKs3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103153" id="pid_i_103153" name="pid_i_103153">
+        <listOfReactants>
+          <speciesReference species="MAP3K12"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAP3K13"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103125" id="pid_i_103125" name="pid_i_103125">
+        <listOfReactants>
+          <speciesReference species="TNF_R_SODD2"/>
+          <speciesReference species="TNF_TNF_R_SODD2"/>
+          <speciesReference species="TNF_extracellular"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="TNF_TNF_R_SODD2"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103148" id="pid_i_103148" name="pid_i_103148">
+        <listOfReactants>
+          <speciesReference species="PDCD8_mitochondria"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="PDCD8_cytoplasm"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_101532" id="pid_i_101532" name="pid_i_101532">
+        <listOfReactants>
+          <speciesReference species="MAPK3_cytoplasm"/>
+          <speciesReference species="MAPK1_cytoplasm"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAPK1_cytoplasm2"/>
+          <speciesReference species="MAPK3_cytoplasm2"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103146" id="pid_i_103146" name="pid_i_103146">
+        <listOfReactants>
+          <speciesReference species="BAD2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="BAD3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103134" id="pid_i_103134" name="pid_i_103134">
+        <listOfReactants>
+          <speciesReference species="sphingomyelin2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ceramide2"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_100342" id="pid_i_100342" name="pid_i_100342">
+        <listOfReactants>
+          <speciesReference species="MAPK82"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAPK83"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103136" id="pid_i_103136" name="pid_i_103136">
+        <listOfReactants>
+          <speciesReference species="RAF12"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="RAF13"/>
+        </listOfProducts>
+      </reaction>
+      <reaction metaid="pid_i_103128" id="pid_i_103128" name="pid_i_103128">
+        <listOfReactants>
+          <speciesReference species="MAP4K42"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="MAP4K43"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bp="http://www.biopax.org/release/biopax-level3.owl#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns="http://www.reactome.org/biopax/427306#" xml:base="http://www.reactome.org/biopax/427306">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.biopax.org/release/biopax-level3.owl" />
+  </owl:Ontology>
+  <bp:BiochemicalReaction rdf:ID="BiochemicalReaction1">
+    <bp:left rdf:resource="#PhysicalEntity1" />
+    <bp:participantStoichiometry rdf:resource="#Stoichiometry1" />
+    <bp:left rdf:resource="#SmallMolecule1" />
+    <bp:right rdf:resource="#Complex1" />
+    <bp:displayName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cGMP stimulates Protein Kinase G</bp:displayName>
+    <bp:xref rdf:resource="#UnificationXref9" />
+    <bp:xref rdf:resource="#UnificationXref10" />
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Protein Kinase G (PKG) is a homodimer held together by a leucine zipper present in the N terminus. Each member of the dimer has two cyclic GMP (cGMP) binding sites, one low affinity and one high affinity. PKG was first described in various arthropods. Mammals have two PKG genes, prkg1 and prkg2, that encode PKG1 (cGKI) and PKG2 (cGKII). The N terminus (the first 90-100 residues) of PKG1 is encoded by two alternatively spliced exons that produce the isoforms PKG1alpha and PKG1beta. Both are cytosolic. PKG1 is present in high concentrations (&gt;0.1 ÂµM) in all smooth muscles, platelets, cerebellum, hippocampus, dorsal root ganglia, neuromuscular endplate, and kidney. PKG1beta is the predominant PKG isoform in platelets. PKG1 is required for the inhibition of platelet activation by NO/cGMP. PKG2 is anchored at the plasma membrane by myristoylation of the N-terminal Gly-2 residue. PKG2 phosphorylates cystic fibrosis transmembrane conductance regulator.</bp:comment>
+    <bp:xref rdf:resource="#PublicationXref1" />
+    <bp:xref rdf:resource="#PublicationXref2" />
+    <bp:xref rdf:resource="#PublicationXref3" />
+    <bp:dataSource rdf:resource="#Provenance1" />
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Akkerman, JW, 2009-06-03</bp:comment>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Kunapuli, SP, 2010-06-07</bp:comment>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: Jupe, S, 2010-06-07</bp:comment>
+  </bp:BiochemicalReaction>
+  <bp:PhysicalEntity rdf:ID="PhysicalEntity1">
+    <bp:displayName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cGMP-dependent protein kinase</bp:displayName>
+    <bp:cellularLocation rdf:resource="#CellularLocationVocabulary1" />
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 427304</bp:comment>
+    <bp:xref rdf:resource="#UnificationXref2" />
+    <bp:xref rdf:resource="#UnificationXref3" />
+    <bp:dataSource rdf:resource="#Provenance1" />
+  </bp:PhysicalEntity>
+  <bp:CellularLocationVocabulary rdf:ID="CellularLocationVocabulary1">
+    <bp:term rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cytosol</bp:term>
+    <bp:xref rdf:resource="#UnificationXref1" />
+  </bp:CellularLocationVocabulary>
+  <bp:UnificationXref rdf:ID="UnificationXref1">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GENE ONTOLOGY</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO:0005829</bp:id>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref2">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">427304</bp:id>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=427304</bp:comment>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref3">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_24826</bp:id>
+    <bp:idVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:idVersion>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_24826.1</bp:comment>
+  </bp:UnificationXref>
+  <bp:Provenance rdf:ID="Provenance1">
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:name>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.reactome.org</bp:comment>
+  </bp:Provenance>
+  <bp:SmallMolecule rdf:ID="SmallMolecule1">
+    <bp:displayName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cyclic GMP</bp:displayName>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3',5'-Cyclic GMP</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine 3',5'-cyclic monophosphate</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine 3',5'-cyclic phosphate</bp:name>
+    <bp:cellularLocation rdf:resource="#CellularLocationVocabulary1" />
+    <bp:entityReference rdf:resource="#SmallMoleculeReference1" />
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 30991</bp:comment>
+    <bp:xref rdf:resource="#UnificationXref5" />
+    <bp:xref rdf:resource="#UnificationXref6" />
+    <bp:dataSource rdf:resource="#Provenance1" />
+  </bp:SmallMolecule>
+  <bp:SmallMoleculeReference rdf:ID="SmallMoleculeReference1">
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3',5'-Cyclic GMP [ChEBI:16356]</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3',5'-Cyclic GMP</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine 3',5'-cyclic monophosphate</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine 3',5'-cyclic phosphate</bp:name>
+    <bp:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cyclic GMP</bp:name>
+    <bp:xref rdf:resource="#UnificationXref4" />
+  </bp:SmallMoleculeReference>
+  <bp:UnificationXref rdf:ID="UnificationXref4">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CHEBI:16356</bp:id>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref5">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">30991</bp:id>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=30991</bp:comment>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref6">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_24220</bp:id>
+    <bp:idVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:idVersion>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_24220.1</bp:comment>
+  </bp:UnificationXref>
+  <bp:Stoichiometry rdf:ID="Stoichiometry1">
+    <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2</bp:stoichiometricCoefficient>
+    <bp:physicalEntity rdf:resource="#SmallMolecule1" />
+  </bp:Stoichiometry>
+  <bp:Complex rdf:ID="Complex1">
+    <bp:displayName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Activated cGMP-dependent protein kinase (PKG)</bp:displayName>
+    <bp:cellularLocation rdf:resource="#CellularLocationVocabulary1" />
+    <bp:componentStoichiometry rdf:resource="#Stoichiometry2" />
+    <bp:component rdf:resource="#PhysicalEntity1" />
+    <bp:componentStoichiometry rdf:resource="#Stoichiometry3" />
+    <bp:component rdf:resource="#SmallMolecule1" />
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 427305</bp:comment>
+    <bp:xref rdf:resource="#UnificationXref7" />
+    <bp:xref rdf:resource="#UnificationXref8" />
+    <bp:dataSource rdf:resource="#Provenance1" />
+  </bp:Complex>
+  <bp:Stoichiometry rdf:ID="Stoichiometry2">
+    <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</bp:stoichiometricCoefficient>
+    <bp:physicalEntity rdf:resource="#PhysicalEntity1" />
+  </bp:Stoichiometry>
+  <bp:Stoichiometry rdf:ID="Stoichiometry3">
+    <bp:stoichiometricCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1</bp:stoichiometricCoefficient>
+    <bp:physicalEntity rdf:resource="#SmallMolecule1" />
+  </bp:Stoichiometry>
+  <bp:UnificationXref rdf:ID="UnificationXref7">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">427305</bp:id>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=427305</bp:comment>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref8">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_24100</bp:id>
+    <bp:idVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:idVersion>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_24100.1</bp:comment>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref9">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">427308</bp:id>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=427308</bp:comment>
+  </bp:UnificationXref>
+  <bp:UnificationXref rdf:ID="UnificationXref10">
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:db>
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_23977</bp:id>
+    <bp:idVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:idVersion>
+    <bp:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_23977.1</bp:comment>
+  </bp:UnificationXref>
+  <bp:PublicationXref rdf:ID="PublicationXref1">
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">5445796</bp:id>
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:db>
+    <bp:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1970</bp:year>
+    <bp:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cyclic nucleotide-dependent protein kinases. VI. Isolation and partial purification of a protein kinase activated by guanosine 3',5'-monophosphate</bp:title>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kuo, JF</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Greengard, P</bp:author>
+    <bp:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 245:2493-8</bp:source>
+  </bp:PublicationXref>
+  <bp:PublicationXref rdf:ID="PublicationXref2">
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10209042</bp:id>
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:db>
+    <bp:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1999</bp:year>
+    <bp:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Increased adhesion and aggregation of platelets lacking cyclic guanosine 3',5'-monophosphate kinase I</bp:title>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Massberg, S</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sausbier, M</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Klatt, P</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bauer, M</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pfeifer, A</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Siess, W</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FÃ¤ssler, R</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ruth, P</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Krombach, F</bp:author>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hofmann, F</bp:author>
+    <bp:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Exp Med 189:1255-64</bp:source>
+  </bp:PublicationXref>
+  <bp:PublicationXref rdf:ID="PublicationXref3">
+    <bp:id rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15545263</bp:id>
+    <bp:db rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:db>
+    <bp:year rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2005</bp:year>
+    <bp:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The biology of cyclic GMP-dependent protein kinases</bp:title>
+    <bp:author rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hofmann, F</bp:author>
+    <bp:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 280:1-4</bp:source>
+  </bp:PublicationXref>
+</rdf:RDF>
+

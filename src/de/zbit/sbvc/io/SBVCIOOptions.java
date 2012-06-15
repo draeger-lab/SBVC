@@ -74,6 +74,16 @@ public interface SBVCIOOptions  extends KeyProvider{
       new Range<Format>(Format.class, Range.toRangeString(Format.class)),
       (short) 2, "-f", Format.SBML);
   
+  public static final Option<Integer> SPECIES = new Option<Integer>("SPECIES",
+      Integer.class, 
+      "The target species for the analysis is defined by the taxonomy id. " +
+      "For instance, homo sapiens has the taxonomy id 9606",
+//      Option.buildRange(String.class,
+      // this is not possible, because the list length of 978 is too long!
+      // Species.getListOfNames(ApplicationMain.getListOfSpecies(),Species.SCIENTIFIC_NAME)),
+//               "{\"hsa\", \"mmu\"}"),
+      (short) 2, "-s ", null);
+  
 //  /**
 //   * if the file should be splitted
 //   */
@@ -90,6 +100,6 @@ public interface SBVCIOOptions  extends KeyProvider{
   public static final OptionGroup<Object> BASE_OPTIONS = new OptionGroup<Object>(
       "Base options",
       "Define the default input/ output files and the conversion option.",
-      INPUT, OUTPUT, FORMAT);
+      INPUT, OUTPUT, FORMAT, SPECIES);
   
 }

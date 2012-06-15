@@ -1,0 +1,45 @@
+Dateien:
+04010	MAPK signaling pathway	für Signaling/ BioPAX, Contains groups
+http://www.genome.jp/kegg-bin/show_pathway?org_name=hsa&mapno=04010&mapscale=1.0&show_description=show
+
+00510	N-Glycan biosynthesis	Alle, Drug-identifiers
+http://www.genome.jp/kegg-bin/show_pathway?org_name=hsa&mapno=00510&mapscale=1.0&show_description=show
+
+00140	Steroid hormone biosynthesis	14 bundled reactions, e.g., "292"
+http://www.genome.jp/kegg-bin/show_pathway?org_name=hsa&mapno=00140&mapscale=1.0&show_description=show
+
+Generell:
+=========
+Version
+Formate (funktional)
+
+Funktional:
+=========
+Unbundle reactions
+Autocomplete reactions
+Stoichiometry
+[Atom balance check]
+Handling of synonyms (KEGG Compound in equation, but KGML annot. with KEGG DRUG)
+[Handling of EntryType "reaction"] (kommen in organsims nicht vor)
+human-readable annotations
+Benennung von elementen
+Relations?
+
+Merge Pathways
+Integrate information from non KEGG resources
+
+
+SBML:
+=========
+SBO-terms
+SBO-terms from material entity branch
+MIRIAM annotations
+Kinetische Gleichungen erzeugen
+
+
+NEUE KRITERIEN:
+=============
+Can handle signaling models
+Uses Appropriate elements
+Works
+
