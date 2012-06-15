@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<tool name="Convert BioPax files" id="biopax2sbml1" version="1.0">
+  <description>
+    into human-readable reports
+  </description>
+  <command interpreter="bash">
+    biopax2sbml.sh
+    $infile
+    $outfile
+    ${infile.name}
+  </command>
+  <inputs>    
+    <param format="owl" name="infile" type="data" label="BioPax file" help="Select uploaded BioPax file." />
+       <!--
+    <param name="split_opt" type="select" label="Split into separate pathway files" help="Choose 'yes' if the given pathway shall be splitted into multiple subpathways for which separate SBML files shall be generated.">
+      <option selected="true" value="no">No</option>
+      <option value="yes">Yes</option>
+    </param>
+    -->
+  </inputs>
+
+   <outputs>
+   <!--
+    <data format="sbml" name="outfile" label="Convert ${infile.name} to SBML">
+    <change_format>
+       <when input="split_opt" value="yes" format="zip" />
+    </change_format>
+    -->
+    <data format="zip" name="outfile" label="Convert ${infile.name} to SBML">
+  </data>
+  </outputs>
+  <help>
+  
+.. class:: infomark
+
+**Short description**
+
+BioPax2SBML is a tool to translate files in Biological Pathway Exchange Language (BioPax) into 
+System Biology Markup Language (SBML) files. BioPax Level 2 and Level 3 is supported and the 
+translated SBML files include both reactions and relations, since the converter uses the 
+Qualitative Models extension (SBML Level 3 with qual extension). 
+
+-----
+
+.. class:: infomark
+
+**How to use the tool**
+
+- First you have to upload a model file in BioPax format. For this purpose, click the respective 
+  link in the left frame to start the upload tool 
+- Select the BioPax file, which shall be converted by BioPax2SBML
+- Click "Execute" to convert the uploaded BioPax file 
+- When the job has finished, click the "eye symbol" appearing in the history to display the result or 
+  click "save" to download the report file. 
+
+
+ </help>
+</tool>

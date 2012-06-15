@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<tool name="Upload BioPax File" id="biopaxupload1" version="1.1.2">
+  <description>
+    from your computer  
+  </description>
+  <action module="galaxy.tools.actions.upload" class="UploadToolAction"/>
+  <command interpreter="python">
+      upload.py $GALAXY_ROOT_DIR $GALAXY_DATATYPES_CONF_FILE $paramfile
+    #set $outnum = 0
+    #while $varExists('output%i' % $outnum):
+        #set $output = $getVar('output%i' % $outnum)
+        #set $outnum += 1
+        ${output.dataset.dataset.id}:${output.files_path}:${output}
+    #end while
+  </command>
+  <inputs nginx_upload="true">
+    <param name="file_type" type="select" label="File Format">
+      <options from_parameter="tool.app.datatypes_registry.upload_file_formats" transform_lines="[ &quot;%s%s%s&quot; % ( line, self.separator, line ) for line in obj ]">
+        <column name="value" index="1"/>
+        <column name="name" index="0"/>
+        <filter type="sort_by" column="0"/>
+        <filter type="add_value" name="BioPax file (owl)" value="owl" index="0"/>
+      </options>
+    </param>
+    <param name="async_datasets" type="hidden" value="None"/>
+    <upload_dataset name="files" title="Specify Files for Dataset" file_type_name="file_type" metadata_ref="files_metadata">
+        <param name="file_data" type="file" size="30" label="BioPax file" ajax-upload="true" help="Select an BioPax file.">
+        <validator type="expression" message="You will need to reselect the file you specified (%s)." substitute_value_in_message="True">not ( ( isinstance( value, unicode ) or isinstance( value, str ) ) and value != "" )</validator> <!-- use validator to post message to user about needing to reselect the file, since most browsers won't accept the value attribute for file inputs -->
+      </param>
+      <param name="url_paste" type="hidden" area="true" size="5x35" label="URL/Text"/> 
+      <param name="ftp_files" type="ftpfile" label="Files uploaded via FTP"/>
+    </upload_dataset>
+  </inputs>
+  <help>
+
+.. class:: infomark
+
+**Short description**
+
+BioPax2SBML is a tool to translate files in Biological Pathway Exchange Language (BioPax) into 
+System Biology Markup Language (SBML) files. BioPax Level 2 and Level 3 is supported and the 
+translated SBML files include both reactions and relations, since the converter uses 
+SBML Level 3 Version 1 with the Qualitative Models extension. 
+
+-----
+
+.. class:: infomark
+
+**How to use the tool**
+
+- First you have to upload a model file in BioPax format. For this purpose, click the respective 
+  link in the left frame to start the upload tool 
+- Select the BioPax file, which shall be converted by BioPax2SBML
+- Click "Execute" to convert the uploaded BioPax file 
+- When the job has finished, click the "eye symbol" appearing in the history to display the result or 
+  click "save" to download the report file. 
+  </help>
+</tool>
