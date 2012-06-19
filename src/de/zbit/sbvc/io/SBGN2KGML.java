@@ -71,8 +71,14 @@ public class SBGN2KGML {
 	// TODO: this mapping is kinda wired, because it is surjective
 	protected EntryType getEntryTypeFromGlyphType(GlyphType gtype){
 		switch(gtype){
-		default:
-			return EntryType.other;
+			case simple_chemical:
+				return EntryType.compound;
+			case macromolecule:
+				return EntryType.enzyme;
+			case macromolecule_multimer:
+				return EntryType.genes;
+			default:
+				return EntryType.other;
 		}
 	}
 
@@ -163,7 +169,7 @@ public class SBGN2KGML {
 				// create a new entry
 				Entry e = new Entry(p, ++id, "unknown:"+id);
 				// TODO: get the proper EntryType from the Glyphtype
-	//			e.setType(type);
+				e.setType(getEntryTypeFromGlyphType(GlyphType.valueOfString(g.getClazz())));
 				
 				// create the graphics
 				Graphics gr = new Graphics(g.getLabel().getText());
@@ -171,7 +177,7 @@ public class SBGN2KGML {
 				gr.setY((int) g.getBbox().getY());
 				gr.setHeight((int) g.getBbox().getH());
 				gr.setWidth((int) g.getBbox().getW());
-	//			gr.setDefaults(entryType);
+				gr.setDefaults(e.getType());
 	
 				// add the graphics to the entry
 				e.addGraphics(gr);
@@ -185,6 +191,8 @@ public class SBGN2KGML {
 				
 				// add the entry to the pathway
 				p.addEntry(e);
+			} else {
+				//TODO: do something with the process glyphs etc.S
 			}
 		}
 		
@@ -233,16 +241,20 @@ public class SBGN2KGML {
 	
 	
 	public static void main(String args[]) {
-		String filename = "C:/Users/manu/Desktop/HiWi/SBGN2KGML/Examples/glycolysis.sbgn";
+//		String filename = "C:/Users/manu/Desktop/HiWi/SBGN2KGML/Examples/glycolysis.sbgn";
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
+		Glyph g = new Glyph();
+		g.setClazz(GlyphType.simple_chemical.toString());
+		EntryType test = sbgn2kgml.getEntryTypeFromGlyphType(GlyphType.valueOfString(g.getClazz()));
+		System.out.println(test.name());
 //		sbgn2kgml.initialize();
-		Sbgn sbgn = sbgn2kgml.read(filename);
+//		Sbgn sbgn = sbgn2kgml.read(filename);
 //		if(sbgn2kgml.validateSBGN(filename))
 //			System.out.println(true);
 //		else
 //			System.out.println(false);
-		Pathway p = sbgn2kgml.translate(sbgn);
-		sbgn2kgml.saveToFile(p, "PathwayTest.xml");
+//		Pathway p = sbgn2kgml.translate(sbgn);
+//		sbgn2kgml.saveToFile(p, "PathwayTest.xml");
 //		Sbgn sbgn = sbgn2kgml.read(filename);
 //		Pathway p = sbgn2kgml.translate(sbgn);
 //		
