@@ -9,10 +9,9 @@
 \usepackage{color} % Only required for the TODO macro.
 
 \usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
-\usepackage{tabularx}
+%\usepackage{tabularx}
 \usepackage{amssymb} % Symbols like checkmark
 %\usepackage{lscape} % Landscape orientation (used for tables)
-
 
 \hypersetup{breaklinks=true,
 pagecolor=white,
@@ -143,7 +142,7 @@ The entire Nature Pathway Interaction Database (PID), which includes pathways fr
 All available PID BioPAX pathway files (Level~2 and Level~3) have been translated into the SBML format (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
 Additionally, we present the new webtool BioPAX2SBML, which can be used for further BioPAX to SBML conversions.
 \section{Availability:}
-BioPAX2SBML is freely available at \url{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
+BioPAX2SBML is freely available at% \url{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 %The complete collection of the PID models is freely available at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}and the webtool BioPAX2SBML at \url{http://webservices.cs.uni-tuebingen.de/}.
 \section{Contact:}
 %\href{finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
@@ -507,8 +506,8 @@ Newer applications that are ready to handle relations can read the additional \q
 We converted both, the Level~2 and the Level~3 BioPAX files to SBML core, including the \qual{} extension.
 The reason for converting both levels was the additional description possibility of gene-regulatory networks and genetic interactions in BioPAX Level~3, which is not supported by Level~2 pathway models.
 Since older simulation applications still work with BioPAX Level~2, we also translated these files into SBML in order to prevent loss of information and to be able to use these models, too.
-All models are available at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
-Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations at \url{http://webservices.cs.uni-tuebingen.de/}.
+All models are available at %\url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
+Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations at %\url{http://webservices.cs.uni-tuebingen.de/}.
 
 
 % Kommentiert da info bereits oben erwähnt wird.
@@ -552,7 +551,7 @@ Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations 
 {\bf Xrefs to MIRIAM annotations}   & \checkmark                        & $\times$                      & $\times$ \\
 %{\bf Integrate cross refreneces}    & \checkmark                        & $\times$                      & $\times$ \\
 {\bf References to original file}   & \checkmark                        & $\times$                      & $\times$ \\
-\bottomrule
+%\bottomrule
 \end{tabular}
 }
 {
@@ -563,6 +562,11 @@ Sybill (everything is translated to a reaction, there are no reaction modifiers 
 %
 Binom (order of the reaction lists not correct, some reaction lists are empty, that's ot allowed),
 human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln) 
+- Bietet die Moeglichkeit aus einer Datei, die mehrere Pathways enthaelt, einen Pathway auszuwaehlen und als BioPAX file zu speichern
+- Auftrennung in Reaction Network, Pathway Structure und Protein-protein interaction moeglich"
+
+- Läuft bei owl Dateien größer 50kb nicht mehr stabil
+
 }
 \end{table*}
 
