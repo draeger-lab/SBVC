@@ -1,22 +1,22 @@
 \documentclass{bioinfo}
 
 \usepackage{graphicx}
-\usepackage{booktabs} % allows \toprule and other table formatting utilities
-\usepackage{multirow} % merge cells vertically
-\usepackage{colortbl} % Allows for alternate coloring the table
-\usepackage[table]{xcolor} % U.a. allows for defining colors in HTML models
-\usepackage{rotating} % Landscape orientation (used for tables)
+%\usepackage{booktabs} % allows \toprule and other table formatting utilities
+%\usepackage{multirow} % merge cells vertically
+%\usepackage{colortbl} % Allows for alternate coloring the table
+%\usepackage[table]{xcolor} % U.a. allows for defining colors in HTML models
+%\usepackage{rotating} % Landscape orientation (used for tables)
 \usepackage{color} % Only required for the TODO macro.
 
-\usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
+%\usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 %\usepackage{tabularx}
 \usepackage{amssymb} % Symbols like checkmark
 %\usepackage{lscape} % Landscape orientation (used for tables)
 
-\hypersetup{breaklinks=true,
-pagecolor=white,
-colorlinks=false}
-\urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
+%\hypersetup{breaklinks=true,
+%pagecolor=white,
+%colorlinks=false}
+%\urlstyle{rm} %so it doesn’t use a typewriter font for url’s.
 
 % Allow line breaks in texttt
 \newcommand{\origttfamily}{}% sollte noch nicht definiert sein!
@@ -25,7 +25,8 @@ colorlinks=false}
 
 \hyphenation{BioPAX BioCarta PaxTools SBML net-work net-works er-ro-neous-ly
       CellDesigner re-la-tion re-la-tion-ship re-ac-tion other-wise
-      re-la-tions re-la-tion-ships re-ac-tions inter-action inter-actions re-search}
+      re-la-tions re-la-tion-ships re-ac-tions inter-action inter-actions re-search
+      be-tween}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Useful macros:
@@ -142,8 +143,7 @@ The entire Nature Pathway Interaction Database (PID), which includes pathways fr
 All available PID BioPAX pathway files (Level~2 and Level~3) have been translated into the SBML format (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
 Additionally, we present the new webtool BioPAX2SBML, which can be used for further BioPAX to SBML conversions.
 \section{Availability:}
-BioPAX2SBML is freely available at% \url{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
-%The complete collection of the PID models is freely available at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}and the webtool BioPAX2SBML at \url{http://webservices.cs.uni-tuebingen.de/}.
+BioPAX2SBML is freely available at \href{http://webservices.cs.uni-tuebingen.de/}{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \href{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 \section{Contact:}
 %\href{finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
 \href{mailto:finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
@@ -176,7 +176,6 @@ The need to combine both formats to use the knowledge from a multitude of databa
 % what we did
 % necessary to mention why we use PID?
 In this paper we present a webtool for the translation from BioPAX into SBML format. We demonstrate its functionality by converting the whole Nature Pathway Interaction Database (PID, \citet{Schaefer2009} from BioPAX Level~2 and Level~3 formats to the SBML format, including the \qual{} extension.
-%The translated files are freely available at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 % what we find out?
 % what do the results mean (why are they significant?)
 
@@ -295,12 +294,13 @@ This table specifies the SBO terms that we used to distinguish between various c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this step, an SBML \species{} and \qualitativeSpecies{} are created for each \PhysicalEntity{}.
-Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPAX2SBO} for a list of used terms).
+Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPAX2SBO} for a list of used terms). 
+Furthermore, the \species{} compartment is assigned due to the \texttt{cellularLocation} of the \PhysicalEntity. 
+The default compartment is set if the \texttt{cellularLocation} is not known.
 
 Then, the BioPAX document is mined for an RDF link from the \PhysicalEntity{} to a corresponding Entrez Gene ID.
 These identifers are unique and facilitate the automated annotation of this \species{} (described in the fourth step).
 If there exists no Gene ID but a gene symbol, the gene symbol is mapped to a Gene ID.
-%If neither a Gene ID nor a gene symbol is available the name of the \PhysicalEntity{} is used.
 
 %%%%%%%%%%%%%% 3. Step %%%%%% reaction relations
 \subsubsection{Step 3: Translation of \Interaction{} elements.}
@@ -316,7 +316,7 @@ Furthermore, the stoichiometry of the reactants and products of {\BiochemicalRea
 The translation of \Control{} elements is more sophisticated, because they are translated into a \transition{} or a \reaction{} depending on enclosed \Control{} elements.
 \Control{} elements always consist of zero or more \Controller{} and zero or one \Controlled{} elements.
 \Controller{} elements are inherited from \PhysicalEntity{} or \Pathway, whereas \Controlled{} elements are also \Interaction{} elements.
-Thus, it depends on the kind of \Controller{} and the \Controlled{} element whether the \Interaction{} is translated into an SBML \reaction{} or \transition.
+Thus, it depends on the kind of \Controller{} and \Controlled{} element whether the \Interaction{} is translated into an SBML \reaction{} or \transition.
 If the \Controller{} or the \Controlled{} element is a \Pathway{} element, the \Interaction{} is always converted to a \transition, because it is biologically not possible to create a reaction with a whole pathway as a reactant or product.
 A \Conversion{} is translated into a \transition{} if the \Controlled{} element is translated into a \transition, too.
 For instance, the conversion of a \Modulation, consisting of a \PhysicalEntity{} as \Controller{} and a \BiochemicalReaction{} as \Controlled, is translated into a reaction.
@@ -468,7 +468,7 @@ All pathways are provided in XML, BioPAX Level~2, and Level~3 format.
 % 3. Aber das Format ist ungeeignet
 % 4. Daher gibt es mehrere Konverter, die folgendes können: reaction
 The BioPAX format is perfectly suitable to encode pathway relations and reactions that can be further used for visualization or pathway analysis. However, this format also has its limitations.
-Many applications, especially for simulation and modeling of biological networks, use the SBML format \citep{Funahashi2003, Hoops2006}.
+Many applications, especially for simulation and modeling of biological networks, use the SBML format \citep{Zinovyev2008, Funahashi2007, Hoops2006}.
 Therefore, a few importers and converters for BioPAX into SBML have been developed.
 BioPAX \Entity{} elements, which can be genes, proteins, small molecules, etc., can be translated into SBML \species{} and the type of the BioPAX \Entity{} can be encoded as SBO term or MIRIAM annotation of the species itself.
 Relations between \Entity{} elements, corresponding to edges in a pathway graph, are also provided with detailed information in BioPAX.
@@ -506,70 +506,82 @@ Newer applications that are ready to handle relations can read the additional \q
 We converted both, the Level~2 and the Level~3 BioPAX files to SBML core, including the \qual{} extension.
 The reason for converting both levels was the additional description possibility of gene-regulatory networks and genetic interactions in BioPAX Level~3, which is not supported by Level~2 pathway models.
 Since older simulation applications still work with BioPAX Level~2, we also translated these files into SBML in order to prevent loss of information and to be able to use these models, too.
-All models are available at %\url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
-Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations at %\url{http://webservices.cs.uni-tuebingen.de/}.
+All models are available at \href{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
+Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations at \href{http://webservices.cs.uni-tuebingen.de/}{http://webservices.cs.uni-tuebingen.de/}.
 
 
 % Kommentiert da info bereits oben erwähnt wird.
 %Since, the models are augmented with additional database information, stored as MIRIAM annotations, the models can easily be used for further simulation purposes. These annotations enable extensive visualization and data exchange between researchers.
 
 \subsection{Comparison to other BioPAX to SBML converters}
-%It is difficult to convert BioPAX to SBML \cite{Bauer-Mehren2009}
-
-\newcolumntype{C}{>{\centering\arraybackslash}p{2cm}}
-\begin{table*}[htb]
-\caption{Comparison of different available converters for KEGG pathways.}
-\label{tab:AppVergleich}
-%\rowcolors{1}{white}{tableShade2}
-\makebox[\textwidth]{
-\begin{tabular}{lccc}
-\toprule
-{\bf }                              & {\bf BioPAX2SBML converter}       & {\bf BiNom}                   & {\bf Sybill} \\
-{\bf }                              & {B\"uchel \emph{et al.}}          & {Zinovyev \emph{et al.}}      & {Ruebenacker \emph{et al.}} \\
-%{\bf Getestet mit} & PID-BioCarta-ceramide signaling (L2)
-%Reacomte-Homarus americanus (L3) & Reactome-Homarus americanus (Level 3) & ceramide signaling von PID-BioCarta \\
-{\bf Version}                       & 1.0                               & 2.0                           & 1.0 (Build 119) \\
-{\bf Release date}                  & 2012-04-02                        & 2012-04-12                    & 2010-02-11 \\
-\midrule
-{\bf BioPAX Input Level}            & Level 2 and 3                     & Level 3                       & Level 2 and 3 \\
-{\bf SBML  Output Level}            & Level 3 Version 1                 & Level 2 Version 4, Beta       & Level 2 Version 4 \\
-                                    & including qual                    & Version for Level 3           &\\
-\\
-{\bf Signaling support (qual)}      & \checkmark                        & $\times$                      & $\times$  \\
-{\bf Valid}                         & \checkmark                        & $\times$                      & $\times$  \\
-{\bf Complete}                      & \checkmark                        & \checkmark                    & $\times$  \\
-{\bf Robustness}                    & \checkmark                        & \checkmark                    & $\circ$\\
-{\bf Machine readable}              & \checkmark                        & \checkmark                    & \checkmark \\
-{\bf Human readable}                & \checkmark                        & $\circ$                       & \checkmark \\
-\\
-{\bf No dublicate entities}         & \checkmark                        & \checkmark                    & \checkmark \\
-{\bf Compartements}                 & \checkmark                        & \checkmark                    & \checkmark \\
-{\bf Stoichiometry}                 & \checkmark                        & $\times$                      & $\times$ \\
-{\bf SBO-terms}                     & \checkmark                        & $\times$                      & $\times$ \\
-{\bf Uses appropriate SBO}          & \checkmark                        & $\times$                      & $\times$ \\
-{\bf (material entity)}             &                                   &                               & \\
-{\bf Xrefs to MIRIAM annotations}   & \checkmark                        & $\times$                      & $\times$ \\
-%{\bf Integrate cross refreneces}    & \checkmark                        & $\times$                      & $\times$ \\
-{\bf References to original file}   & \checkmark                        & $\times$                      & $\times$ \\
-%\bottomrule
-\end{tabular}
-}
-{
+% There exist other conversion approaches but mostly 1:1 conversions
+% It is difficult to convert BioPAX to SBML \cite{Bauer-Mehren2009}
+% We augment and include qual
+% What is important for the models (comparison table criteria...)
+% For Sybill it is clear that qual could not be integrated, since exclusively Level 2 v4 is written
+% auf die Besonderheit von BiNoM eingehen und erwähnen, dass der Vergleich eigentlich nicht ganz fair ist, weil es sich lediglich um ein Cytoscape plugin handelt (comparison to those tools is not reasonable)
 Sybill (everything is translated to a reaction, there are no reaction modifiers defined), (species are used in reactions, without listing in the species list)
 (groups are missing, proteins are missing, links to other pathways are missing)\\
 - different entity states are different SBML species, but they are not defined in detail \\
 - Wenn kein Pathwayobjekt definiert wurde, wird der pathway nicht übersetzt \\
 %
 Binom (order of the reaction lists not correct, some reaction lists are empty, that's ot allowed),
-human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln) 
+human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
 - Bietet die Moeglichkeit aus einer Datei, die mehrere Pathways enthaelt, einen Pathway auszuwaehlen und als BioPAX file zu speichern
 - Auftrennung in Reaction Network, Pathway Structure und Protein-protein interaction moeglich"
 
 - Läuft bei owl Dateien größer 50kb nicht mehr stabil
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% comparison table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcolumntype{C}{>{\centering\arraybackslash}p{2cm}}
+\begin{table*}[htb]
+\caption{Comparison of different available converters for BioPAX pathways.}
+\label{tab:AppVergleich}
+%\rowcolors{1}{white}{tableShade2}
+\makebox[\textwidth]{
+\begin{tabular}{lccc}
+\toprule
+{\bf }                              & {\bf BioPAX2SBML converter}       & {\bf Sybill}                  & {\bf BiNoM}\\
+{\bf }                              & {B\"uchel \emph{et al.}}          & {Ruebenacker \emph{et al.}}   & {Zinovyev \emph{et al.}} \\
+%{\bf Getestet mit} & PID-BioCarta-ceramide signaling (L2)
+%Reacomte-Homarus americanus (L3) & Reactome-Homarus americanus (Level 3) & ceramide signaling von PID-BioCarta \\
+{\bf Version}                       & 1.0                               & 1.0 (Build 119)               & 2.0  \\
+{\bf Release date}                  & 2012-04-02                        & 2010-02-11                    & 2012-04-12  \\
+\midrule
+{\bf BioPAX Input Level}            & Levels 2 and 3                    & Levels 2 and 3                & Level 3 \\
+{\bf SBML  Output Level}            & Level 3 Version 1                 & Level 2 Version 4             & Level 2 Version 4, Beta \\
+                                    & including qual                    &                               & Version for Level 3 \\
+\midrule
+{\bf Signaling support (qual)}      & \checkmark                        & -                             & -  \\
+{\bf Valid SBML}                    & \checkmark                        & -                             & -  \\
+{\bf Complete}                      & \checkmark                        & -                             & \checkmark\\
+{\bf No duplicate entities}         & \checkmark                        & \checkmark                    & \checkmark \\
+{\bf Robustness}                    & \checkmark                        & $\circ$                       & $\circ$\\
+\midrule
+{\bf Compartments}                  & \checkmark                        & \checkmark                    & \checkmark \\
+{\bf Stoichiometry}                 & \checkmark                        & -                             & - \\
+{\bf Uses SBO terms}                & \checkmark                        & -                             & - \\
+{\bf Xrefs to CV terms}             & \checkmark                        & -                             & - \\
+{\bf Augment model}                 & \checkmark                        & -                             & - \\
+{\bf Provenance}                    & \checkmark                        & -                             & - \\
+\midrule
+\end{tabular}
+}
+{
+The table compares three applications which are able to translate BioPAX into SBML.
+The checkmark (\checkmark) indicates that the criteria is completely fulfilled, the circles ($\circ$) means that the criteria is partly fulfilled, and the minus (-) that it is not fulfilled.
+An conversion is \emph{valid} if the validators from SBML.org finds no errors in the converted SBML file and it is \emph{complete} if no BioPAX entity is missing in the converted model. 
+It is important for modeling purposes that there are no duplicate entities in the files, this is represented with the '\emph{No duplicate entities}' criterion.
+A converter is \emph{robust} if it can handle bigger file sizes (more than 1MB) and is able to convert a BioPAX file which contains no \Pathway{} element.
+The '\emph{Compartments}', '\emph{Stoichiometry}', and '\emph{Uses SBO terms}' criterion denotes if this information is translated into SBML and if the SBML species are denoted with the corresponding SBO term.
+Additionally, it is checked if the BioPAX cross-references (Xrefs) are converted into SBML controlled vocabulary terms (CV terms) and if the SBML model is \emph{augmented} with further database information. 
+Finally, the \emph{provenance} indicates if the file history and the conversion is saved in the converted SBML file.
 }
 \end{table*}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusion}
 Conversion between different formats is important in all parts of computer science.
@@ -596,7 +608,6 @@ Additional information, such as various identifiers or the type of an entity, ar
 By utilizing the KEGG API it was even possible to complement the translated BioPAX documents with a wealth of information from further databases, such as Entrez Gene, KEGG, etc.
 
 This results in comprehensive and correct SBML models, created for all pathways in the Nature Pathway Interaction Database.
-%The files can be downloaded at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 These models can easily be used, e.g., for further simulation and modeling steps, without having to deal with incorrect input file formats or error-prone conversions.
 
 \section*{Acknowledgements}
@@ -630,7 +641,7 @@ Network under grant number 0315756.
 %  (2011).
 %\newblock {Qualitative Models} (qual).
 %\newblock Specification available at
-%  \url{http://sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}.
+%  \href{http://sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}{http://sbml.org/Community/Wiki/SBML\_Level\_3\_Proposals/Qualitative\_Models}.
 %  Accessed 2012 Mar 22.
 %
 %\bibitem[Courtot {\em et~al.}(2011)Courtot, Juty, Kn\"{u}pfer, Waltemath,
@@ -672,7 +683,7 @@ Network under grant number 0315756.
 %  (2011).
 %\newblock {System Biology Format Converter (SBFC)}.
 %\newblock Software available from
-%  \url{http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPAX.html}.
+%  \href{http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPAX.html}{http://www.ebi.ac.uk/compneur-srv/sbml/converters/SBMLtoBioPAX.html}.
 %  Accessed 2012 Mar 22.
 %
 %\bibitem[Funahashi {\em et~al.}(2007)Funahashi, Jouraku, Matsuoka, and
