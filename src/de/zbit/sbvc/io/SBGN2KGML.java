@@ -25,7 +25,7 @@ import de.zbit.kegg.parser.pathway.Graphics;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.Relation;
 import de.zbit.kegg.parser.pathway.RelationType;
-import de.zbit.kegg.parser.pathway.SubType;
+import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 
 /**
  * Class for converting {@link Sbgn} into a {@link Pathway}
@@ -143,7 +143,7 @@ public class SBGN2KGML {
 
 		// create a new pathway
 		// TODO: the number of the pathway should be a five-digit number so what?
-		Pathway p = new Pathway("path:unknown", "unknown organism", 10000);
+		Pathway p = new Pathway("unknown", "unknown", 10000, "unknown title");
 
 		// translate the glyphs
 		if(considerGlyphs)
@@ -173,19 +173,28 @@ public class SBGN2KGML {
 			if(g.getLabel() != null){
 				
 				// create a new entry
-				// TODO: make compound name = "cpd:xxx"
-				Entry e = new Entry(p, ++id, "unknown:"+id);
+				Entry e = new EntryExtended(p, ++id, "unknown:"+id);
 
 				// convert the glyphtype into entrytype
 				e.setType(getEntryTypeFromGlyphType(GlyphType.valueOfString(g.getClazz())));
 				
+//				if (e instanceof EntryExtended) {
+//				  // TODO: Set extended type
+//				  ((EntryExtended)e).setGeneType(null);
+//				}
+				
 				// create the graphics
+				// TODO: eventually use different creators
+//				Graphics.createGraphicsForCompound(name);
+//				Graphics.createGraphicsForPathwayReference(name);
+//				else
 				Graphics gr = new Graphics(g.getLabel().getText());
+				
+				gr.setDefaults(e.getType());
 				gr.setX((int) g.getBbox().getX());
 				gr.setY((int) g.getBbox().getY());
 				gr.setHeight((int) g.getBbox().getH());
 				gr.setWidth((int) g.getBbox().getW());
-				gr.setDefaults(e.getType());
 	
 				// add the graphics to the entry
 				e.addGraphics(gr);
@@ -326,10 +335,9 @@ public class SBGN2KGML {
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
 		sbgn2kgml.initialize();
 		Sbgn sbgn = sbgn2kgml.read(filename);
-		if(sbgn2kgml.validateSBGN(filename))
-			System.out.println(true);
-		else
-			System.out.println(false);
+		
+		System.out.println(sbgn2kgml.validateSBGN(filename));
+		
 		Pathway p = sbgn2kgml.translate(sbgn);
 		sbgn2kgml.saveToFile(p, "PathwayTest.xml");
 	}
