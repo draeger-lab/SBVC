@@ -142,6 +142,7 @@ Until now, there exists no BioPAX to SBML converter that is fully capable of tra
 The entire Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute has been converted from BioPAX into SBML.
 All available PID BioPAX pathway files (Level~2 and Level~3) have been translated into the SBML format (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
 Additionally, we present the new webtool BioPAX2SBML, which can be used for further BioPAX to SBML conversions.
+Finally, this converter is compared to existing conversion tools.
 \section{Availability:}
 BioPAX2SBML is freely available at \href{http://webservices.cs.uni-tuebingen.de/}{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \href{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
 \section{Contact:}
@@ -521,21 +522,22 @@ Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations 
 % For Sybill it is clear that qual could not be integrated, since exclusively Level 2 v4 is written
 % auf die Besonderheit von BiNoM eingehen und erwähnen, dass der Vergleich eigentlich nicht ganz fair ist, weil es sich lediglich um ein Cytoscape plugin handelt (comparison to those tools is not reasonable)
 
-Just a few approaches exist to convert BioPAX to SBML and most of them use a simple one-to-one conversion.
+Just a few approaches exist to convert BioPAX to SBML and the existing ones use a simple one-to-one conversion.
 This might be due to the fact that ``the inter-conversion between BioPAX and SBML is not trivial as both formats were developed for different purposes" \citep{Bauer-Mehren2009}.
-Sybill \citep{Ruebenacker2009} and BiNoM \citep{Zinovyev2008} are two approaches that can be used for the translation of BioPAX into SBML but none of them use the Qualitative Models extension.
-Sybill is a stand-alone tool, that is also integrated in the quantitative modeling environment VCell \citep{Slepchenko2003}.
-In contrast, BiNoM is a Cytoscape plugin which offers the possibility to open BioPAX Level~3 files but whose main focus lies on the visualization of BioPAX files.
-We developed some comparison criteria and showed the results in Table~\ref{tab:Comparison}.% shows the comparison of both approaches to the BioPAX2SBML converter approach.
+Sybill \citep{Ruebenacker2009} and BiNoM \citep{Zinovyev2008} are two approaches that can be used for the translation of BioPAX into SBML but none of them is able to appropriately translating signaling networks.
+Sybill is a stand-alone tool that is also integrated in the quantitative modeling environment VCell \citep{Slepchenko2003}.
+In contrast, BiNoM is a Cytoscape plugin which offers the possibility to open BioPAX Level~3 files.
+Following, its main focus lies on the visualization of BioPAX files and not on the conversion.
+We developed some comparison criteria and show the results in Table~\ref{tab:Comparison}.% shows the comparison of both approaches to the BioPAX2SBML converter approach.
 
 Sybill converts BioPAX Level~2 and Level~3 files and has a very comfortable graphical user interface allowing the user to manipulate the conversion result.
-Unfortunately, the converted SBML file is not complete and the validator from SBML.org notifies errors, because species are used in several reactions that are missing in the species list. Additionally, some groups and pathway links are missing, too.
-BiNoM produces complete files, but the validator also notifies errors due to empty \texttt{listOf} elements and due to the wrong order of these elements.
-In contrast to Sybill, BiNoM converts BioPAX files without a pathway element, but it is not able to visualize BioPAX files bigger than 100kb.
-That is why both tools just partly fulfill the robustness criterion.
+Unfortunately, the converted SBML file is not complete and the validator from SBML.org reports errors, because species are used in several reactions that are missing in the species list. Additionally, some groups and pathway links are missing, too.
+BiNoM generates a complete conversion result, but the validator also reports errors due to empty \texttt{listOf} elements and due to the wrong order of these elements.
+In contrast to Sybill, BiNoM converts BioPAX files without a pathway element, but it is just able to handle a small number of BioPAX files from the Pathway Interaction Database.
+This is why both tools just partially fulfill the robustness criterion.
 Another feature of BiNoM is that it can separately visualize reaction networks, pathway structure and protein-protein interaction networks out of one BioPAX file.
 
-Finally, all approaches prevent the translation of double species, but exclusively BioPAX2SBML converter uses the qual extension and SBO terms for detailed species describtion, translate the BioPAX cross-references (Xrefs) into SBML CV-terms, and augment the SMBL file content with further database links.
+Finally, all approaches avoid the translation of dublicate species, but exclusively BioPAX2SBML converter uses the qual extension and SBO terms for detailed species description, translates the BioPAX cross-references (\texttt{Xrefs}) into SBML CV-terms, and augments the SMBL file content with further database cross-references.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% comparison table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -549,7 +551,7 @@ Finally, all approaches prevent the translation of double species, but exclusive
 \makebox[\textwidth]{
 \begin{tabular}{lccc}
 \toprule
-{\bf }                              & {\bf BioPAX2SBML converter}       & {\bf Sybill}                  & {\bf BiNoM}\\
+{\bf }                              & {\bf BioPAX2SBML}                 & {\bf Sybill}                  & {\bf BiNoM}\\
 {\bf }                              & {B\"uchel \emph{et al.}}          & {Ruebenacker \emph{et al.}}   & {Zinovyev \emph{et al.}} \\
 %{\bf Getestet mit} & PID-BioCarta-ceramide signaling (L2)
 %Reacomte-Homarus americanus (L3) & Reactome-Homarus americanus (Level 3) & ceramide signaling von PID-BioCarta \\
@@ -578,13 +580,13 @@ Finally, all approaches prevent the translation of double species, but exclusive
 }
 {
 The table compares three applications which are able to translate BioPAX into SBML.
-The checkmark (\checkmark) indicates that the criteria is completely fulfilled, the circles ($\circ$) that the criteria is partly fulfilled, and the minus (-) that it is not fulfilled.
-A conversion is \emph{valid} if the validator from SBML.org finds no errors in the converted SBML file and the converted model is \emph{complete} if no BioPAX entity is missing.
+The checkmark (\checkmark) indicates that the criteria is completely fulfilled, the circles ($\circ$) shows that the criterion is partially fulfilled, and the minus (-) is used if it is not fulfilled.
+A conversion is \emph{valid} if the validator from SBML.org reports no errors in the converted SBML file and the converted model is \emph{complete} if no BioPAX entity is missing.
 It is important for modeling purposes that there are no duplicate entities in the files, this is represented with the \emph{No duplicate entities} criterion.
-A converter is \emph{robust} if it can handle bigger file sizes (more than 100KB) and is able to convert a BioPAX file which contains no \Pathway{} element.
-The \emph{Compartments}, \emph{Stoichiometry}, and \emph{Uses SBO terms} criterion denotes if this information is translated into SBML and if the SBML species are denoted with the corresponding SBO term.
-Additionally, it is checked if the BioPAX cross-references (Xrefs) are translated into SBML controlled vocabulary terms (CV terms) and if the SBML model is \emph{augmented} with further database information.
-Finally, the \emph{provenance} criterion indicates if the file history and conversion tool information is saved in the converted SBML file.
+A converter is \emph{robust} if it can handle all tested files and is able to convert a BioPAX file, which contains no \Pathway{} element.
+The \emph{Compartments}, \emph{Stoichiometry}, and \emph{Uses SBO terms} criteria denote if this information is translated into SBML and if the SBML species are denoted with the corresponding SBO term.
+Additionally, it is checked if the BioPAX cross-references (\texttt{Xrefs}) are translated into SBML controlled vocabulary terms (CV terms) and if the SBML model is \emph{augmented} with further information.
+Finally, the \emph{provenance} criterion denotes if the file history and conversion tool information is saved in the converted SBML file.
 }
 \end{table*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

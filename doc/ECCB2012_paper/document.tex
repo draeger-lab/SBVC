@@ -1,6 +1,9 @@
 \documentclass{bioinfo}
 
+\usepackage{booktabs} % allows \toprule and other table formatting utilities
+\usepackage{multirow} % merge cells vertically
 \usepackage{color}
+\usepackage{tabularx}
 \usepackage[pdfborder={0 0 0}]{hyperref} % links, but no colored boxes
 
 \hypersetup{breaklinks=true,
@@ -559,9 +562,8 @@ Authors & \multicolumn{2}{c}{\citeauthor{Wrzodek2011}} & \citeauthor{KEGGconvert
 }
 {
 
-This table compares various applications that can convert KEGG pathways to BioPAX or SBML models. A checkmark (\checkmark) is given, if the corresponding converter completely fulfills all requirements, a circle ($\circ$) states that the requirements are only met partially or incorrect and a cross indicates features, that are not contained at all ($\times$). ``n/a" indicates that a criterion is not applicable to a converter.
-A model is \emph{Machine interpretable} if entities in the model can directly be mapped to a database. The criterion \emph{Human interpretable} indicates that a model somehow assigns human readable names or gene symbols to entities. \emph{Signaling pathways} are supported if the converters can read and convert KEGG models with relations. A conversion is \emph{complete} if every relevant reaction of a KGML also occurs in any form in the translated document. For visualization purposes, KGML files often contain multiple copies of entries or reactions. These \emph{duplicates} should be removed. The contained reactions are often \emph{bundled} (multiple reactions are summarized as one) or miss some reaction participants. \emph{Revision of reactions} refers to the completion of missing reaction participants. The \emph{stoichiometry} is not contained in KGML documents and must be parsed from reaction equations in the KEGG REACTION database. To test the validity of the models, we used the corresponding validators from \href{http://sbml.org/Facilities/Validator/}{SBML.org} and \href{http://www.biopax.org/biopax-validator/}{BioPAX.org}. A model is marked as \emph{valid}, if the validator does not return any errors. For SBML, we further inspect if the models contain \emph{SBO terms}. It is further recommended to include \emph{notes}, such as human readable descriptions, and \emph{annotations} (e.g., cross-references in form of CV terms, MIRIAM URNs, \Xrefs). Only for BioPAX, it is important to use the \emph{appropriate classes} (instances of \smallMolecule{} for small molecules and instances of \protein{} for proteins) and a nice feature to fill the available BioPAX fields for chemical formula or molecular weight of small molecules (\emph{SM annotations}).
-%Cytoscape using KGMLReader, BiNOM (Version und Date korrespondieren zu den beiden Plugins).
+This table compares various applications that can convert KEGG pathways to BioPAX or SBML models. A checkmark (\checkmark) is given, if the
+
 }
 \end{table*}
 
