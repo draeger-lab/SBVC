@@ -294,8 +294,8 @@ This table specifies the SBO terms that we used to distinguish between various c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this step, an SBML \species{} and \qualitativeSpecies{} are created for each \PhysicalEntity{}.
-Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPAX2SBO} for a list of used terms). 
-Furthermore, the \species{} compartment is assigned due to the \texttt{cellularLocation} of the \PhysicalEntity. 
+Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPAX2SBO} for a list of used terms).
+Furthermore, the \species{} compartment is assigned due to the \texttt{cellularLocation} of the \PhysicalEntity.
 The default compartment is set if the \texttt{cellularLocation} is not known.
 
 Then, the BioPAX document is mined for an RDF link from the \PhysicalEntity{} to a corresponding Entrez Gene ID.
@@ -520,17 +520,22 @@ Furthermore, we provide our webtool BioPAX2SBML for further BioPAX translations 
 % What is important for the models (comparison table criteria...)
 % For Sybill it is clear that qual could not be integrated, since exclusively Level 2 v4 is written
 % auf die Besonderheit von BiNoM eingehen und erwähnen, dass der Vergleich eigentlich nicht ganz fair ist, weil es sich lediglich um ein Cytoscape plugin handelt (comparison to those tools is not reasonable)
-Sybill (everything is translated to a reaction, there are no reaction modifiers defined), (species are used in reactions, without listing in the species list)
-(groups are missing, proteins are missing, links to other pathways are missing)\\
-- different entity states are different SBML species, but they are not defined in detail \\
-- Wenn kein Pathwayobjekt definiert wurde, wird der pathway nicht übersetzt \\
-%
-Binom (order of the reaction lists not correct, some reaction lists are empty, that's ot allowed),
-human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
-- Bietet die Moeglichkeit aus einer Datei, die mehrere Pathways enthaelt, einen Pathway auszuwaehlen und als BioPAX file zu speichern
-- Auftrennung in Reaction Network, Pathway Structure und Protein-protein interaction moeglich"
 
-- Läuft bei owl Dateien größer 50kb nicht mehr stabil
+Just a few approaches exist to convert BioPAX to SBML and most of them use a simple one-to-one conversion.
+This might be due to the fact that ``the inter-conversion between BioPAX and SBML is not trivial as both formats were developed for different purposes" \citep{Bauer-Mehren2009}.
+Sybill \citep{Ruebenacker2009} and BiNoM \citep{Zinovyev2008} are two approaches that can be used for the translation of BioPAX into SBML but none of them use the Qualitative Models extension.
+Sybill is a stand-alone tool, that is also integrated in the quantitative modeling environment VCell \citep{Slepchenko2003}.
+In contrast, BiNoM is a Cytoscape plugin which offers the possibility to open BioPAX Level~3 files but whose main focus lies on the visualization of BioPAX files.
+We developed some comparison criteria and showed the results in Table~\ref{tab:Comparison}.% shows the comparison of both approaches to the BioPAX2SBML converter approach.
+
+Sybill converts BioPAX Level~2 and Level~3 files and has a very comfortable graphical user interface allowing the user to manipulate the conversion result.
+Unfortunately, the converted SBML file is not complete and the validator from SBML.org notifies errors, because species are used in several reactions that are missing in the species list. Additionally, some groups and pathway links are missing, too.
+BiNoM produces complete files, but the validator also notifies errors due to empty \texttt{listOf} elements and due to the wrong order of these elements.
+In contrast to Sybill, BiNoM converts BioPAX files without a pathway element, but it is not able to visualize BioPAX files bigger than 100kb.
+That is why both tools just partly fulfill the robustness criterion.
+Another feature of BiNoM is that it can separately visualize reaction networks, pathway structure and protein-protein interaction networks out of one BioPAX file.
+
+Finally, all approaches prevent the translation of double species, but exclusively BioPAX2SBML converter uses the qual extension and SBO terms for detailed species describtion, translate the BioPAX cross-references (Xrefs) into SBML CV-terms, and augment the SMBL file content with further database links.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% comparison table %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -539,7 +544,7 @@ human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
 \newcolumntype{C}{>{\centering\arraybackslash}p{2cm}}
 \begin{table*}[htb]
 \caption{Comparison of different available converters for BioPAX pathways.}
-\label{tab:AppVergleich}
+\label{tab:Comparison}
 %\rowcolors{1}{white}{tableShade2}
 \makebox[\textwidth]{
 \begin{tabular}{lccc}
@@ -555,7 +560,8 @@ human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
 {\bf SBML  Output Level}            & Level 3 Version 1                 & Level 2 Version 4             & Level 2 Version 4, Beta \\
                                     & including qual                    &                               & Version for Level 3 \\
 \midrule
-{\bf Signaling support (qual)}      & \checkmark                        & -                             & -  \\
+{\bf Qualitative model}             & \checkmark                        & -                             & -  \\
+{\bf support (qual)}                &                                   &                               &\\
 {\bf Valid SBML}                    & \checkmark                        & -                             & -  \\
 {\bf Complete}                      & \checkmark                        & -                             & \checkmark\\
 {\bf No duplicate entities}         & \checkmark                        & \checkmark                    & \checkmark \\
@@ -564,7 +570,7 @@ human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
 {\bf Compartments}                  & \checkmark                        & \checkmark                    & \checkmark \\
 {\bf Stoichiometry}                 & \checkmark                        & -                             & - \\
 {\bf Uses SBO terms}                & \checkmark                        & -                             & - \\
-{\bf Xrefs to CV terms}             & \checkmark                        & -                             & - \\
+{\bf Xrefs converted into CV terms} & \checkmark                        & -                             & - \\
 {\bf Augment model}                 & \checkmark                        & -                             & - \\
 {\bf Provenance}                    & \checkmark                        & -                             & - \\
 \midrule
@@ -572,13 +578,13 @@ human readable  (abhänging von der Eingabedatei, keine allgemeinen Regeln)
 }
 {
 The table compares three applications which are able to translate BioPAX into SBML.
-The checkmark (\checkmark) indicates that the criteria is completely fulfilled, the circles ($\circ$) means that the criteria is partly fulfilled, and the minus (-) that it is not fulfilled.
-An conversion is \emph{valid} if the validators from SBML.org finds no errors in the converted SBML file and it is \emph{complete} if no BioPAX entity is missing in the converted model. 
-It is important for modeling purposes that there are no duplicate entities in the files, this is represented with the '\emph{No duplicate entities}' criterion.
-A converter is \emph{robust} if it can handle bigger file sizes (more than 1MB) and is able to convert a BioPAX file which contains no \Pathway{} element.
-The '\emph{Compartments}', '\emph{Stoichiometry}', and '\emph{Uses SBO terms}' criterion denotes if this information is translated into SBML and if the SBML species are denoted with the corresponding SBO term.
-Additionally, it is checked if the BioPAX cross-references (Xrefs) are converted into SBML controlled vocabulary terms (CV terms) and if the SBML model is \emph{augmented} with further database information. 
-Finally, the \emph{provenance} indicates if the file history and the conversion is saved in the converted SBML file.
+The checkmark (\checkmark) indicates that the criteria is completely fulfilled, the circles ($\circ$) that the criteria is partly fulfilled, and the minus (-) that it is not fulfilled.
+A conversion is \emph{valid} if the validator from SBML.org finds no errors in the converted SBML file and the converted model is \emph{complete} if no BioPAX entity is missing.
+It is important for modeling purposes that there are no duplicate entities in the files, this is represented with the \emph{No duplicate entities} criterion.
+A converter is \emph{robust} if it can handle bigger file sizes (more than 100KB) and is able to convert a BioPAX file which contains no \Pathway{} element.
+The \emph{Compartments}, \emph{Stoichiometry}, and \emph{Uses SBO terms} criterion denotes if this information is translated into SBML and if the SBML species are denoted with the corresponding SBO term.
+Additionally, it is checked if the BioPAX cross-references (Xrefs) are translated into SBML controlled vocabulary terms (CV terms) and if the SBML model is \emph{augmented} with further database information.
+Finally, the \emph{provenance} criterion indicates if the file history and conversion tool information is saved in the converted SBML file.
 }
 \end{table*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
