@@ -817,8 +817,8 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       for (int i = 0; i < participants.size(); i++) {
         if (Pathway.class.isAssignableFrom(participants.get(i).getClass())) {
           keggEntry1 = parseEntity(((Pathway) participants.get(i)), keggPW, m, species);
-        } else if (PhysicalEntity.class.isAssignableFrom(participants.get(i).getClass())) {
-          keggEntry1 = parseEntity(((PhysicalEntity) participants.get(i)), keggPW, m, species);
+        } else if (Entity.class.isAssignableFrom(participants.get(i).getClass())) {
+          keggEntry1 = parseEntity(((Entity) participants.get(i)), keggPW, m, species);
         } else {
           log.log(Level.SEVERE, "1 This should not happen: '" + participants.get(i).getModelInterface() + "'.");
           System.exit(1);
@@ -827,8 +827,8 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           EntryExtended keggEntry2 = null;
           if (Pathway.class.isAssignableFrom(participants.get(j).getClass())) {
             keggEntry2 = parseEntity(((Pathway) participants.get(j)), keggPW, m, species);
-          } else if (PhysicalEntity.class.isAssignableFrom(participants.get(j).getClass())) {
-            keggEntry2 = parseEntity(((PhysicalEntity) participants.get(j)), keggPW, m, species);
+          } else if (Entity.class.isAssignableFrom(participants.get(j).getClass())) {
+            keggEntry2 = parseEntity(((Entity) participants.get(j)), keggPW, m, species);
           } else {
             log.log(Level.SEVERE, "2 This should not happen: '"  + participants.get(j).getModelInterface() + "'.");
             System.exit(1);
