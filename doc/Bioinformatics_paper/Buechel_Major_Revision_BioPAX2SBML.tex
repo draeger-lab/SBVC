@@ -132,7 +132,8 @@ The focus of SBML is quantitative modeling and dynamic simulation of models, whe
 BioPAX describes reactions and relations.
 In contrast, reactions are the only type of interaction in core SBML.
 With the SBML Qualitative Models extension (\qual), it has recently also become possible to describe relations in SBML.
-Before the creation of \qual{}, relations could not be translated into SBML at all or were erroneously converted to reactions.
+Before the creation of \qual{}, relations could not be \NEW{properly translated into SBML or just by adding additional SBO terms on reactions which is not so proper}.
+%Before the creation of \qual{}, relations could not be translated into SBML at all or were erroneously converted into reactions}.
 Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations.
 \section{Results:}
 The entire Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and the National Cancer Institute, has been converted from BioPAX into SBML.
@@ -267,7 +268,8 @@ This table specifies the SBO terms that we used to distinguish between various c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this step, an SBML \species{} and \qualitativeSpecies{} are created for each \PhysicalEntity{}.
-Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}, see Table~\ref{Tab:BioPAX2SBO} for a list of used terms).
+Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}).
+The used SBO terms are listed in Table~\ref{Tab:BioPAX2SBO}.
 Furthermore, the \species{} compartment is assigned due to the \texttt{CellularLocation} of the \PhysicalEntity.
 The default compartment is set if the \texttt{CellularLocation} is not known.
 
