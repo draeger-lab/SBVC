@@ -211,7 +211,9 @@ public class SBGN2KGML {
 				}
 				
 				// add the entry to the pathway
+				// TODO: Add them *after* parsing the arcs
 				p.addEntry(e);
+				// DO e.setReaction(reaction) for modifiers.
 			}
 		}
 		

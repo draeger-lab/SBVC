@@ -77,7 +77,7 @@ public class SBVCPanelTools {
         panel = new TranslatorSBGNPanel(inputFile, translationResult);
         break;
         
-      case BioPAX_level2: case BioPAX_level3:
+      case BioPAX_level2: case BioPAX_level3: case SIF:
         panel = new TranslatorBioPAXPanel(inputFile, keggFormat, translationResult);
         break;
         
@@ -110,7 +110,7 @@ public class SBVCPanelTools {
         panel = new TranslatorSBGNPanel(pathwayID, translationResult);
         break;
         
-      case BioPAX_level2: case BioPAX_level3:
+      case BioPAX_level2: case BioPAX_level3: case SIF:
         panel = new TranslatorBioPAXPanel(pathwayID, keggFormat, translationResult);
         break;
         

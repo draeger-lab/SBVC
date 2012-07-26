@@ -218,6 +218,15 @@ public class SBVC extends Launcher{
   }
   
   /* (non-Javadoc)
+   * @see de.zbit.Launcher#getCitation(boolean)
+   */
+  @Override
+  public String getCitation(boolean HTMLstyle) {
+    // TODO Return a citation string, as soon as this is published. 
+    return super.getCitation(HTMLstyle);
+  }
+  
+  /* (non-Javadoc)
    * @see de.zbit.Launcher#addCopyrightToSplashScreen()
    */
   @Override
