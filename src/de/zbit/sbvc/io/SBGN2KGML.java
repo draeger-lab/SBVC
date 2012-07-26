@@ -3,8 +3,9 @@ package de.zbit.sbvc.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,12 +18,16 @@ import org.sbgn.bindings.Port;
 import org.sbgn.bindings.Sbgn;
 import org.xml.sax.SAXException;
 
+import de.zbit.graph.io.def.SBGNProperties.ArcType;
 import de.zbit.graph.io.def.SBGNProperties.GlyphType;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Graphics;
 import de.zbit.kegg.parser.pathway.Pathway;
+import de.zbit.kegg.parser.pathway.Reaction;
+import de.zbit.kegg.parser.pathway.ReactionComponent;
+import de.zbit.kegg.parser.pathway.ReactionType;
 import de.zbit.kegg.parser.pathway.Relation;
 import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
@@ -32,21 +37,32 @@ import de.zbit.kegg.parser.pathway.ext.EntryExtended;
  *
  * @author 	Manuel Ruff
  * @date 	2012-06-03
- * @version $Rev: 99$
+ * @version $Rev: 114$
  * @since	$Rev: 99$
  *
  */
 public class SBGN2KGML {
 
-	public static final Logger log = Logger.getLogger(SBGN2KGML.class.getName());	// logger for errors, warnings, etc.
+	public static final Logger log = Logger.getLogger(SBGN2KGML.class.getName());					// logger for errors, warnings, etc.
 	
-	HashMap<String, GlyphType> glyphTypeLookup = new HashMap<String, GlyphType>();	// mapping from the glyphs clazz onto the GlyphType
-	HashMap<String, Glyph> glyphLookup = new HashMap<String, Glyph>();				// mapping from the glyph ids onto the glyph itself
-	HashMap<String, Entry> entryLookup = new HashMap<String, Entry>();				// mapping from the glyph ids onto the entries
-	HashMap<String, Entry> clonemarkerLookup = new HashMap<String, Entry>();		// mapping from the clonemarker name onto the entry
-	HashMap<String, Glyph> processGlyphLookup = new HashMap<String, Glyph>();		// mapping from the process glyph id's onto the glyph itself
-	HashMap<String, ArrayList<String>> portLinkageCollectorLookup = new HashMap<String, ArrayList<String>>();	// mapping collection for all in or outgoing glyphs of a port
-	private int id = 0;	// entries id
+	public SBGN2KGMLHelper helper = new SBGN2KGMLHelper();											// helper class to get the proper EntryType and ArcType
+	
+	
+	HashMap<String, Entry> entryLookup = new HashMap<String, Entry>();								// mapping from the glyph id onto the entries
+	HashMap<String, String> clonemarkerLookup = new HashMap<String, String>();						// mapping from the clonemarker name onto the keggid
+	HashMap<String, Glyph> processGlyphLookup = new HashMap<String, Glyph>();						// mapping from the process glyph id onto the glyph itself
+	
+	HashMap<String, ArrayList<String>> portGatherer = new HashMap<String, ArrayList<String>>();		// mapping from port name onto all glyph names which are connected with
+	HashMap<String, ArrayList<String>> portSubstrates = new HashMap<String, ArrayList<String>>();
+	HashMap<String, ArrayList<String>> portProducts = new HashMap<String, ArrayList<String>>();
+	HashMap<String, ArrayList<String>> reactionModifiers = new HashMap<String, ArrayList<String>>();	// mapping from the process glyph id onto the reactionmodifiers
+	HashMap<String, String> reactionLookup = new HashMap<String, String>();							// mapping from the process glyph id onto the reaction name
+	
+	ArrayList<Arc> arcsWithoutPorts = new ArrayList<Arc>();											// mapping for arcs without ports (relations)
+	
+	private int entryID = 0;																		// entries id
+	private int reactionID = 0;
+	private int skipCount = 0;																		// counts the clonemarker occurences to guarantee ongoing names
 	
 	private boolean considerGlyphs = true;
 	private boolean considerArcs = true;
@@ -54,39 +70,7 @@ public class SBGN2KGML {
 	/**
 	 * Constructor
 	 */
-	public SBGN2KGML(){
-		initialize();
-	}
-	
-	/**
-	 * Method for initializing {@link SBGN2KGML}. It simply creates a mapping for the {@link Glyph#getClazz()} onto {@link GlyphType}
-	 */
-	protected void initialize(){
-		// for all GlyphTypes
-		for(GlyphType g : EnumSet.allOf(GlyphType.class)){
-			// generate a lookup from String to GlyphType
-			glyphTypeLookup.put(g.toString(), g);
-		}
-	}
-	
-	/**
-	 * Method to get the corresponding {@link EntryType} from the {@link GlyphType}
-	 * @param gtype	{@link GlyphType}
-	 * @return		{@link EntryType}
-	 */
-	// TODO: this mapping is kinda wired, because it is surjective
-	protected EntryType getEntryTypeFromGlyphType(GlyphType gtype){
-		switch(gtype){
-			case simple_chemical:
-				return EntryType.compound;
-			case macromolecule:
-				return EntryType.enzyme;
-			case macromolecule_multimer:
-				return EntryType.genes;
-			default:
-				return EntryType.other;
-		}
-	}
+	public SBGN2KGML(){}
 
 	/**
 	 * Method for reading a {@link Sbgn}-file
@@ -95,16 +79,18 @@ public class SBGN2KGML {
 	 * @exception JAXBException
 	 */
 	public Sbgn read(String filename) {
-		// initialize a file
+
+		// initialize the objects
 		File f = new File(filename);
-		// initilize the sbgn object
 		Sbgn sbgn = null;
+		
+		// try reading the file
 		try {
-			// read in the file into the sbgn object
 			sbgn = SbgnUtil.readFromFile(f);
 		} catch (JAXBException e) {
 			log.log(Level.SEVERE, String.format("Couldn't read in the the file: %s", f.getAbsoluteFile()), e);
 		}
+		
 		return sbgn;
 	}
 
@@ -120,8 +106,12 @@ public class SBGN2KGML {
 	 * @exception IOException
 	 */
 	public boolean validateSBGN(String filename) {
+		
+		// initialize the objects
 		File f = new File(filename);
 		boolean isValid = false;
+		
+		// try validating the file
 		try {
 			isValid = SbgnUtil.isValid(f);
 		} catch (JAXBException e) {
@@ -131,18 +121,18 @@ public class SBGN2KGML {
 		} catch (IOException e) {
 			log.log(Level.SEVERE, String.format("Couldn't create or find the file: %s", f.getAbsoluteFile()), e);
 		}
+		
 		return isValid;
 	}
 
 	/**
-	 * Method for translating a {@link Sbgn}-file into a KGML-file
+	 * Method for translating a {@link Sbgn}-file into a {@link Pathway}
 	 * @param {@link Sbgn}		(see {@link SBGN2KGML#read(String)})
 	 * @return {@link Pathway}	(see {@link KGMLWriter})
 	 */
 	protected Pathway translate(Sbgn sbgn) {
 
 		// create a new pathway
-		// TODO: the number of the pathway should be a five-digit number so what?
 		Pathway p = new Pathway("unknown", "unknown", 10000, "unknown title");
 
 		// translate the glyphs
@@ -163,20 +153,17 @@ public class SBGN2KGML {
 	 */
 	protected void handleAllGlyphs(Sbgn sbgn, Pathway p){
 		
-		// for every glyph
 		for (Glyph g : sbgn.getMap().getGlyph()) {
 			
-			// map all the ports and subglyphs
-			createMappingForGlyph(g);
+			createMappingForProcessGlyphAndPorts(g);
 			
 			// no label means process glyph
 			if(g.getLabel() != null){
 				
-				// create a new entry
-				Entry e = new EntryExtended(p, ++id, "unknown:"+id);
+				Entry e = new EntryExtended(p, ++entryID, "unknown entry:"+(entryID-skipCount));
 
-				// convert the glyphtype into entrytype
-				e.setType(getEntryTypeFromGlyphType(GlyphType.valueOfString(g.getClazz())));
+				// convert the GlyphType into an EntryType
+				e.setType(helper.getEntryTypeFromGlyphType(GlyphType.valueOfString(g.getClazz())));
 				
 //				if (e instanceof EntryExtended) {
 //				  // TODO: Set extended type
@@ -185,29 +172,43 @@ public class SBGN2KGML {
 				
 				// create the graphics
 				// TODO: eventually use different creators
-//				Graphics.createGraphicsForCompound(name);
-//				Graphics.createGraphicsForPathwayReference(name);
-//				else
-				Graphics gr = new Graphics(g.getLabel().getText());
+				Graphics gr = null;
 				
-				gr.setDefaults(e.getType());
-				gr.setX((int) g.getBbox().getX());
-				gr.setY((int) g.getBbox().getY());
-				gr.setHeight((int) g.getBbox().getH());
-				gr.setWidth((int) g.getBbox().getW());
+				if(e.getType().compareTo(EntryType.compound) == 0)
+					gr = Graphics.createGraphicsForCompound(g.getLabel().getText());
+				else if(e.getType().compareTo(EntryType.map) == 0)
+					gr = Graphics.createGraphicsForPathwayReference(g.getLabel().getText());
+				else
+					gr = new Graphics(g.getLabel().getText());
+				
+				if(gr != null){
+					gr.setDefaults(e.getType());
+					gr.setX((int) g.getBbox().getX());
+					gr.setY((int) g.getBbox().getY());
+					gr.setHeight((int) g.getBbox().getH());
+					gr.setWidth((int) g.getBbox().getW());
+				}
 	
 				// add the graphics to the entry
 				e.addGraphics(gr);
 				
-				// map the glyph onto the entries
+				// map the glyph onto the entries and the glyphs
+				e.setCustom(g);
 				entryLookup.put(g.getId(), e);
 				
 				// same entries have the same name
-				if(g.getClone() != null)
-					if(clonemarkerLookup.containsKey(g.getLabel().getText()))
-						e.setName(clonemarkerLookup.get(g.getLabel().getText()).getName());
-				else
-					clonemarkerLookup.put(g.getLabel().getText(), e);
+				// TODO: maybe decrease the number if a clone is found to get ongoing numbering!
+				if(g.getClone() != null) {
+					if(clonemarkerLookup.containsKey(g.getLabel().getText())) {
+						e.setName(clonemarkerLookup.get(g.getLabel().getText()));
+						skipCount++;
+					} else {
+						clonemarkerLookup.put(g.getLabel().getText(), e.getName());
+					}
+				}
+				else {
+					clonemarkerLookup.put(g.getLabel().getText(), e.getName());
+				}
 				
 				// add the entry to the pathway
 				p.addEntry(e);
@@ -227,80 +228,175 @@ public class SBGN2KGML {
 		// TODO NOW it connects all together - thats wrong
 		// TODO add enzyme support
 		
-		createMappingForAllPorts(sbgn);
+		createMappingForAllPortsAndArcs(sbgn);
 		
 		// for every arc
-		for (Arc arc : sbgn.getMap().getArc()) {
+//		for (Arc arc : sbgn.getMap().getArc()) {
 			
-			Port firstPort = null;
-			Port secondPort = null;
-			Entry source = null;
-			Entry target = null;
-			ArrayList<Relation> relations = new ArrayList<Relation>();
+//			Port firstPort = null;
+//			Port secondPort = null;
+//			Entry source = null;
+//			Entry target = null;
+////			ArrayList<Relation> relations = new ArrayList<Relation>();
+//			
+//			if(arc.getTarget().getClass().equals(Port.class)) {
+//				firstPort = (Port) arc.getTarget();
+//			}
+//			
+//			if(firstPort == null && arc.getSource().getClass().equals(Glyph.class) && arc.getTarget().getClass().equals(Glyph.class)) {
+//				source = entryLookup.get(((Glyph) arc.getSource()).getId());
+//				target = entryLookup.get(((Glyph) arc.getTarget()).getId());
+//				
+//				if(source != null && target != null) {
+//					Relation relation = new Relation(source.getId(), target.getId(), RelationType.other);
+////					relations.add(relation);
+//				}
+//			}
+//			
+//			if(firstPort != null && arc.getSource().getClass().equals(Glyph.class)) {
+//				Glyph processGlyph = processGlyphLookup.get(firstPort.getId());
+//				
+//				for (Port currentPort : processGlyph.getPort()) {
+//					if(currentPort.getId() != firstPort.getId())
+//						secondPort = currentPort;
+//				}
+//					
+//				ArrayList<String> collectedGlyphs = portGatherer.get(secondPort.getId());
+//						
+//				for (String s : collectedGlyphs) {
+//					Relation relation = new Relation(entryLookup.get(((Glyph) arc.getSource()).getId()).getId(), entryLookup.get(s).getId(), RelationType.other);
+////					relations.add(relation);
+//				}
+//			}
+//			
+////			for(Relation relation : relations)
+////				p.addRelation(relation);
 			
-			if(arc.getTarget().getClass().equals(Port.class)) {
-				firstPort = (Port) arc.getTarget();
-			}
-			
-			if(firstPort == null && arc.getSource().getClass().equals(Glyph.class) && arc.getTarget().getClass().equals(Glyph.class)) {
-				source = entryLookup.get(((Glyph) arc.getSource()).getId());
-				target = entryLookup.get(((Glyph) arc.getTarget()).getId());
+			// create edges for the relations
+			// the meaning of awp is [A]rcs[W]ithout[P]orts
+			for(Arc awp : arcsWithoutPorts) {
 				
-				if(source != null && target != null) {
-					Relation relation = new Relation(source.getId(), target.getId(), RelationType.other);
-					relations.add(relation);
-				}
-			}
-			
-			if(firstPort != null && arc.getSource().getClass().equals(Glyph.class)) {
-				Glyph processGlyph = processGlyphLookup.get(firstPort.getId());
-				
-				for (Port currentPort : processGlyph.getPort()) {
-					if(currentPort.getId() != firstPort.getId())
-						secondPort = currentPort;
-				}
-					
-				ArrayList<String> collectedGlyphs = portLinkageCollectorLookup.get(secondPort.getId());
-						
-				for (String s : collectedGlyphs) {
-					Relation relation = new Relation(entryLookup.get(((Glyph) arc.getSource()).getId()).getId(), entryLookup.get(s).getId(), RelationType.other);
-					relations.add(relation);
-				}
-			}
-			
-			for(Relation relation : relations)
+				int sourceEntryID = entryLookup.get(((Glyph) awp.getSource()).getId()).getId();
+				int targetEntryID = entryLookup.get(((Glyph) awp.getTarget()).getId()).getId();
+				Relation relation = new Relation(sourceEntryID, targetEntryID, helper.getRelationTypeFromArcType(ArcType.valueOfString(awp.getClazz())));
 				p.addRelation(relation);
+				
+			}
 
-		}
+			// create edges for the reactions
+			Iterator<Glyph> processGlyphIterator = processGlyphLookup.values().iterator();
+			while(processGlyphIterator.hasNext()){
+				Glyph processGlyph = processGlyphIterator.next();
+				ArrayList<String> substrates = new ArrayList<String>();
+				ArrayList<String> products = new ArrayList<String>();
+				
+				for(Port port : processGlyph.getPort()){
+					if(portSubstrates.containsKey(port.getId()))
+						substrates.add(port.getId());
+					if(portProducts.containsKey(port.getId()))
+						products.add(port.getId());
+				}
+				
+				Reaction r = null;
+				
+				if(substrates.isEmpty() || products.isEmpty()){
+					r = new Reaction(p, "unknown reaction:"+(++reactionID), ReactionType.reversible);
+					
+					if(!products.isEmpty()){
+						r.addSubstrate(new ReactionComponent(entryLookup.get(portProducts.get(products.get(0)).get(0))));
+						r.addProduct(new ReactionComponent(entryLookup.get(portProducts.get(products.get(1)).get(0))));
+					}
+					if(!substrates.isEmpty()){
+						r.addSubstrate(new ReactionComponent(entryLookup.get(portSubstrates.get(substrates.get(0)).get(0))));
+						r.addProduct(new ReactionComponent(entryLookup.get(portSubstrates.get(substrates.get(1)).get(0))));
+					}
+				}
+				else{
+					r = new Reaction(p, "unknown reaction:"+(++reactionID), ReactionType.irreversible);
+				
+					if(!products.isEmpty()){
+						for(int i = 0; i < products.size(); i++){
+							for(String s : portProducts.get(products.get(i))){
+								r.addProduct(new ReactionComponent(entryLookup.get(s)));
+							}
+						}
+					}
+					
+					if(!substrates.isEmpty()){
+						for(int i = 0; i < substrates.size(); i++){
+							for(String s : portSubstrates.get(substrates.get(i))){
+								r.addSubstrate(new ReactionComponent(entryLookup.get(s)));
+							}
+						}
+					}
+				}
+				
+				reactionLookup.put(processGlyph.getId(), r.getName());
+				
+				p.addReaction(r);
+			}
+			
+			// create edges for the reaction modifiers
+			Iterator<Map.Entry<String, ArrayList<String>>> reactionModifiersIterator = reactionModifiers.entrySet().iterator();
+			while(reactionModifiersIterator.hasNext()){
+				Map.Entry<String, ArrayList<String>> entrySet = reactionModifiersIterator.next();
+				
+//				p.addReactionModifier(entry, reaction name);
+			}
+//		}
 	}
 	
 	/**
-	 * Method to create a mapping for all {@link Port}'s and their linked {@link Glyph}'s from a {@link Sbgn}
+	 * Method to create a mapping for all {@link Port}'s onto their linked {@link Glyph}'s
+	 * and gather all {@link Arc}'s without any {@link Port}'s
 	 * @param sbgn	{@link Sbgn}
 	 */
-	protected void createMappingForAllPorts(Sbgn sbgn) {
+	protected void createMappingForAllPortsAndArcs(Sbgn sbgn) {
 		
 		for (Arc arc : sbgn.getMap().getArc()) {
-			
-			ArrayList<String> collectedGlyphs = new ArrayList<String>();
+		
+			// initialize
+			ArrayList<String> collectedGlyphNamesForOnePort = new ArrayList<String>();
+			ArrayList<String> collectedReactionModifiers = new ArrayList<String>();
 			Port port = null;
+			boolean isProduct = false;
+			boolean isSubstrate = false;
 			
+			// check if source or target is a port and if its already gathered
+			// update the glyphname list
 			if(arc.getSource().getClass().equals(Port.class)) {
 				port = (Port) arc.getSource();
-				if(portLinkageCollectorLookup.containsKey(port.getId()))
-						collectedGlyphs = portLinkageCollectorLookup.get(port.getId());
-				collectedGlyphs.add(((Glyph) arc.getTarget()).getId());
+				isProduct = true;
+				if(portProducts.containsKey(port.getId()))
+						collectedGlyphNamesForOnePort = portProducts.get(port.getId());
+				collectedGlyphNamesForOnePort.add(((Glyph) arc.getTarget()).getId());
 			}
 			
 			if(arc.getTarget().getClass().equals(Port.class)) {
 				port = (Port) arc.getTarget();
-				if(portLinkageCollectorLookup.containsKey(port.getId()))
-						collectedGlyphs = portLinkageCollectorLookup.get(port.getId());
-				collectedGlyphs.add(((Glyph) arc.getSource()).getId());
+				isSubstrate = true;
+				if(portSubstrates.containsKey(port.getId()))
+						collectedGlyphNamesForOnePort = portSubstrates.get(port.getId());
+				collectedGlyphNamesForOnePort.add(((Glyph) arc.getSource()).getId());
 			}
 			
-			if(port != null)
-				portLinkageCollectorLookup.put(port.getId(), collectedGlyphs);
+			if(isProduct)
+				portProducts.put(port.getId(), collectedGlyphNamesForOnePort);
+			
+			if(isSubstrate)
+				portSubstrates.put(port.getId(), collectedGlyphNamesForOnePort);
+			
+			if(port == null){
+				if(((Glyph) arc.getTarget()).getPort().isEmpty() && ((Glyph) arc.getSource()).getPort().isEmpty()){
+					arcsWithoutPorts.add(arc);
+				} else if(!((Glyph) arc.getTarget()).getPort().isEmpty()){
+					if(reactionModifiers.containsKey(((Glyph) arc.getTarget()).getId()))
+							collectedReactionModifiers = reactionModifiers.get(((Glyph) arc.getTarget()).getId());
+					collectedReactionModifiers.add(((Glyph) arc.getSource()).getId());
+					reactionModifiers.put(((Glyph) arc.getTarget()).getId(), collectedReactionModifiers);
+				}
+			}
+				
 		}
 	}
 	
@@ -314,26 +410,20 @@ public class SBGN2KGML {
 	}
 	
 	/**
-	 * Method to create a mapping for a {@link Glyph} which will be saved in {@link SBGN2KGML#glyphLookup} and {@link SBGN2KGML#portLookup}
+	 * Method to create a mapping for a Process-{@link Glyph}
 	 * @param g	{@link Glyph}
 	 */
-	protected void createMappingForGlyph(Glyph g){
-		// put the original glyph into the glyph lookup table
-		if(g.getLabel() != null)
-			glyphLookup.put(g.getId(), g);
-		else {
+	protected void createMappingForProcessGlyphAndPorts(Glyph g){
+		
+		if(!g.getPort().isEmpty())
 			processGlyphLookup.put(g.getId(), g);
-
-			for (Port port : g.getPort())
-				processGlyphLookup.put(port.getId(), g);
-		}
+				
 	}
 	
 	
 	public static void main(String args[]) {
 		String filename = "glycolysis.sbgn";
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
-		sbgn2kgml.initialize();
 		Sbgn sbgn = sbgn2kgml.read(filename);
 		
 		System.out.println(sbgn2kgml.validateSBGN(filename));
