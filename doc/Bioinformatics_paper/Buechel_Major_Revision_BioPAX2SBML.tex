@@ -132,7 +132,7 @@ The focus of SBML is quantitative modeling and dynamic simulation of models, whe
 BioPAX describes reactions and relations.
 In contrast, reactions are the only type of interaction in core SBML.
 With the SBML Qualitative Models extension (\qual), it has recently also become possible to describe relations in SBML.
-Before the creation of \qual{}, relations could not be \NEW{properly translated into SBML or just by adding additional SBO terms on reactions which is not so proper}.
+Before the development of SBML \qual{}, relations could not be \NEW{properly translated into SBML}.
 %Before the creation of \qual{}, relations could not be translated into SBML at all or were erroneously converted into reactions}.
 Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations.
 \section{Results:}
@@ -145,7 +145,7 @@ BioPAX2SBML is freely available at \url{http://webservices.cs.uni-tuebingen.de/}
 \section{Contact:}
 \href{mailto:finja.buechel@uni-tuebingen.de}{finja.buechel@uni-tuebingen.de}
 \NEW{\section{Supplementary Information:}
-Supplementary data are available at Bioinformatics online. }
+Supplementary data is available at Bioinformatics online.}
 \end{abstract}
 
 
@@ -161,7 +161,7 @@ Those relationships are denoted as \emph{relations} that specify enzyme-enzyme r
 Before the creation of the Qualitative Models extension for SBML (\qual, \citealp[see][]{QualSpecification}), it was not possible to define relations or to include reactions together with relations in one model.
 Furthermore, the combination or exchange of information between different databases is hardly feasible if one database uses the BioPAX format and the other one the SBML format.
 So far, there exist several visualization tools, such as Cytoscape \citep{Zinovyev2008, Smoot2011a} or Clandestine \citep{Funahashi2007, Mi2011}, which can handle BioPAX and SBML by using plugins. But the combination of both formats or conversion of one format into the other is difficult even with these plugins.
-Hence, converters are needed.
+Hence, converters are needed.\cite{Stromback2005}
 
 Today, there exist mainly converters from SBML to BioPAX like \emph{The System Biology Format Converter} \citep[see][]{SBFC}, but no converter for BioPAX to SBML that is capable of properly including relations.
 Other research groups previously faced the same problem with incompatibilities between BioPAX and SBML.
@@ -179,7 +179,7 @@ The SBML Level~3 Version~1 core specification defines a special XML dialect to d
 The most important classes are \species{}, describing reactive species, and \reactions{}, which interconnect \species{} elements.
 A \species{} element can be further specified with the aid of MIRIAM annotations \citep{Novere2005}.
 %The SBML core specification provides no possibility to define other relationships than concrete quantitative reactions.
-\NEW{The SBML core specification provides several constructs to describe quantitative processes, suchs as events, rules, constraints, reactions, etc., but there is no possibility to define qualitative relationships.}
+\NEW{The SBML core specification provides several constructs to describe quantitative processes, such as events, rules, constraints, reactions, etc., but there is no possibility to define qualitative relationships.}
 
 The SBML Qualitative Models extension (\qual) introduces qualitative elements, such as \qualitativeSpecies{} and \transition, providing the necessary means to describe relationships that \NEW{cannot} be described by reactions, for instance, enzyme-enzyme relations or interactions of transcription factors and genes \citep{QualSpecification}.
 Instead of the quantities associated to \species, which are affected by reactions, \qualitativeSpecies{} exhibit discrete states, representing their activities that are changed using transitions.
@@ -685,6 +685,11 @@ Smoot, M.~E., Ono, K., Ruscheinski, J., Wang, P.-L., and Ideker, T. (2011).
   visualization.
 \newblock {\em Bioinformatics\/}, {\bf 27}(3), 431--432.
 
+\bibitem[Str\"omb\"ack {\em et~al.}(2005)Str\"omb\"ack, Lambrix]{Stromback2005}
+Str\"omb\"ack, L. and Lambrix, P. (2005).
+\newblock Representations of molecular pathways: an evaluation of {SBML}, {PSI MI} and {BioPAX}.
+\newblock {\em Bioinformatics\/}, {\bf 21}(24), 4401--4407.
+
 \bibitem[Zinovyev {\em et~al.}(2008)Zinovyev, Viara, Calzone, and
   Barillot]{Zinovyev2008}
 Zinovyev, A., Viara, E., Calzone, L., and Barillot, E. (2008).
@@ -693,7 +698,5 @@ Zinovyev, A., Viara, E., Calzone, L., and Barillot, E. (2008).
 \newblock {\em Bioinformatics\/}, {\bf 24}(6), 876--877.
 
 \end{thebibliography}
-
-\include{Buechel_Appendix}
 
 \end{document}
