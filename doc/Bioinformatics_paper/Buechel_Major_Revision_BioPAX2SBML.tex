@@ -20,7 +20,7 @@
 \hyphenation{BioPAX BioCarta PaxTools SBML net-work net-works er-ro-neous-ly
       Clandestine re-la-tigon re-la-tigon-ship re-ac-tigon other-wise
       re-la-tins re-la-tigon-ships re-ac-tins inter-action inter-actions re-search
-      be-tween}
+      be-tween tran-scrip-tion unique-ly BioCyc}
 
 \newcommand{\NEW}[1]{\textcolor{red}{#1}}
 
@@ -154,22 +154,29 @@ Supplementary data is available at Bioinformatics online.}
 \section{Introduction}
 The goal of systems biology is the model-driven understanding of biological and biochemical processes across all layers and various levels of detail.
 The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) are common modeling languages that facilitate the exchange and storage of \emph{in-silico} models.
-BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory and genetic interaction networks \citep{Demir2010}.
-SBML describes the structure of models, and offers the possibility to include mathematical expressions \citep{Hucka2003}.
-The SBML core specification defines reactions in detail but no other relationships between molecules.
+BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory and genetic interaction networks \NEW{and is mainly used for information exchange} \citep{Demir2010}.
+SBML describes the structure of models, and offers the possibility to include mathematical expressions \NEW{which are necessary for simulation purposes} \citep{Hucka2003}.
+\NEW{A detailed comparison between both languages can be found in \citet{Stromback2005} and \citet{Stromback2006}.}
+
+\NEW{Besides these language differences, BioPAX models from databases like the Nature Pathway Interaction Database (PID, \citealp{Schaefer2009}) or MetaCyc \citep{Caspi2012} are often used as information source to build SBML models for further simulation processes \citep{Bauer-Mehren2009}.
+}
+
+The SBML core specification defines \NEW{quantitative processes, such as reactions, events, rules, and constraints,} in detail but no other relationships between molecules.
 Those relationships are denoted as \emph{relations} that specify enzyme-enzyme relations, protein-protein interactions, interactions of transcription factors and genes, protein-compound interaction, links to other pathways, etc.
-Before the creation of the Qualitative Models extension for SBML (\qual, \citealp[see][]{QualSpecification}), it was not possible to define relations or to include reactions together with relations in one model.
-Furthermore, the combination or exchange of information between different databases is hardly feasible if one database uses the BioPAX format and the other one the SBML format.
-So far, there exist several visualization tools, such as Cytoscape \citep{Zinovyev2008, Smoot2011a} or Clandestine \citep{Funahashi2007, Mi2011}, which can handle BioPAX and SBML by using plugins. But the combination of both formats or conversion of one format into the other is difficult even with these plugins.
-Hence, converters are needed.\cite{Stromback2005}
+\NEW{These relations are also provided in BioPAX models,} but before the creation of the Qualitative Models extension for SBML (\qual, \citealp[see][]{QualSpecification}), it was not possible to define those relations or to include reactions together with relations in one model.
+%
+%Furthermore, the combination or exchange of information between different databases is hardly feasible if one database uses the BioPAX format and the other one the SBML format.
+%So far, there exist several visualization tools, such as Cytoscape \citep{Zinovyev2008, Smoot2011a} or Clandestine \citep{Funahashi2007, Mi2011}, which can handle BioPAX and SBML by using plugins. But the combination of both formats or conversion of one format into the other is difficult even with these plugins.
+Hence, new BioPAX to SBML converters are needed.
 
 Today, there exist mainly converters from SBML to BioPAX like \emph{The System Biology Format Converter} \citep[see][]{SBFC}, but no converter for BioPAX to SBML that is capable of properly including relations.
 Other research groups previously faced the same problem with incompatibilities between BioPAX and SBML.
 To overcome the limitations of those file formats and to avoid the creation of pseudo-reactions or similar constructions, \citet{Ruebenacker2009} introduce an intermediate bridging format.
-%
 The need to combine both formats to use the knowledge from a multitude of databases in various applications becomes more and more urgent.
 
-In this paper we present a webtool for the translation from BioPAX into SBML format. We demonstrate its functionality by converting the whole Nature Pathway Interaction Database (PID, \citealp{Schaefer2009}) from BioPAX Level~2 and Level~3 formats to the SBML format, including the \qual{} extension.
+
+In this paper we present a webtool for the translation from BioPAX into SBML format. 
+We demonstrate its functionality by converting the whole PID from BioPAX Level~2 and Level~3 formats to the SBML format, including the \qual{} extension.
 
 
 \begin{methods}
@@ -461,7 +468,7 @@ Hence, former conversion approaches from BioPAX to SBML did either incorrectly c
 To fill this gap, the SBML community has recently developed the \qual{} specification, which allows users to model arbitrary transitions between species.
 
 Furthermore, the models themselves just provide the base for further analysis or visualization methods.
-Other applications, such as Clandestine or COPASI, focus on visualization, simulation, analysis, etc. of those models.
+Other applications, such as Clandestine \citep{Funahashi2007} or COPASI \citep{Hoops2006}, focus on visualization, simulation, analysis, etc. of those models.
 Therefore, most of those applications have certain requirements on the models.
 For example, to uniquely map mass spectrometry data on a model, it may be required for the model to have UniProt IDs.
 To match mRNA expression data or perform gene set enrichment analyses, Entrez Gene identifiers might be required.
@@ -486,7 +493,7 @@ Only a few approaches exist to convert BioPAX to SBML and the existing ones use 
 This might be due to the fact that ``the inter-conversion between BioPAX and SBML is not trivial as both formats were developed for different purposes" \citep{Bauer-Mehren2009}.
 Sybill \citep{Ruebenacker2009} and BiNoM \citep{Zinovyev2008} are two approaches that can be used for the translation of BioPAX into SBML but none of them is able to appropriately translate signaling networks.
 Sybill is a stand-alone tool that is also integrated in the quantitative modeling environment VCell \citep{Slepchenko2003}.
-In contrast, BiNoM is a Cytoscape plugin, which offers the possibility to open BioPAX Level~3 files.
+In contrast, BiNoM is a Cytoscape plugin \citep{Smoot2011a}, which offers the possibility to open BioPAX Level~3 files.
 It mainly focusses on the visualization of BioPAX files and not on the actual conversion into SBML.
 Table~\ref{tab:Comparison} compares these programs based on defined criteria.
 
@@ -554,6 +561,17 @@ Berenguier, D., Chaouiya, C., Naldi, A., Thieffry, D., and van Iersel, M.~P.
 \newblock Specification available at
   \url{http://sbml.org/Community/Wiki/SBML_Level_3_Proposals/Qualitative_Models}.
   Accessed 2012 Mar 22.
+
+\bibitem[Caspi {\em et~al.}(2012)Caspi, Altman, Dreher, Fulcher, Subhraveti,
+Keseler, Kothari, Krummenacker, Latendresse, Mueller, Ong, Paley, Pujar,
+Shearer, Travers, Weerasinghe, Zhang, and Kar]{Caspi2012}
+Caspi, R., Altman, T., Dreher, K., Fulcher, C. A., Subhraveti, P., 
+Keseler, I.~M., Kothari, A., Krummenacker, M., Latendresse, M., 
+Mueller, L.~A., Ong, Q., Paley, S., Pujar, A., 
+Shearer, A.~G., Travers, M., Weerasinghe, D., Zhang, P., and
+Karp, P.~D. (2012).
+\newblock The MetaCyc Database of Metabolic Pathways and Enzymes and the BioCyc Collection of Pathway/genome Databases.
+\newblock {\em Nucleic Acids Res\/}, {\bf 40}(Database issue), D742–-D753.
 
 \bibitem[Courtot {\em et~al.}(2011)Courtot, Juty, Kn\"{u}pfer, Waltemath,
   Zhukova, Dr\"{a}ger, Dumontier, Finney, Golebiewski, Hastings, Hoops,
@@ -684,6 +702,11 @@ Smoot, M.~E., Ono, K., Ruscheinski, J., Wang, P.-L., and Ideker, T. (2011).
 \newblock Cytoscape 2.8: new features for data integration and network
   visualization.
 \newblock {\em Bioinformatics\/}, {\bf 27}(3), 431--432.
+
+\bibitem[Str\"omb\"ack {\em et~al.}(2006)Str\"omb\"ack, Jakoniene, Tan, Lambrix]{Stromback2006}
+Str\"omb\"ack, L., Jakoniene, V., Tan, H. and Lambrix, P. (2006).
+\newblock Representing, storing and accessing molecular interaction data: a review of models and tools.
+\newblock {\em Briefings in Bioinformatics\/}, {\bf 7}(4), 331--338.
 
 \bibitem[Str\"omb\"ack {\em et~al.}(2005)Str\"omb\"ack, Lambrix]{Stromback2005}
 Str\"omb\"ack, L. and Lambrix, P. (2005).
