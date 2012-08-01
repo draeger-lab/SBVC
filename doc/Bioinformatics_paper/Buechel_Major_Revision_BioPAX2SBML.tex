@@ -22,7 +22,7 @@
       re-la-tins re-la-tigon-ships re-ac-tins inter-action inter-actions re-search
       be-tween tran-scrip-tion unique-ly BioCyc}
 
-\newcommand{\NEW}[1]{\textcolor{red}{#1}}
+\newcommand{\NEW}[1]{\textcolor{black}{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Useful macros:
@@ -136,7 +136,7 @@ Before the development of SBML \qual{}, relations could not be \NEW{properly tra
 %Before the creation of \qual{}, relations could not be translated into SBML at all or were erroneously converted into reactions}.
 Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations.
 \section{Results:}
-The entire Nature Pathway Interaction Database (PID) %, which includes pathways from BioCarta, Reactome, and the National Cancer Institute, 
+The entire Nature Pathway Interaction Database (PID) %, which includes pathways from BioCarta, Reactome, and the National Cancer Institute,
 has been converted from BioPAX (Level~2 and Level~3) into SBML (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
 Additionally, we present the new webtool BioPAX2SBML for further BioPAX to SBML conversions.
 Compared to previous conversion tools, BioPAX2SBML is more comprehensive, more robust and more exact.
@@ -162,7 +162,6 @@ SBML describes the structure of models.
 
 \NEW{Besides these language differences, BioPAX models from databases like the Nature Pathway Interaction Database (PID, \citealp{Schaefer2009}) or MetaCyc \citep{Caspi2012} are often used as information source to build SBML models for further simulation processes \citep{Bauer-Mehren2009}.
 }
-
 The SBML core specification defines \NEW{quantitative processes, such as reactions, events, rules, and constraints,} in detail but no other relationships between molecules.
 Those relationships are denoted as \emph{relations} that specify enzyme-enzyme relations, protein-protein interactions, interactions of transcription factors and genes, protein-compound interaction, links to other pathways, etc.
 \NEW{These relations are also provided in BioPAX models,} but before the creation of the Qualitative Models extension for SBML (\qual, \citealp[see][]{QualSpecification}), it was not possible to define those relations or to include reactions together with relations in one model.
@@ -223,7 +222,7 @@ The BioPAX specification of Level~2 denotes all classes in lower case typewriter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%% FIGURE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[t!h]
-\centering \includegraphics[width=0.9\textwidth]{Buechel_Figure1_BioPaxSBMLqual.png}
+\centering \includegraphics[width=0.9\textwidth]{Buechel_Figure1_BioPaxSBMLqual.tif}
 \caption{Conversion from BioPAX Level~2 and Level~3 to SBML Level~3 Version~1 with the Qualitative Models extension (\qual).
 The green rounded rectangles on the righthand site describe the SBML and \qual{} classes, and the blue ones left the BioPAX elements.
 The distinction between BioPAX Level~2 and Level~3 elements is visualized with dashed rectangles.
