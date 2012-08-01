@@ -130,15 +130,15 @@ $^{2}$Computational Systems Neurobiology Group, European Bioinformatics Institut
 The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) belong to the most popular modeling and data exchange languages in systems biology.
 The focus of SBML is quantitative modeling and dynamic simulation of models, whereas the BioPAX specification concentrates mainly on visualization and qualitative analysis of pathway maps.
 BioPAX describes reactions and relations.
-In contrast, reactions are the only type of interaction in core SBML.
+In contrast, \NEW{SBML core exclusively describes quantitative processes such as reactions}.
 With the SBML Qualitative Models extension (\qual), it has recently also become possible to describe relations in SBML.
 Before the development of SBML \qual{}, relations could not be \NEW{properly translated into SBML}.
 %Before the creation of \qual{}, relations could not be translated into SBML at all or were erroneously converted into reactions}.
 Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations.
 \section{Results:}
-The entire Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and the National Cancer Institute, has been converted from BioPAX into SBML.
-All available PID BioPAX pathway files (Level~2 and Level~3) have been translated into the SBML format (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
-Additionally, we present the new webtool BioPAX2SBML, which can be used for further BioPAX to SBML conversions.
+The entire Nature Pathway Interaction Database (PID) %, which includes pathways from BioCarta, Reactome, and the National Cancer Institute, 
+has been converted from BioPAX (Level~2 and Level~3) into SBML (Level~3 Version~1) including both reactions and relations by using the new \qual{} extension package.
+Additionally, we present the new webtool BioPAX2SBML for further BioPAX to SBML conversions.
 Compared to previous conversion tools, BioPAX2SBML is more comprehensive, more robust and more exact.
 \section{Availability:}
 BioPAX2SBML is freely available at \url{http://webservices.cs.uni-tuebingen.de/} and the complete collection of the PID models at \url{http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/}.
@@ -151,12 +151,14 @@ Supplementary data is available at Bioinformatics online.}
 
 
 
+
 \section{Introduction}
 The goal of systems biology is the model-driven understanding of biological and biochemical processes across all layers and various levels of detail.
 The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) are common modeling languages that facilitate the exchange and storage of \emph{in-silico} models.
-BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory and genetic interaction networks \NEW{and is mainly used for information exchange} \citep{Demir2010}.
-SBML describes the structure of models, and offers the possibility to include mathematical expressions \NEW{which are necessary for simulation purposes} \citep{Hucka2003}.
-\NEW{A detailed comparison between both languages can be found in \citet{Stromback2005} and \citet{Stromback2006}.}
+BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory and genetic interaction networks \NEW{and is mainly used for qualitative analysis and information exchange} \citep{Demir2010}.
+SBML describes the structure of models.
+\NEW{In contrast to BioPAX, it} and offers the possibility to include mathematical expressions \NEW{which are necessary for dynamic simulations.} \citep{Hucka2003}.
+\NEW{A detailed comparison between both languages can be found in \citet{Stromback2005, Stromback2006}.}
 
 \NEW{Besides these language differences, BioPAX models from databases like the Nature Pathway Interaction Database (PID, \citealp{Schaefer2009}) or MetaCyc \citep{Caspi2012} are often used as information source to build SBML models for further simulation processes \citep{Bauer-Mehren2009}.
 }
@@ -175,7 +177,7 @@ To overcome the limitations of those file formats and to avoid the creation of p
 The need to combine both formats to use the knowledge from a multitude of databases in various applications becomes more and more urgent.
 
 
-In this paper we present a webtool for the translation from BioPAX into SBML format. 
+In this paper we present a webtool for the translation from BioPAX into SBML format.
 We demonstrate its functionality by converting the whole PID from BioPAX Level~2 and Level~3 formats to the SBML format, including the \qual{} extension.
 
 
@@ -210,7 +212,7 @@ Level~1 is exclusively able to describe metabolic interactions, whereas Level~2 
 In addition to Level~2, gene-regulatory networks and genetic interactions can be described with Level~3.
 %For this purpose the \Control{} subclass \TemplateReactionRegulation, the \Conversion{} subclass \Degradation{}, \TemplateReaction, \GeneticInteraction, and \MolecularInteraction{} have been added.
 %Furthermore, \PhysicalEntity{} is now able to define \DNAregion{} and \RNAregion.
-For this purpose \NEW{several new BioPAX instances} have been added \NEW{see dashed elements in Figure \ref{fig:BioPAXSBMLqual}}.
+For this purpose, \NEW{several new BioPAX instances} have been added \NEW{(see dashed elements in Figure \ref{fig:BioPAXSBMLqual})}.
 Level~3 is not downwards compatible with Level~2, but Level~2 is downwards compatible with Level~1 \citep{Demir2010}.
 The BioPAX specification of Level~2 denotes all classes in lower case typewriter font and the specification of Level~3 denotes them in upper case typewriter font. For better readability of this paper, all BioPAX element names begin with capital letters and refer to Level~2 and 3. In contrast, SBML classes are written in lower case.
 
@@ -280,7 +282,7 @@ This table specifies the SBO terms that we used to distinguish between various c
 
 In this step, an SBML \species{} and \qualitativeSpecies{} are created for each \PhysicalEntity{}.
 Depending on the kind of the \PhysicalEntity, i.e., if it is a protein, complex, DNA, RNA, or small molecule, the \species{} is annotated with the corresponding SBO term (\citealp{SBO}).
-The used SBO terms are listed in Table~\ref{Tab:BioPAX2SBO}.
+\NEW{The used SBO terms are listed in Table~\ref{Tab:BioPAX2SBO}.}
 Furthermore, the \species{} compartment is assigned due to the \texttt{CellularLocation} of the \PhysicalEntity.
 The default compartment is set if the \texttt{CellularLocation} is not known.
 
@@ -314,7 +316,7 @@ Thus, it depends on the kind of \Controller{} and \Controlled{} element whether 
 %This attribute is assigned to nearly all \Control{} elements.
 %If the \ControlType{} is activating, \sign{} is set to \emph{active}; if it is inhibiting \sign{} is set to \emph{negative}; if it is both, \sign{} is set to \emph{dual}; otherwise \sign{} is set to \emph{unknown}.
 \NEW{
-All \Controller-\Controlled{} combinations and the corresponding SBML classes are listed in Table~\ref{Tab:BioPAX2SBML} and discussed in more detail in the Supplement.
+All \Controller-\Controlled{} combinations and the corresponding SBML classes are listed in Table~\ref{Tab:BioPAX2SBML} and discussed in more detail in the supplement.
 For nearly all \Control{} elements a \ControlType{} is assigned describing the relationship between the enclosed elements (i.e. activating, inhibiting).
 Depending on this type, the \sign{} attribute of the SBML \inputP{} element is determined.
 }
@@ -565,9 +567,9 @@ Berenguier, D., Chaouiya, C., Naldi, A., Thieffry, D., and van Iersel, M.~P.
 \bibitem[Caspi {\em et~al.}(2012)Caspi, Altman, Dreher, Fulcher, Subhraveti,
 Keseler, Kothari, Krummenacker, Latendresse, Mueller, Ong, Paley, Pujar,
 Shearer, Travers, Weerasinghe, Zhang, and Kar]{Caspi2012}
-Caspi, R., Altman, T., Dreher, K., Fulcher, C. A., Subhraveti, P., 
-Keseler, I.~M., Kothari, A., Krummenacker, M., Latendresse, M., 
-Mueller, L.~A., Ong, Q., Paley, S., Pujar, A., 
+Caspi, R., Altman, T., Dreher, K., Fulcher, C. A., Subhraveti, P.,
+Keseler, I.~M., Kothari, A., Krummenacker, M., Latendresse, M.,
+Mueller, L.~A., Ong, Q., Paley, S., Pujar, A.,
 Shearer, A.~G., Travers, M., Weerasinghe, D., Zhang, P., and
 Karp, P.~D. (2012).
 \newblock The MetaCyc Database of Metabolic Pathways and Enzymes and the BioCyc Collection of Pathway/genome Databases.
@@ -659,12 +661,12 @@ Kanehisa, M., Goto, S., Hattori, M., Aoki-Kinoshita, K.~F., Itoh, M.,
 \newblock From genomics to chemical genomics: new developments in {KEGG}.
 \newblock {\em Nucleic Acids Res\/}, {\bf 34}(Database issue), D354--D357.
 
-\bibitem[Mi {\em et~al.}(2011)Mi, Muruganujan, Demir, Matsuoka, Funahashi,
-  Kitano, and Thomas]{Mi2011}
-Mi, H., Muruganujan, A., Demir, E., Matsuoka, Y., Funahashi, A., Kitano, H.,
-  and Thomas, P.~D. (2011).
-\newblock {BioPAX support in CellDesigner.}
-\newblock {\em Bioinformatics\/}, {\bf 27}(24), 3437--3438.
+%\bibitem[Mi {\em et~al.}(2011)Mi, Muruganujan, Demir, Matsuoka, Funahashi,
+%  Kitano, and Thomas]{Mi2011}
+%Mi, H., Muruganujan, A., Demir, E., Matsuoka, Y., Funahashi, A., Kitano, H.,
+%  and Thomas, P.~D. (2011).
+%\newblock {BioPAX support in CellDesigner.}
+%\newblock {\em Bioinformatics\/}, {\bf 27}(24), 3437--3438.
 
 \bibitem[Nov\`{e}re {\em et~al.}(2005)Nov\`{e}re, Finney, Hucka, Bhalla,
   Campagne, Collado-Vides, Crampin, Halstead, Klipp, Mendes, Nielsen, Sauro,
