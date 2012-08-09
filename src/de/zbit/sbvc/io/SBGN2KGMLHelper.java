@@ -13,18 +13,13 @@ import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
  * 
  * @author 	Manuel Ruff
  * @date 	2012-06-21
- * @version $Rev: 114$
+ * @version $Rev: 136$
  * @since	$Rev: 114$
  *
  */
 public class SBGN2KGMLHelper {
 	
 	public static final Logger log = Logger.getLogger(SBGN2KGMLHelper.class.getName());			// logger for errors, warnings, etc.
-	
-	/**
-	 * Constructor
-	 */
-	public SBGN2KGMLHelper(){}
 	
 	/**
 	 * Method to get the corresponding {@link EntryType} from the {@link GlyphType}
