@@ -5,7 +5,9 @@ import java.util.logging.Logger;
 import de.zbit.graph.io.def.SBGNProperties.ArcType;
 import de.zbit.graph.io.def.SBGNProperties.GlyphType;
 import de.zbit.kegg.parser.pathway.EntryType;
+import de.zbit.kegg.parser.pathway.Relation;
 import de.zbit.kegg.parser.pathway.RelationType;
+import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
 
 /**
@@ -53,9 +55,36 @@ public class SBGN2KGMLHelper {
 	 * @return		{@link RelationType}
 	 */
 	public RelationType getRelationTypeFromArcType(ArcType atype){
-		
+		// TODO: RelationType:
+//	  RelationType.
 		switch(atype){
-			default:
+			case absolute_inhibition:
+			  return SubType.INHIBITION;
+      case absolute_stimulation:
+        
+      case assignment:
+      case catalysis:
+        // TODO: das ist dann ein enzym, welches eine reaktion katalysisert.
+        // d.h. hier sollte entry.setReaction() gesetzt werden.
+        // Wenn es eine Relation ist, sollte SubType.ACTIVATION verwendet werden.
+      case consumption:
+      case equivalence_arc:
+      case inhibition:
+        return SubType.INHIBITION;
+      case interaction:
+        return SubType.MISSING_INTERACTION;
+      case logic_arc:
+      case modulation:
+      case necessary_stimulation:
+      case negative_influence:
+        return SubType.INHIBITION;
+      case positive_influence:
+        return SubType.ACTIVATION;
+      case production:
+      case stimulation:
+        return SubType.ACTIVATION;
+      case unknown_influence:
+      default:
 				return RelationType.other;
 		}
 	}

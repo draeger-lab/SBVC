@@ -2,11 +2,13 @@ package de.zbit.sbvc.io;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.zbit.io.csv.CSVReader;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
@@ -37,9 +39,10 @@ public class SIF2KGML {
 	/**
 	 * Method for reading in a Simple Interaction File
 	 * @param filename	{@link String}
-	 * @return {@Link ArrayList<SifRelation>)
+	 * @return {@Link ArrayList<SifRelation>)
+	 * @throws IOException 
 	 */
-	public static SIFPathway readSIF(String filename) {
+	public static SIFPathway readSIF(String filename) throws IOException {
 		
 		if(!filename.endsWith(".sif"))
 			log.log(Level.SEVERE, String.format("The file %s doesn't end with .sif", filename));
@@ -62,7 +65,7 @@ public class SIF2KGML {
 				splitted = line.split("\t");
 				// check if the file fulfills the patterns
 				if(splitted.length != 3)
-					splitted = line.split("\\s");
+					splitted = line.split(" ");
 				
 				if(splitted.length != 3)
 					log.log(Level.WARNING, String.format("The line %s in the file %s doesn't have the form <nodeA> <relationship> <nodeB>", new Object[]{counter, filename}));
