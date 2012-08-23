@@ -18,13 +18,16 @@ import de.zbit.kegg.parser.pathway.Reaction;
 import de.zbit.kegg.parser.pathway.ReactionType;
 import de.zbit.kegg.parser.pathway.Relation;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
+import de.zbit.sbvc.io.helper.SIFPathway;
+import de.zbit.sbvc.io.helper.SIFProperties;
+import de.zbit.sbvc.io.helper.SIFRelation;
 
 /**
  * Class for converting Simple Interaction Files into a {@link Pathway}
  *
  * @author 	Manuel Ruff
  * @date 	2012-08-08
- * @version $Rev: 135$
+ * @version $Rev: 138$
  * @since	$Rev: 135$
  *
  */
@@ -33,8 +36,8 @@ public class SIF2KGML {
 	
 	public static final Logger log = Logger.getLogger(SIF2KGML.class.getName());					// logger for errors, warnings, etc.
 	
-	private int entryID = 0;																		// entries id
-	private int reactionID = 0;
+	private int entryID = 0;																		// incremental number for all entries
+	private int reactionID = 0;																		// incremental number for all reactions
 	
 	/**
 	 * Method for reading in a Simple Interaction File
@@ -48,10 +51,12 @@ public class SIF2KGML {
 			log.log(Level.SEVERE, String.format("The file %s doesn't end with .sif", filename));
 		
 		Scanner scanner = null;
-		// take the only the filename and set it as Pathwayname
+		
+		// take the filename and set it as Pathwayname
 		SIFPathway sif = new SIFPathway(filename.replaceAll("\\.sif", "").replaceAll(".*/", "").replaceAll(".*\\\\", ""));
 		ArrayList<SIFRelation> relations = new ArrayList<SIFRelation>();
 
+		// try reading in the sif file line by line
 		try {
 			scanner = new Scanner(new FileReader(filename)).useDelimiter("\n");
 			
@@ -60,10 +65,12 @@ public class SIF2KGML {
 			int counter = 0;
 			
 			while(scanner.hasNext()) {
+				
 				line = scanner.nextLine();
 				counter++;
 				splitted = line.split("\t");
-				// check if the file fulfills the patterns
+				
+				// check if the line fulfills the patterns
 				if(splitted.length != 3)
 					splitted = line.split(" ");
 				
@@ -74,8 +81,15 @@ public class SIF2KGML {
 				
 				}
 		} catch (FileNotFoundException e) {
-			
+			log.log(Level.SEVERE, String.format("Couldn't find the file " + filename));
 		}
+		
+		// add the relations to the sif pathway
+		sif.addRelations(relations);
+		
+		// close the scanner
+		scanner.close();
+		
 		return sif;
 	}
 	
@@ -96,16 +110,28 @@ public class SIF2KGML {
 			Entry target = new EntryExtended(p, ++entryID, relation.getTarget());
 			
 			// set EntryTypes
-			source.setType(EntryType.compound);
-			target.setType(EntryType.compound);
+			source.setType(SIFProperties.getEntryTypeFromInteractionType(relation.getInteractionType(), true));
+			target.setType(SIFProperties.getEntryTypeFromInteractionType(relation.getInteractionType(), false));
 			
 			//create Graphics
 			Graphics sourceGraphic = null;
 			Graphics targetGraphic = null;
 			
-			// since all are compounds createGraphicsForCompound
-			sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
-			targetGraphic = Graphics.createGraphicsForCompound(target.getName());
+			// determine the graphic type
+			switch(relation.getInteractionType()){
+				case cr:
+					sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
+					targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
+					break;
+				case rc:
+					sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
+					targetGraphic = Graphics.createGraphicsForCompound(target.getName());
+					break;
+				default:
+					sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
+					targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
+					
+			}
 			
 			// set the graphic defaults
 			sourceGraphic.setDefaults(source.getType());
@@ -118,6 +144,7 @@ public class SIF2KGML {
 			Reaction rea = null;
 			Relation rel = null;
 			
+			// determine if its a reaction of a relation
 			switch(relation.getInteractionType()){
 				case pr:
 					rea = new Reaction(p, "unknown_reaction:"+(++reactionID), ReactionType.irreversible);
@@ -135,14 +162,16 @@ public class SIF2KGML {
 					target.setReaction(rea.getName());
 					break;
 				default:
-					rel = new Relation(source.getId(), target.getId(), null);
+					rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
 			}
 			
+			// check if all went well
 			if(rea != null)
 				p.addReaction(rea);
 			if(rel != null)
 				p.addRelation(rel);
 			
+			// add the entries to the pathway
 			p.addEntry(source);
 			p.addEntry(target);
 			
@@ -162,11 +191,12 @@ public class SIF2KGML {
 	
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		String filename = "Test.sif";
 		SIF2KGML sif2kgml = new SIF2KGML();
-		SIFPathway sifpathway = sif2kgml.readSIF(filename);
+		SIFPathway sifpathway = SIF2KGML.readSIF(filename);
 		Pathway p = sif2kgml.translate(sifpathway);
 		sif2kgml.saveToFile(p, "SIFPathwayTest.xml");
 	}
