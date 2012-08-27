@@ -54,6 +54,7 @@ import de.zbit.resources.Resource;
 import de.zbit.sbvc.gui.SBVCUI;
 import de.zbit.sbvc.io.SBVCIOOptions;
 import de.zbit.util.Species;
+import de.zbit.util.StringUtil;
 import de.zbit.util.Utils;
 import de.zbit.util.logging.LogUtil;
 import de.zbit.util.prefs.KeyProvider;
@@ -213,8 +214,8 @@ public class SBVC extends Launcher{
    */
   @Override
   public String getAppName() {
-    return "System Biology Visualizer and Converter"; 
-//    return "BioPAX2SBML"; // XXX: This is for the BioPAX2SBML converter
+//    return "System Biology Visualizer and Converter"; 
+    return "BioPAX2SBML"; // XXX: This is for the BioPAX2SBML converter
   }
   
   /* (non-Javadoc)
@@ -257,7 +258,7 @@ public class SBVC extends Launcher{
 
   @Override
   public String getVersionNumber() {
-    return "0.1";
+    return "1.0";
   }
 
   @Override

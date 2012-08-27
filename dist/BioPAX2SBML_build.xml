@@ -24,7 +24,7 @@
     <echo>
        PLESE MAKE SURE LOG LEVEL IN SBVC.java MAIN METHOD IS SET TO INFO,
     	 that "GUIOptions.GUI.setDefaultValue(Boolean.FALSE);" is set to FALSE, 
-       and the application title is set to BioPAX2SBML!
+       and the application title is set to BioPAX2SBML and the Version no is correct!
     	 ALSO Ensure that list of "yFiles-using-classes to obfuscate" is complete!
     </echo>
   	

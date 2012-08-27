@@ -1119,8 +1119,10 @@ public class BioPAXL22KGML extends BioPAX2KGML {
           if (relExists && subType !=null) {
             r = rel;
             boolean added = r.addSubtype(subType);
-            if (augmentOriginalKEGGpathway && added)
+            if (augmentOriginalKEGGpathway && added){
               addedSubTypes++;
+              r.setSource("KEGG_AND_BIOCARTA");
+            }
             return r;
           }          
         }
@@ -1141,6 +1143,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       if(keggPW.getEntryForId(keggEntry1Id)!=null && keggPW.getEntryForId(keggEntry2Id)!=null) {
         // Only add relations if nodes for the relation are present.
         if (keggEntry1Id != keggEntry2Id){
+          r.setSource("BIOCARTA");
           keggPW.addRelation(r);
           newAddedRelations++; 
         }        

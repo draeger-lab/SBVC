@@ -155,10 +155,11 @@ Supplementary data is available at Bioinformatics online.}
 \section{Introduction}
 The goal of systems biology is the model-driven understanding of biological and biochemical processes across all layers and various levels of detail.
 The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) are common modeling languages that facilitate the exchange and storage of \emph{in-silico} models.
-BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory and genetic interaction networks \NEW{and is mainly used for qualitative analysis and information exchange} \citep{Demir2010}.
+BioPAX can be used to describe the biological \NEW{semantics} of metabolic, signaling, molecular, gene-regulatory, and genetic interaction networks.
+\NEW{It is mainly used for qualitative analysis and information exchange} \citep{Demir2010}.
 SBML describes the structure of models.
-\NEW{In contrast to BioPAX, it} and offers the possibility to include mathematical expressions \NEW{which are necessary for dynamic simulations.} \citep{Hucka2003}.
-\NEW{A detailed comparison between both languages can be found in \citet{Stromback2005, Stromback2006}.}
+\NEW{In contrast to BioPAX, it} offers the possibility to include mathematical expressions, \NEW{which are necessary for dynamic simulations.} \citep{Hucka2003}.
+\NEW{A detailed comparison between both languages has been given by \citet{Stromback2005, Stromback2006}.}
 
 \NEW{Besides these language differences, BioPAX models from databases like the Nature Pathway Interaction Database (PID, \citealp{Schaefer2009}) or MetaCyc \citep{Caspi2012} are often used as information source to build SBML models for further simulation processes \citep{Bauer-Mehren2009}.
 }
@@ -222,7 +223,7 @@ The BioPAX specification of Level~2 denotes all classes in lower case typewriter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%% FIGURE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[t!h]
-\centering \includegraphics[width=0.9\textwidth]{Buechel_Figure1_BioPaxSBMLqual.tif}
+\centering \includegraphics[width=0.9\textwidth]{Buechel_Figure1_BioPaxSBMLqual}
 \caption{Conversion from BioPAX Level~2 and Level~3 to SBML Level~3 Version~1 with the Qualitative Models extension (\qual).
 The green rounded rectangles on the righthand site describe the SBML and \qual{} classes, and the blue ones left the BioPAX elements.
 The distinction between BioPAX Level~2 and Level~3 elements is visualized with dashed rectangles.
@@ -316,7 +317,7 @@ Thus, it depends on the kind of \Controller{} and \Controlled{} element whether 
 %If the \ControlType{} is activating, \sign{} is set to \emph{active}; if it is inhibiting \sign{} is set to \emph{negative}; if it is both, \sign{} is set to \emph{dual}; otherwise \sign{} is set to \emph{unknown}.
 \NEW{
 All \Controller-\Controlled{} combinations and the corresponding SBML classes are listed in Table~\ref{Tab:BioPAX2SBML} and discussed in more detail in the supplement.
-For nearly all \Control{} elements a \ControlType{} is assigned describing the relationship between the enclosed elements (i.e. activating, inhibiting).
+For nearly all \Control{} elements a \ControlType{} is assigned describing the relationship between the enclosed elements (i.e., activating, inhibiting).
 Depending on this type, the \sign{} attribute of the SBML \inputP{} element is determined.
 }
 

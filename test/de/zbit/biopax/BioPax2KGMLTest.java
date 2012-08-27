@@ -138,7 +138,7 @@ public class BioPax2KGMLTest {
         try {
           pathways = KeggParser.parse(sourceDir + "/" + filename);
         } catch (Exception e) {
-          log.log(Level.SEVERE, "Doof.");
+          log.log(Level.SEVERE, "Parsing of KEGG pathway was not successful.");
         }
         BioPAXL32KGML bp2k = new BioPAXL32KGML();
         for (Pathway p : pathways) {
