@@ -61,8 +61,8 @@ import de.zbit.kegg.api.KeggInfos;
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.ArrayUtils;
-import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.DatabaseIdentifiers;
+import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.Species;
 import de.zbit.util.StringUtil;
 import de.zbit.util.Utils;
@@ -395,6 +395,49 @@ public abstract class BioPAX2KGML {
     (String fileName, String destinationFolder, boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
     return createPathwaysFromModel(m, fileName, destinationFolder, writeEntryExtended, species); 
+  }
+  
+  
+  /**
+   * returns a list of all the pathways in a model
+   * @param m
+   * @return
+   */
+  public static List<String> getListOfPathways(Model m){
+    List<String> pathwayList = null;
+    if (m.getLevel().equals(BioPAXLevel.L2)){
+      pathwayList = BioPAXL22KGML.getListOfPathways(m);
+    } else if (m.getLevel().equals(BioPAXLevel.L3)){
+      pathwayList = BioPAXL32KGML.getListOfPathways(m);
+    }
+    
+    return pathwayList;
+  }
+  
+  /**
+   * parses an selected pathway of the entred file to KEGG
+   * @param file
+   * @param pwName
+   * @param m
+   * @return
+   */
+  public static de.zbit.kegg.parser.pathway.Pathway parsePathwayToKEGG(String file, String pwName, Model m) {
+    de.zbit.kegg.parser.pathway.Pathway keggPW = null;
+    
+    if(m.getLevel().equals(BioPAXLevel.L2)){
+      BioPAXL22KGML b22 = new BioPAXL22KGML();
+      pathway pw = b22.getPathwayByName(m, pwName);      
+      if(pw!=null)
+        keggPW = b22.createPathway(m, BioPAX2KGML.getRDFScomment(file), 
+            pw, b22.determineSpecies(pw.getORGANISM()));
+    } else if(m.getLevel().equals(BioPAXLevel.L3)){
+      BioPAXL32KGML b23 = new BioPAXL32KGML();
+      org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
+      if(pw!=null)
+        keggPW = b23.createPathway(m, BioPAX2KGML.getRDFScomment(file),
+            pw, b23.determineSpecies(pw.getOrganism()));
+    }
+    return keggPW;
   }
   
   /**

@@ -44,7 +44,11 @@ public class SBVCTest {
     LogUtil.initializeLogging(Level.FINE);
     SBVC sbvc = new SBVC();
     
+    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/pathway-biopax.owl",
+        "C:/Users/buechel/Downloads/res/", 
+        null);
     
+    if(true)return;
     sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
         "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
     

@@ -30,15 +30,10 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.BioPAXLevel;
 import org.biopax.paxtools.model.Model;
-import org.biopax.paxtools.model.level2.pathway;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level3.UnificationXref;
 
-import de.zbit.io.DirectoryParser;
-import de.zbit.io.FileWalker;
-import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.kegg.KGMLWriter;
-import de.zbit.kegg.parser.KeggParser;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.util.Species;
 import de.zbit.util.logging.LogUtil;
@@ -96,85 +91,14 @@ public class BioPax2KGMLTest {
     
   }
   
-  /**
-   * for extending existing KGML files with further information for the relations
-   * @param fileList (just the filename)
-   * @param informationFile containing new relation information, i.e. BioCarta data
-   * @param writeEntryExtended 
-   */
-  private static void createExtendedKGML(List<String> fileList, String informationFile,
-      String sourceDir, String destDir, boolean writeEntryExtended) {
-    FileHandler h = null;
-    try {
-      h = new FileHandler("relationsAdded.txt");
-    } catch (SecurityException e1) {
-      e1.printStackTrace();
-    } catch (IOException e1) {
-      e1.printStackTrace();
-    }
-    h.setFormatter(new OneLineFormatter());
-    h.setFilter(new Filter() {
-
-      /* (non-Javadoc)
-       * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
-       */
-      public boolean isLoggable(LogRecord record) {
-        if ((record.getSourceClassName().equals(BioPAXL32KGML.class.getName()) || record
-            .getLoggerName().equals(BioPAXL32KGML.class.getName()))
-            && record.getLevel().equals(Level.INFO)
-            && record.getSourceMethodName().equals("addRelationsToPathway")) {
-
-          return true;
-        }
-        return false;
-      }
-    });
-    LogUtil.addHandler(h, LogUtil.getInitializedPackages());
-
-    Model m = BioPAX2KGML.getModel(informationFile);    
-    if(m!=null){
-      for (String filename : fileList) {
-        List<Pathway> pathways = null;
-        try {
-          pathways = KeggParser.parse(sourceDir + "/" + filename);
-        } catch (Exception e) {
-          log.log(Level.SEVERE, "Parsing of KEGG pathway was not successful.");
-        }
-        BioPAXL32KGML bp2k = new BioPAXL32KGML();
-        for (Pathway p : pathways) {
-          bp2k.addRelationsToPathway(p, m);
-          if (bp2k.getNewAddedRelations()>0 || bp2k.getAddedSubTypes()>0){
-            p.setAdditionalText("Pathway information was augmented with BioCarta information " +
-            "(2010-08-10)");
-            String fn = filename.replace(".xml", "_extended.xml");
-            KGMLWriter.writeKGML(p, destDir + "/" + fn, writeEntryExtended);  
-          }
-            
-        }    
-      }  
-    } else {
-      log.log(Level.SEVERE, "Could not continue, because the model is null.");
-    }
-  }
+  
   
 
   private void parseAndWritePathway(String file, String destinationFolder, String pwName) {
     Model m = BioPAX2KGML.getModel(file);
     if (m!=null){
       Pathway keggPW = null;
-      if(m.getLevel().equals(BioPAXLevel.L2)){
-        BioPAXL22KGML b22 = new BioPAXL22KGML();
-        pathway pw = b22.getPathwayByName(m, pwName);      
-        if(pw!=null)
-          keggPW = b22.createPathway(m, BioPAX2KGML.getRDFScomment(file), 
-              pw, b22.determineSpecies(pw.getORGANISM()));
-      } else if(m.getLevel().equals(BioPAXLevel.L3)){
-        BioPAXL32KGML b23 = new BioPAXL32KGML();
-        org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
-        if(pw!=null)
-          keggPW = b23.createPathway(m, BioPAX2KGML.getRDFScomment(file),
-              pw, b23.determineSpecies(pw.getOrganism()));
-      }
+      keggPW = BioPAX2KGML.parsePathwayToKEGG(file, pwName, m);
       
       if(keggPW != null){
         KGMLWriter.writeKGML(keggPW, destinationFolder + KGMLWriter.createFileName(keggPW), false);
@@ -185,6 +109,8 @@ public class BioPax2KGMLTest {
       log.log(Level.SEVERE, "Could not continue, because the model is null.");
     }
   }
+
+  
 
   /**
    * print the pathwy list of a model
@@ -198,7 +124,7 @@ public class BioPax2KGMLTest {
       pws = b22.getListOfPathways(m);
     } else if(m.getLevel().equals(BioPAXLevel.L3)){
       BioPAXL32KGML b23 = new BioPAXL32KGML();
-      pws = b23.getPathways(m);
+      pws = b23.getListOfPathways(m);
     }
     
     if(pws!=null && pws.size()>0){
@@ -274,35 +200,22 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
     
-    String fileFolder = System.getenv("FILE_FOLDER");
+//    String fileFolder = System.getenv("FILE_FOLDER");
+    String fileFolder = "V:/";
     
     BioPax2KGMLTest bft = new BioPax2KGMLTest();
     
-    String subPID = "PID_Pathways/";    
+  
     List<String> fileList = new ArrayList<String>();
    
-    // augment kgmls with BioCarta information
-//    DirectoryParser d = new DirectoryParser("W:/metabolic/organisms/hsa", "xml");
-//    while (d.hasNext())
-//      fileList.add(d.next());
-//    
-//    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
-//        "W:/metabolic/organisms/hsa", 
-//        "C:/Users/buechel/Desktop/KGML_extended_hsa/metabolic/organisms/hsa/", true); 
-//    
-//    fileList = new ArrayList<String>();
-//    d = new DirectoryParser("W:/non-metabolic/organisms/hsa", "xml");
-//    while (d.hasNext())
-//      fileList.add(d.next());
-//    BioPax2KGMLTest.createExtendedKGML(fileList, fileFolder + subPID + "BioCarta.bp3.owl", 
-//        "W:/non-metabolic/organisms/hsa", 
-//        "C:/Users/buechel/Desktop/KGML_extended_hsa/non-metabolic/organisms/hsa", true); 
-//    
-//    if (true) return;
+    
+    
+    
+    if (true) return;
     
     
     // writing of one pathway
-    bft.parseAndWritePathway(subPID, subPID, "ceramidepathway");
+    bft.parseAndWritePathway(fileFolder, fileFolder, "ceramidepathway");
     
     
     

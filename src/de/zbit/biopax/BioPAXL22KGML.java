@@ -301,7 +301,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    * @param m
    * @return
    */
-  protected List<String> getListOfPathways(Model m){
+  public static List<String> getListOfPathways(Model m){
     List<String> pws = new SortedArrayList<String>();
     
     Set<pathway> list = m.getObjects(pathway.class);
@@ -319,7 +319,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    * @param name
    * @return the BioPaxPathway with the specific name
    */
-  protected pathway getPathwayByName(Model m, String name){
+  public pathway getPathwayByName(Model m, String name){
     pathway pw = null;
     Set<pathway> list = m.getObjects(pathway.class);
     
