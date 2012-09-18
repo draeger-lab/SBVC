@@ -544,7 +544,11 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       names = names.trim();
       names = names.replace(" ", "_");
     }
-    graphName = names;
+    
+    if (entity.getSHORT_NAME()!=null && !entity.getSHORT_NAME().isEmpty())
+        graphName = entity.getSHORT_NAME();
+    else 
+      graphName = names;
         
 
     String keggname = BioPAX2KGML.getKEGGName(identifiers, species);

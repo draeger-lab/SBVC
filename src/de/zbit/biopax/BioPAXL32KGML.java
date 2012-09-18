@@ -611,6 +611,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     // determine graph name and gene symbols   
     String graphName = "";
     Set<String> names = entity.getName();
+    
     StringBuffer name = new StringBuffer();
     if (names != null && names.size() > 0) {
       for (String n : names) {        
@@ -622,7 +623,12 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       }
       name.delete(name.length() - 2, name.length() - 1);
     }
-    graphName = name.toString().trim();
+    
+    if (entity.getDisplayName()!=null && entity.getDisplayName().trim().length()>0) {
+      graphName = entity.getDisplayName().trim();
+    } else {
+      graphName = BioPAX2KGML.getShortestString(names);
+    }
     
     String keggname = BioPAX2KGML.getKEGGName(identifiers, species);
 

@@ -777,4 +777,28 @@ public abstract class BioPAX2KGML {
   public void setAddedSubTypes(int addedSubTypes) {
     this.addedSubTypes = addedSubTypes;
   }
+
+  /**
+   * @param names
+   * @return
+   */
+  public static String getShortestString(Set<String> names) {
+    if (names==null || names.size()<1) {
+      return "Unknown";
+    } else {
+      String name = null;
+      Iterator<String> it = names.iterator();
+      while (it.hasNext()) {
+        if (name==null) {
+          name = it.next();
+        } else {
+          String current = it.next();
+          if (current.length()<name.length()) {
+            name = current;
+          }
+        }
+      }
+      return name;
+    }
+  }
 }
