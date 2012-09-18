@@ -153,8 +153,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   protected Collection<Pathway> createPathways(Model m, String comment, Set<pathway> pathways, 
       Species species) {    
-    if (species!=null)
+    if (species!=null) {
       initalizeMappers(species);
+    }
     
     Collection<Pathway> keggPWs = new ArrayList<Pathway>();
 

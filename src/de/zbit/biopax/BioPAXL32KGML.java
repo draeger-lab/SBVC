@@ -199,8 +199,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     Set<Pathway> list = m.getObjects(Pathway.class);
     
     for (Pathway p : list) {
-      if(getPathwayName(p).equals(name))
+      if(getPathwayName(p).equals(name)) {
         return p;
+      }
     }
     
     return pw;
@@ -234,9 +235,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
 //    addImageLinkToKEGGpathway(species, getNameWithoutBlanks(pathway.getName()), keggPW);
 
     for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
-      if (Entity.class.isAssignableFrom(interaction.getClass()))
+      if (Entity.class.isAssignableFrom(interaction.getClass())) {
         parseEntity((Entity)interaction, keggPW, m, species);
-      else{
+      } else {
         log.severe("This should not happen! - '" + interaction.getModelInterface() + "'.");
         System.exit(1);
       }

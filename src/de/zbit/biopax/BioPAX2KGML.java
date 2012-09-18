@@ -434,9 +434,10 @@ public abstract class BioPAX2KGML {
     } else if(m.getLevel().equals(BioPAXLevel.L3)){
       BioPAXL32KGML b23 = new BioPAXL32KGML();
       org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
-      if(pw!=null)
+      if(pw!=null) {
         keggPW = b23.createPathway(m, BioPAX2KGML.getRDFScomment(file),
             pw, b23.determineSpecies(pw.getOrganism()));
+      }
     }
     return keggPW;
   }
@@ -452,9 +453,12 @@ public abstract class BioPAX2KGML {
       new ArrayList<de.zbit.kegg.parser.pathway.Pathway>(); 
        
     if (m!=null){
-      File f = new File(fileName);
-
-      String comment = getRDFScomment(fileName);
+      File f = null;
+      String comment="";
+      if (fileName!=null) {
+        f = new File(fileName);
+        comment = getRDFScomment(fileName);
+      }
       
      
       // BioPax Level 2 
@@ -468,7 +472,7 @@ public abstract class BioPAX2KGML {
         } else {
           // All modes, but we have NO pathway objects (use the model)
           de.zbit.kegg.parser.pathway.Pathway keggPW = 
-            bp.createPathwayFromBioPaxFile(m, comment, FileTools.removeFileExtension(f.getName()), species);
+            bp.createPathwayFromBioPaxFile(m, comment, f==null?"Unknown":FileTools.removeFileExtension(f.getName()), species);
           keggPWs.add(keggPW);   
         }
       } //BioPax Level 3
