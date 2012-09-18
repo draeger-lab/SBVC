@@ -124,7 +124,7 @@ public class SBVC extends Launcher{
   public void convertBioPAXToSBML(String input, String outputFolderName, Species species) {
     // getting the KEGG Pathways of the model
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPAX2KGML.createPathwaysFromModel(input, outputFolderName, false, species);
+      BioPAX2KGML.createPathwaysFromModel(input, false, species);
     
     // translation to sbml
     KEGG2SBMLqual k2s = null;

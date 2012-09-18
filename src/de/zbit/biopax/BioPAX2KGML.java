@@ -392,9 +392,9 @@ public abstract class BioPAX2KGML {
    * @return
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (String fileName, String destinationFolder, boolean writeEntryExtended, Species species) {
+    (String fileName, boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
-    return createPathwaysFromModel(m, fileName, destinationFolder, writeEntryExtended, species); 
+    return createPathwaysFromModel(m, fileName, writeEntryExtended, species); 
   }
   
   
@@ -413,6 +413,7 @@ public abstract class BioPAX2KGML {
     
     return pathwayList;
   }
+  
   
   /**
    * parses an selected pathway of the entred file to KEGG
@@ -446,15 +447,12 @@ public abstract class BioPAX2KGML {
    * @param m
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (Model m, String fileName, String destinationFolder, boolean writeEntryExtended, Species species) {
+    (Model m, String fileName, boolean writeEntryExtended, Species species) {
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       new ArrayList<de.zbit.kegg.parser.pathway.Pathway>(); 
        
     if (m!=null){
       File f = new File(fileName);
-      if (destinationFolder == null || destinationFolder.isEmpty()) {
-        destinationFolder = createDefaultFolder(m.getLevel());
-      }
 
       String comment = getRDFScomment(fileName);
       
@@ -519,8 +517,7 @@ public abstract class BioPAX2KGML {
       boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPAX2KGML.createPathwaysFromModel(m, fileName, destinationFolder,
-      writeEntryExtended, species);
+      BioPAX2KGML.createPathwaysFromModel(m, fileName, writeEntryExtended, species);
     BioPAX2KGML.writeKGMLsForPathways(m, destinationFolder, keggPWs, writeEntryExtended);
   }
   

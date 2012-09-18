@@ -107,15 +107,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
   public de.zbit.kegg.parser.pathway.Pathway createPathwayFromBioPaxFile(Model m, String comment, 
       String pathwayName, Species species) {
     // determine the organism
-    Species newSpecies = null;
-    
-    Set<bioSource> orgs = m.getObjects(bioSource.class);
-    if (orgs != null && orgs.size() > 0) {
-      bioSource org = orgs.iterator().next();
-      newSpecies = determineSpecies(org);      
-    } else {
-      log.info("No specific pathway species could be determined.");
-    }
+    Species newSpecies = getSpecies(m);
     
     if (newSpecies != null){
       initalizeMappers(newSpecies);
@@ -132,6 +124,24 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     }
 
     return keggPW;
+  }
+
+  
+  /**
+   * determines the pathway species
+   * @param m
+   * @return
+   */
+  public Species getSpecies(Model m) {
+    Species species = null;
+    Set<bioSource> orgs = m.getObjects(bioSource.class);
+    if (orgs != null && orgs.size() > 0) {
+      bioSource org = orgs.iterator().next();
+      species = determineSpecies(org);      
+    } else {
+      log.info("No specific pathway species could be determined.");
+    }
+    return species;
   } 
   
   /**
@@ -162,7 +172,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
   
   /**
    * determines the species of the pathway and returns {@link Species}
-   * the default species it "Homo sapiens"
+   * the default species is null
    * @param pathway
    * @return
    */

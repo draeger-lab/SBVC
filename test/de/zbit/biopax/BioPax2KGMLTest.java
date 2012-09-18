@@ -50,9 +50,9 @@ public class BioPax2KGMLTest {
   public static final Logger log = Logger.getLogger(BioPax2KGMLTest.class.getName());
   
 
-  private void testCreateKGMLsFromBioCartaModel(String file, String destinationFolder, 
+  private void testCreateKGMLsFromBioCartaModel(String file, 
       boolean writeEntryExtended, Species species) {   
-    BioPAX2KGML.createPathwaysFromModel(file, destinationFolder, writeEntryExtended, species);    
+    BioPAX2KGML.createPathwaysFromModel(file, writeEntryExtended, species);    
   }  
   
   private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
@@ -61,8 +61,7 @@ public class BioPax2KGMLTest {
     if (f.isDirectory()) {
       String[] files = f.list();
       for (String file : files) {
-        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, destinationFolder, 
-            writeEntryExtended, species);    
+        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, writeEntryExtended, species);    
       }      
     }       
   }

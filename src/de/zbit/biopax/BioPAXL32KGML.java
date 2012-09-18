@@ -138,7 +138,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
 
   /**
    * determines the species of the pathway and returns {@link Species}
-   * the default species it "Homo sapiens"
+   * the default species is null
    * @param pathway
    * @return
    */
@@ -306,15 +306,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
   public de.zbit.kegg.parser.pathway.Pathway createPathwayFromBioPaxFile(Model m, String comment,  
       String pathwayName, Species species) {
     // determine the organism
-    Species newSpecies = null;    
-    
-    Set<BioSource> orgs = m.getObjects(BioSource.class);
-    if (orgs != null && orgs.size() > 0) {
-      BioSource org = orgs.iterator().next();
-      newSpecies = determineSpecies(org);      
-    } else {
-      log.info("No pathway species could be determined.");
-    }
+    Species newSpecies = getSpecies(m);
     
     if (newSpecies != null) {
       initalizeMappers(newSpecies);
@@ -333,6 +325,18 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     }
     
     return keggPW;
+  }
+
+  public Species getSpecies(Model m) {
+    Species species = null;
+    Set<BioSource> orgs = m.getObjects(BioSource.class);
+    if (orgs != null && orgs.size() > 0) {
+      BioSource org = orgs.iterator().next();
+      species = determineSpecies(org);      
+    } else {
+      log.info("No pathway species could be determined.");
+    }
+    return species;
   }
 
   /**
