@@ -333,5 +333,12 @@ public class BioPAXpathway {
     }
     return addedEntrez;
   }
+
+  /**
+   * @return <code>TRUE</code> if {@link #model} is not <code>NULL</code>.
+   */
+  public boolean isSetModel() {
+    return model!=null;
+  }
   
 }

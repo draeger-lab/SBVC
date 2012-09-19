@@ -635,12 +635,17 @@ public class BioPAXL32KGML extends BioPAX2KGML {
 
     // create graphics
     Graphics graphics = null;
-    if (eType.equals(EntryType.map))
+    if (eType.equals(EntryType.map)) {
       graphics = Graphics.createGraphicsForPathwayReference(graphName);
-    else if (eType.equals(EntryType.compound))
+    } else if (eType.equals(EntryType.compound)) {
       graphics = Graphics.createGraphicsForCompound(graphName);
-    else
+    } else if (eType.equals(EntryType.group) || eType.equals(EntryType.genes)) {
+      graphics = Graphics.createGraphicsForGroupOrComplex(graphName);
+    } else if (eType.equals(EntryType.gene) || eType.equals(EntryType.other)) {
+      graphics = Graphics.createGraphicsForProtein(graphName);
+    } else {
       graphics = new Graphics(graphName);
+    }
 
     keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, gType, graphics);
     if (components != null) {         
