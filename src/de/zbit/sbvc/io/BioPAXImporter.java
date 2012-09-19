@@ -37,10 +37,10 @@ import javax.swing.SwingWorker;
 import de.zbit.biopax.BioPAXpathway;
 import de.zbit.gui.GUITools;
 import de.zbit.gui.JLabeledComponent;
-import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.BatchKEGGtranslator;
+import de.zbit.kegg.io.KEGG2yGraph;
 import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.util.NotifyingWorker;
@@ -155,13 +155,17 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       AbstractKEGGtranslator<?> translator = (AbstractKEGGtranslator<?>) BatchKEGGtranslator.getTranslator(outputFormat, Translator.getManager());
       
       translator.setProgressBar(getProgressBar());
+      if (translator instanceof KEGG2yGraph) {
+        // BioPAX pathway visualization requires the inclusion of reactions.
+        ((KEGG2yGraph)translator).setDrawArrowsForReactions(true);
+      }
       Object result = translator.translate(keggPathway);
       
       fireActionEvent(new ActionEvent(result, 4, null));
       return result;
       
     } catch (Exception e) {
-      log.log(Level.WARNING, "Could not import BioPAX pathway.", e);
+      GUITools.showErrorMessage(null, e, "Could not import BioPAX pathway.");
       fireActionEvent(new ActionEvent(this, 2, null)); // Remove this tab
       fireActionEvent(new ActionEvent(this, 5, null)); // Remove this from list of listeners
       return null;
