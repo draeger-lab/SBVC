@@ -1,3 +1,27 @@
+/*
+ * $Id$
+ * $URL$
+ * ---------------------------------------------------------------------
+ * This file is part of SBVC, the systems biology visualizer and
+ * converter. This tools is able to read a plethora of systems biology
+ * file formats and convert them to an internal data structure.
+ * These files can then be visualized, either using a simple graph
+ * (KEGG-style) or using the SBGN-PD layout and rendering constraints.
+ * Some currently supported IO formats are SBML (+qual, +layout), KGML,
+ * BioPAX, SBGN, etc. Please visit the project homepage at
+ * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
+ * latest version of SBVC.
+ *
+ * Copyright (C) 2012 by the University of Tuebingen, Germany.
+ *
+ * SBVC is free software; you can redistribute it and/or 
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation. A copy of the license
+ * agreement is provided in the file named "LICENSE.txt" included with
+ * this software distribution and also available online as
+ * <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
+ * ---------------------------------------------------------------------
+ */
 package de.zbit.sbvc.io.helper;
 
 import java.util.logging.Logger;
@@ -11,6 +35,7 @@ import de.zbit.kegg.parser.pathway.RelationType;
  * Helper-Class for converting Simple Interaction Files into a {@link Pathway}
  *
  * @author 	Manuel Ruff
+ * @author Clemens Wrzodek
  * @date 	2012-08-08
  * @version $Rev: 138$
  * @since	$Rev: 135$
@@ -20,16 +45,16 @@ import de.zbit.kegg.parser.pathway.RelationType;
 public class SIFProperties {
 	
 	/**
-	 * InteractionTypes of the Simple Interaction Format
-	 * pp (protein-protein interaction)
-	 * pd (protein->dna)
-	 * pr (protein->reaction)
-	 * rc (reaction->compound)
-	 * cr (compound->reaction)
-	 * gl (genetic lethal relationship)
-	 * pm (protein-metabolite interaction)
-	 * mp (metabolite-protein interaction)
-	 *
+	 * InteractionTypes of the Simple Interaction Format (SIF):<ul>
+	 * <li>pp (protein-protein interaction)</li>
+	 * <li>pd (protein->dna)</li>
+	 * <li>pr (protein->reaction)</li>
+	 * <li>rc (reaction->compound)</li>
+	 * <li>cr (compound->reaction)</li>
+	 * <li>gl (genetic lethal relationship)</li>
+	 * <li>pm (protein-metabolite interaction)</li>
+	 * <li>mp (metabolite-protein interaction)</li>
+	 * </ul>
 	 */
 	public static enum InteractionType
 	{

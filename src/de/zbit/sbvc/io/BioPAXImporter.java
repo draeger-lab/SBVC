@@ -35,7 +35,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import de.zbit.biopax.BioPAXpathway;
+import de.zbit.gui.GUITools;
 import de.zbit.gui.JLabeledComponent;
+import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.BatchKEGGtranslator;
@@ -87,6 +89,10 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       fireActionEvent(new ActionEvent(this, 3, null));
       log.info(String.format("Reading BioPAX file '%s'...", biopaxFile.getName()));
       BioPAXpathway bp = new BioPAXpathway(biopaxFile);
+      if (!bp.isSetModel()) {
+        GUITools.showErrorMessage(null, "Could not read the model. Is it a valid BioPAX file?");
+        return null;
+      }
       List<String> pathwayList = bp.getListOfPathways();
       
       // 2. Eventually (if n>1) let the user pick a pathway.
@@ -116,6 +122,7 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       
       // 3. Convert to KGML
       Pathway keggPathway = bp.getKGMLpathway(pwName);
+      //KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
       
       // 4. Get species
       Species spec = BioPAXpathway.getSpecies(keggPathway, availableOrganisms());

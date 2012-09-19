@@ -8,10 +8,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.zbit.io.csv.CSVReader;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
-import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Graphics;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.Reaction;
@@ -117,21 +115,43 @@ public class SIF2KGML {
 			Graphics sourceGraphic = null;
 			Graphics targetGraphic = null;
 			
-			// determine the graphic type
-			switch(relation.getInteractionType()){
-				case cr:
-					sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
-					targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
-					break;
-				case rc:
-					sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
-					targetGraphic = Graphics.createGraphicsForCompound(target.getName());
-					break;
-				default:
-					sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
-					targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
-					
+			 /**
+		   * InteractionTypes of the Simple Interaction Format
+		   * pp (protein-protein interaction)
+		   * pd (protein->dna)
+		   * pr (protein->reaction)
+		   * 
+		   * 
+		   * gl (genetic lethal relationship)
+		   * pm (protein-metabolite interaction)
+		   * mp (metabolite-protein interaction)
+		   *
+		   */
+			if (relation.getInteractionType()!=null && relation.getInteractionType().toString().length()>1) {
+			  char sourceType = relation.getInteractionType().toString().toLowerCase().charAt(0);
+			  char targetType = relation.getInteractionType().toString().toLowerCase().charAt(1);
+			  if (sourceType==('p')) { // protein
+			    sourceGraphic = Graphics.createGraphicsForProtein(source.getName());
+			  } else if (sourceType==('c') || sourceType==('m')) { // compound / metabolite
+			    sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
+			  } else if (sourceType==('r')) { // compound / metabolite
+			    sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
+			  }
+			  
+        if (targetType==('p')) { // protein
+          targetGraphic = Graphics.createGraphicsForProtein(target.getName());
+        } else if (targetType==('c') || targetType==('m')) { // compound / metabolite
+          targetGraphic = Graphics.createGraphicsForCompound(target.getName());
+        } else if (targetType==('r')) { // compound / metabolite
+          targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
+        }
 			}
+			if (sourceGraphic==null) {
+			  sourceGraphic = new Graphics(source.getName());
+			}
+      if (targetGraphic==null) {
+        targetGraphic = new Graphics(target.getName());
+      } 
 			
 			// set the graphic defaults
 			sourceGraphic.setDefaults(source.getType());

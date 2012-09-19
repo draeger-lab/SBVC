@@ -186,12 +186,16 @@ public class SBGN2KGML {
 				Graphics gr = null;
 				
 				// determine the graphic type of the entry
-				if(e.getType().compareTo(EntryType.compound) == 0)
+				if (e.getType().compareTo(EntryType.compound) == 0)
 					gr = Graphics.createGraphicsForCompound(g.getLabel().getText());
-				else if(e.getType().compareTo(EntryType.map) == 0)
+				else if (e.getType().compareTo(EntryType.map) == 0)
 					gr = Graphics.createGraphicsForPathwayReference(g.getLabel().getText());
+				else if (e.getType().compareTo(EntryType.group) == 0)
+				  gr = Graphics.createGraphicsForGroupOrComplex(g.getLabel().getText());
+				else if (e.getType().compareTo(EntryType.gene) == 0)
+				  gr = Graphics.createGraphicsForProtein(g.getLabel().getText());
 				else
-					gr = new Graphics(g.getLabel().getText());
+				  gr = new Graphics(g.getLabel().getText());
 				
 				if(gr != null){
 					gr.setDefaults(e.getType());
@@ -450,7 +454,7 @@ public class SBGN2KGML {
 	public static void main(String args[]) {
 //		String filename = "glycolysis.sbgn";
 //		String filename = "mapk_cascade.sbgn";
-		String filename = "test.sbgn";
+		String filename = "files/SBGNExamples/test.sbgn";
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
 		Sbgn sbgn = sbgn2kgml.read(filename);
 		
