@@ -275,7 +275,7 @@ public class BioPAXpathway {
             
             // Eventually set the collected KEGG ids as new name
             if (newName.size()>0) {
-              e.setName(StringUtil.implode(newName, " "));
+              p.changeNameOfEntry(e, StringUtil.implode(newName, " "));
             }
             
           }

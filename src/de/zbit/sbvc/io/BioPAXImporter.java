@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -122,7 +121,6 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       
       // 3. Convert to KGML
       Pathway keggPathway = bp.getKGMLpathway(pwName);
-      //KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
       
       // 4. Get species
       Species spec = BioPAXpathway.getSpecies(keggPathway, availableOrganisms());
@@ -138,6 +136,9 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
           showWarningThatNoEntrezIDsAreInThePathway();
         }
       }
+      
+      // DEBUG output of KGML
+//      KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
       
       // Reading done. Send some infos to the underlying listeners
       // Recommended name for this tab
