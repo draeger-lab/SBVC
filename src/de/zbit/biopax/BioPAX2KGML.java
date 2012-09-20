@@ -92,7 +92,7 @@ public abstract class BioPAX2KGML {
     allSpecies.add(new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
     allSpecies.add(new Species("Mus musculus", "_MOUSE", "Mouse", "mmu", 10090));
     allSpecies.add(new Species("Rattus norvegicus", "_RAT", "Rat", "rno", 10116));
-    allSpecies.add(new Species("Enterococcus faecalis", "_ENTFA", "Enterococcus", "efa", 226185));
+//    allSpecies.add(new Species("Enterococcus faecalis", "_ENTFA", "Enterococcus", "efa", 226185));
   }
 
   /**
@@ -439,6 +439,49 @@ public abstract class BioPAX2KGML {
             pw, b23.determineSpecies(pw.getOrganism()));
       }
     }
+    return keggPW;
+  }
+  
+  /**
+   * parses the complete BioPAX file even if it contains several pathways
+   * @param file
+   * @param pwName
+   * @param m
+   * @return
+   */
+  public static de.zbit.kegg.parser.pathway.Pathway parsePathwayToKEGG(String fileName, Model m, Species s) {
+    log.info("new parsing method");
+    de.zbit.kegg.parser.pathway.Pathway keggPW = null;
+    
+    if (m!=null){
+      File f = null;
+      String comment="";
+      if (fileName!=null) {
+        f = new File(fileName);
+        comment = getRDFScomment(fileName);
+      }
+      
+     
+      // BioPax Level 2 
+      if (m.getLevel().equals(BioPAXLevel.L2)) {
+        BioPAXL22KGML bp = new BioPAXL22KGML();
+        keggPW = 
+            bp.createPathwayFromBioPaxFile(m, comment, f==null?"Unknown":FileTools.removeFileExtension(f.getName()), s);
+      } //BioPax Level 3
+        else if (m.getLevel().equals(BioPAXLevel.L3)) {
+        BioPAXL32KGML bp = new BioPAXL32KGML();
+        keggPW = bp.createPathwayFromBioPaxFile
+          (m, comment, FileTools.removeFileExtension(f.getName()), s);
+      } else {
+        log.log(Level.SEVERE, "Unkown BioPAX Level '" + m.getLevel().toString()
+            + "' is not supported.");
+        System.exit(1);
+      }
+      
+    } else {
+      log.log(Level.SEVERE, "Could not continue, because the model is null.");
+    }  
+    
     return keggPW;
   }
   
@@ -804,5 +847,26 @@ public abstract class BioPAX2KGML {
       }
       return name;
     }
+  }
+
+  /**
+   * @param model
+   * @return
+   */
+  public static Collection<Species> getSpecies(Model m) {
+ // BioPax Level 2 
+    if (m.getLevel().equals(BioPAXLevel.L2)) {
+      BioPAXL22KGML bp = new BioPAXL22KGML();
+      return bp.getSpecies(m);
+    } //BioPax Level 3
+      else if (m.getLevel().equals(BioPAXLevel.L3)) {
+      BioPAXL32KGML bp = new BioPAXL32KGML();
+      return bp.getSpecies(m);
+    } else {
+      log.log(Level.SEVERE, "Unkown BioPAX Level '" + m.getLevel().toString()
+          + "' is not supported.");
+      System.exit(1);
+    }
+    return null;
   }
 }
