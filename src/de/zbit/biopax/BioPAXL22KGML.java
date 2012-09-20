@@ -237,7 +237,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         parseInteraction((interaction) pathComp, keggPW, m, species);
       } else if (pathway.class.isAssignableFrom(pathComp.getClass())){
         createKEGGEntry((pathway) pathComp, keggPW, m, species, 
-            EntryType.map, null, ",", null, null, false);  
+            EntryType.map, null, ",", null, null);  
       } else {
         log.log(Level.SEVERE, "Could not parse: '" + pathComp.getModelInterface() + "'.");
       }      
@@ -443,9 +443,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     if (entity==null) return null;
     EntryExtended keggEntry = null;
     if (physicalEntity.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = parsePhysicalEntity((physicalEntity) entity, keggPW, m, species, cv, false);
+      keggEntry = parsePhysicalEntity((physicalEntity) entity, keggPW, m, species, cv);
     } else if (pathway.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null, cv, false);
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null, cv);
     } else if (interaction.class.isAssignableFrom(entity.getClass())) {
       parseInteraction((interaction)entity, keggPW, m, species);
     } else {
@@ -467,29 +467,29 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   private EntryExtended parsePhysicalEntity(physicalEntity entity,
       de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, 
-      openControlledVocabulary cv, boolean complexComponent) {
+      openControlledVocabulary cv) {
     EntryExtended keggEntry = null;
 
     if (complex.class.isAssignableFrom(entity.getClass())) {
       List<Integer> components = createComplexComponentList(((complex) entity).getCOMPONENTS(),
           keggPW, m, species);
       keggEntry = createKEGGEntry((entity) entity, keggPW, m, species, EntryType.group, null, "/",
-          components, cv, complexComponent);
+          components, cv);
     } else if (sequenceEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",",
-          null, cv, complexComponent);
+          null, cv);
     } else if (protein.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.protein,
-          ",", null, cv, complexComponent);
+          ",", null, cv);
     } else if (rna.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.rna, ",",
-          null, cv, complexComponent);
+          null, cv);
     } else if (smallMolecule.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, EntryTypeExtended.unknown,
-          ",", null, cv, complexComponent);
+          ",", null, cv);
     } else {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.unknown,
-          ",", null, cv, complexComponent);
+          ",", null, cv);
     }
 
     return keggEntry;
@@ -512,7 +512,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     for (physicalEntityParticipant physicalEntity : set) {
       if (physicalEntity.getPHYSICAL_ENTITY()==null) continue;
       EntryExtended keggEntry = parsePhysicalEntity(physicalEntity.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, physicalEntity.getCELLULAR_LOCATION(), true);
+          species, physicalEntity.getCELLULAR_LOCATION());
       if (keggEntry != null)
         components.add(keggEntry.getId());
     }
@@ -533,7 +533,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   protected EntryExtended createKEGGEntry(entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species, EntryType eType, EntryTypeExtended gType, String graphNameSeparator,
-      List<Integer> components, openControlledVocabulary cv, boolean complexComponent) {
+      List<Integer> components, openControlledVocabulary cv) {
     EntryExtended keggEntry;
 
     // get all availabe database identifiers of the entity
@@ -590,17 +590,15 @@ public class BioPAXL22KGML extends BioPAX2KGML {
 
     // checking if entry already exists
     if (!augmentOriginalKEGGpathway){
-      if (!complexComponent){
-        Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();
-        if (entries != null && entries.size() > 0) {
-          for (de.zbit.kegg.parser.pathway.Entry entry : entries) {        
-              // important to ignore id, because this can differ from file to file
-              if (((EntryExtended)entry).equalsWithoutIDNameReactionComparison(keggEntry)) {            
-                keggEntry = (EntryExtended) entry;
-                return keggEntry;
-              }        
-          }
-        }  
+      Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();
+      if (entries != null && entries.size() > 0) {
+        for (de.zbit.kegg.parser.pathway.Entry entry : entries) {        
+            // important to ignore id, because this can differ from file to file
+            if (((EntryExtended)entry).equalsWithoutIDNameReactionComparison(keggEntry)) {            
+              keggEntry = (EntryExtended) entry;
+              return keggEntry;
+            }        
+        }
       }      
       // add entry to pathway
       keggPW.addEntry(keggEntry);      
@@ -890,7 +888,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
               }
             } else if (pathway.class.isAssignableFrom(process.getClass())) {
               EntryExtended keggEntry2 = createKEGGEntry((pathway) process, keggPW, m, species,
-                  EntryType.map, null, ",", null, null, false);
+                  EntryType.map, null, ",", null, null);
               if (keggEntry2 !=null)
                 createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
                   relType, subtype, xrefs);
@@ -1092,13 +1090,13 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     for (physicalEntityParticipant left : set) {
       if (left.getPHYSICAL_ENTITY()==null) continue;
       EntryExtended keggEntry1 = parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, left.getCELLULAR_LOCATION(), false);
+          species, left.getCELLULAR_LOCATION());
       
       if (keggEntry1 !=null){
         for (physicalEntityParticipant right : set2) {
           if (right.getPHYSICAL_ENTITY()==null) continue;
           EntryExtended keggEntry2 = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
-              species, right.getCELLULAR_LOCATION(), false);
+              species, right.getCELLULAR_LOCATION());
           if (keggEntry1 !=null){
             Relation r = createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(), 
                 type, subType, xrefs);
@@ -1201,7 +1199,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     for (physicalEntityParticipant left : lefts) {
       if (left.getPHYSICAL_ENTITY()==null) continue;
       EntryExtended keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, left.getCELLULAR_LOCATION(), false);
+          species, left.getCELLULAR_LOCATION());
          
       if (keggEntry != null) {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
@@ -1216,7 +1214,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     for (physicalEntityParticipant right : rights) {
       if (right.getPHYSICAL_ENTITY()==null) continue;
       EntryExtended keggEntry = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, right.getCELLULAR_LOCATION(), false);
+          species, right.getCELLULAR_LOCATION());
       if (keggEntry != null) {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());   
         Integer stoich = (int)right.getSTOICHIOMETRIC_COEFFICIENT();
