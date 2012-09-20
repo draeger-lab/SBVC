@@ -430,13 +430,13 @@ public abstract class BioPAX2KGML {
       pathway pw = b22.getPathwayByName(m, pwName);      
       if(pw!=null)
         keggPW = b22.createPathway(m, BioPAX2KGML.getRDFScomment(file), 
-            pw, b22.determineSpecies(pw.getORGANISM()));
+            pw, BioPAXL22KGML.determineSpecies(pw.getORGANISM()));
     } else if(m.getLevel().equals(BioPAXLevel.L3)){
       BioPAXL32KGML b23 = new BioPAXL32KGML();
       org.biopax.paxtools.model.level3.Pathway pw = b23.getPathwayByName(m, pwName);
       if(pw!=null) {
         keggPW = b23.createPathway(m, BioPAX2KGML.getRDFScomment(file),
-            pw, b23.determineSpecies(pw.getOrganism()));
+            pw, BioPAXL32KGML.determineSpecies(pw.getOrganism()));
       }
     }
     return keggPW;
@@ -854,14 +854,12 @@ public abstract class BioPAX2KGML {
    * @return
    */
   public static Collection<Species> getSpecies(Model m) {
- // BioPax Level 2 
+    // BioPax Level 2 
     if (m.getLevel().equals(BioPAXLevel.L2)) {
-      BioPAXL22KGML bp = new BioPAXL22KGML();
-      return bp.getSpecies(m);
+      return BioPAXL22KGML.getSpecies(m);
     } //BioPax Level 3
       else if (m.getLevel().equals(BioPAXLevel.L3)) {
-      BioPAXL32KGML bp = new BioPAXL32KGML();
-      return bp.getSpecies(m);
+      return BioPAXL32KGML.getSpecies(m);
     } else {
       log.log(Level.SEVERE, "Unkown BioPAX Level '" + m.getLevel().toString()
           + "' is not supported.");

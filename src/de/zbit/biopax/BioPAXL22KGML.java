@@ -85,6 +85,8 @@ import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.SortedArrayList;
 import de.zbit.util.Species;
 import de.zbit.util.Utils;
+import de.zbit.util.objectwrapper.ValuePair;
+import de.zbit.util.objectwrapper.ValuePairUncomparable;
 import de.zbit.util.progressbar.ProgressBar;
 
 /**
@@ -231,13 +233,16 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     
 
     for (pathwayComponent pathComp : pathway.getPATHWAY_COMPONENTS()) {
+      if (pathComp.getRDFId().contains("#pid_i_103142_condition_1")){
+        System.out.println("Los geht's");
+      }
       if (pathwayStep.class.isAssignableFrom(pathComp.getClass())){
         parsePathwayStep((pathwayStep)pathComp, keggPW, m, species);
       } else if (interaction.class.isAssignableFrom(pathComp.getClass())){
         parseInteraction((interaction) pathComp, keggPW, m, species);
-      } else if (pathway.class.isAssignableFrom(pathComp.getClass())){
+      } else if (pathway.class.isAssignableFrom(pathComp.getClass())){         
         createKEGGEntry((pathway) pathComp, keggPW, m, species, 
-            EntryType.map, null, ",", null, null);  
+            EntryType.map, null, ",", null, null, null);  
       } else {
         log.log(Level.SEVERE, "Could not parse: '" + pathComp.getModelInterface() + "'.");
       }      
@@ -445,7 +450,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     if (physicalEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = parsePhysicalEntity((physicalEntity) entity, keggPW, m, species, cv);
     } else if (pathway.class.isAssignableFrom(entity.getClass())) {
-      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null, cv);
+      keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null, cv, null);
     } else if (interaction.class.isAssignableFrom(entity.getClass())) {
       parseInteraction((interaction)entity, keggPW, m, species);
     } else {
@@ -474,22 +479,22 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       List<Integer> components = createComplexComponentList(((complex) entity).getCOMPONENTS(),
           keggPW, m, species);
       keggEntry = createKEGGEntry((entity) entity, keggPW, m, species, EntryType.group, null, "/",
-          components, cv);
+          components, cv, null);
     } else if (sequenceEntity.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",",
-          null, cv);
+          null, cv, null);
     } else if (protein.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.gene, EntryTypeExtended.protein,
-          ",", null, cv);
+          ",", null, cv, null);
     } else if (rna.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.rna, ",",
-          null, cv);
+          null, cv, null);
     } else if (smallMolecule.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.compound, EntryTypeExtended.unknown,
-          ",", null, cv);
+          ",", null, cv, null);
     } else {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.unknown,
-          ",", null, cv);
+          ",", null, cv, null);
     }
 
     return keggEntry;
@@ -533,29 +538,39 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   protected EntryExtended createKEGGEntry(entity entity, de.zbit.kegg.parser.pathway.Pathway keggPW,
       Model m, Species species, EntryType eType, EntryTypeExtended gType, String graphNameSeparator,
-      List<Integer> components, openControlledVocabulary cv) {
+      List<Integer> components, openControlledVocabulary cv, String name) {
     EntryExtended keggEntry;
-
-    // get all availabe database identifiers of the entity
-    Map<IdentifierDatabases, Collection<String>> identifiers = 
-      getDatabaseIdentifiers(entity, eType, gType);
-        
-   
-    // determine graph name and gene symbols   
     String graphName = "";
-    String names = entity.getNAME();
-    if (names != null) {      
-      names = names.trim();
-      names = names.replace(" ", "_");
-    }
+    String names = "";
+    String keggname = "";
+    Map<IdentifierDatabases, Collection<String>> identifiers = null;
     
-    if (entity.getSHORT_NAME()!=null && !entity.getSHORT_NAME().isEmpty())
-        graphName = entity.getSHORT_NAME();
-    else 
-      graphName = names;
-        
+    if (entity!=null){
+      // get all availabe database identifiers of the entity
+      identifiers = getDatabaseIdentifiers(entity, eType, gType);
+          
+     
+      // determine graph name and gene symbols   
 
-    String keggname = BioPAX2KGML.getKEGGName(identifiers, species);
+      names = entity.getNAME();
+      if (names != null) {      
+        names = names.trim();
+        names = names.replace(" ", "_");
+      }
+      
+      if (entity.getSHORT_NAME()!=null && !entity.getSHORT_NAME().isEmpty())
+          graphName = entity.getSHORT_NAME();
+      else 
+        graphName = names;
+    
+      keggname = BioPAX2KGML.getKEGGName(identifiers, species);
+    } else if (name!=null && !name.isEmpty()){
+      names = name;
+      graphName = name;
+      keggname = getKEGGUnkownName();
+    }
+
+    
 
 
     // create graphics
@@ -578,7 +593,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     
     
     // set further information to the entry
-    keggEntry.addDatabaseIdentifiers(identifiers);   
+    if (identifiers!=null) {
+      keggEntry.addDatabaseIdentifiers(identifiers);
+    }
     
     if (components != null) {      
       keggEntry.addComponents(components);
@@ -721,16 +738,16 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     if (catalysis.class.isAssignableFrom(entity.getClass())) {
       createKEGGReactionRelation(((catalysis) entity).getCONTROLLER(),
           ((catalysis) entity).getCONTROLLED(), getSubtype(((catalysis) entity).getCONTROL_TYPE()),
-          keggPW, m, species, ((catalysis)entity).getXREF());
+          keggPW, m, species, ((catalysis)entity).getXREF(), ((catalysis)entity).getNAME());
     } else if (modulation.class.isAssignableFrom(entity.getClass())) {
       createKEGGReactionRelation(((modulation) entity).getCONTROLLER(),
           ((modulation) entity).getCONTROLLED(),
           getSubtype(((modulation) entity).getCONTROL_TYPE()), keggPW, m, species, 
-          ((modulation)entity).getXREF());
+          ((modulation)entity).getXREF(), ((modulation)entity).getNAME());
     } else {
       createKEGGReactionRelation(((control) entity).getCONTROLLER(),
           ((control) entity).getCONTROLLED(), getSubtype(((control) entity).getCONTROL_TYPE()),
-          keggPW, m, species, ((control)entity).getXREF());
+          keggPW, m, species, ((control)entity).getXREF(), ((control)entity).getNAME());
     } 
   }
 
@@ -815,9 +832,10 @@ public class BioPAXL22KGML extends BioPAX2KGML {
    */
   private EntryExtended createKEGGReactionRelation(Set<physicalEntityParticipant> controllers,
       Set<process> controlleds, SubType subtype,
-      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, Set<xref> xrefs) {
+      de.zbit.kegg.parser.pathway.Pathway keggPW, Model m, Species species, Set<xref> xrefs, String name) {
+    List<ValuePairUncomparable<EntryExtended, RelationType>> keggEntry1s = 
+      new ArrayList<ValuePairUncomparable<EntryExtended, RelationType>>();  
     EntryExtended keggEntry1 = null;
-    RelationType relType = null;
 
     if (controllers.size() >= 1) {
       for (physicalEntityParticipant controller : controllers) {
@@ -828,84 +846,135 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             controller.getCELLULAR_LOCATION());
         
         if(keggEntry1!=null && keggEntry1.getType().equals(EntryType.map)){
-          relType = RelationType.maplink;
+          keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.maplink));
         } else {
-          relType = RelationType.PPrel;
+          keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.maplink));
         }
+      }
+    } else if (name!=null && !name.isEmpty()){
+      keggEntry1 = createKEGGEntry(null, keggPW, m, species, EntryType.map, null, null, null, null, name);
+    }
+    
+    if (controlleds.size() > 0) {
+      for (process process : controlleds) {
+        if (conversion.class.isAssignableFrom(process.getClass())) {
+          conversion con = (conversion) process;
+          if (biochemicalReaction.class.isAssignableFrom(con.getClass())
+              || complexAssembly.class.isAssignableFrom(con.getClass())
+              || transportWithBiochemicalReaction.class.isAssignableFrom(con.getClass())) {
+            if (!augmentOriginalKEGGpathway) {
+              Reaction r = null;
+              try {
+                r = createKEGGReaction(((biochemicalReaction) con).getLEFT(),
+                    ((biochemicalReaction) con).getRIGHT(), keggPW, m, species, xrefs);
 
-        if (keggEntry1 != null && controlleds.size() > 0) {
-          for (process process : controlleds) {
-            if (conversion.class.isAssignableFrom(process.getClass())) {
-              conversion con = (conversion) process;
-              if (biochemicalReaction.class.isAssignableFrom(con.getClass())
-                  || complexAssembly.class.isAssignableFrom(con.getClass())
-                  || transportWithBiochemicalReaction.class.isAssignableFrom(con.getClass())) {
-                if (!augmentOriginalKEGGpathway) {
-                  Reaction r = null;
-                  try {
-                    r = createKEGGReaction(((biochemicalReaction) con).getLEFT(),
-                        ((biochemicalReaction) con).getRIGHT(), keggPW, m, species, xrefs);
-
-                  } catch (ClassCastException e) {
-                    try {
-                      r = createKEGGReaction(((complexAssembly) con).getLEFT(),
-                          ((complexAssembly) con).getRIGHT(), keggPW, m, species, xrefs);
-                    } catch (ClassCastException e2) {
-                      r = createKEGGReaction(((transportWithBiochemicalReaction) con).getLEFT(),
-                          ((transportWithBiochemicalReaction) con).getRIGHT(), keggPW, m, species, xrefs);
-                    }
-                  }
-
-                  if (relType.equals(RelationType.maplink) && r!=null) {
-                    for (ReactionComponent rc : r.getSubstrates()) {
-                      createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtype, xrefs);
-                    }
-                  } else if (relType.equals(RelationType.PPrel) && r!=null) {
-                    keggEntry1.appendReaction(r.getName());
-                  }  
+              } catch (ClassCastException e) {
+                try {
+                  r = createKEGGReaction(((complexAssembly) con).getLEFT(),
+                      ((complexAssembly) con).getRIGHT(), keggPW, m, species, xrefs);
+                } catch (ClassCastException e2) {
+                  r = createKEGGReaction(((transportWithBiochemicalReaction) con).getLEFT(),
+                      ((transportWithBiochemicalReaction) con).getRIGHT(), keggPW, m, species, xrefs);
                 }
-              } else if (transport.class.isAssignableFrom(con.getClass())) {
-                Reaction r = createKEGGReaction(((transport) con).getLEFT(),
-                    ((transport) con).getRIGHT(), keggPW, m, species, ((transport)con).getXREF());                
-                if (relType.equals(RelationType.maplink) && r!=null) {
-                  for (ReactionComponent rc : r.getSubstrates()) {
-                    createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), relType, subtype, xrefs);
-                  }
-                } else if (relType.equals(RelationType.PPrel) && r!=null) {
-                  keggEntry1.appendReaction(r.getName());
-                }
-              } else if (conversion.class.isAssignableFrom(con.getClass())){
-                  List<Relation> rels =  createKEGGRelations(con.getLEFT(), con.getRIGHT(), keggPW, m, species, 
-                    RelationType.PPrel, getSubtype(con.getINTERACTION_TYPE()), xrefs);
-                  for (Relation rel : rels) {
-                    if (rel !=null)
-                      createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), relType, subtype, xrefs);
-                  }
-              } else {
-                log.severe("Not programmed case: controlled interface '" + con.getModelInterface()
-                    + "'");
-                System.exit(1);
               }
-            } else if (pathway.class.isAssignableFrom(process.getClass())) {
-              EntryExtended keggEntry2 = createKEGGEntry((pathway) process, keggPW, m, species,
-                  EntryType.map, null, ",", null, null);
-              if (keggEntry2 !=null)
-                createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
-                  relType, subtype, xrefs);
-            } else if (interaction.class.isAssignableFrom(process.getClass())) {                            
-              parseInteractionFromInteraction( ((interaction)process), keggPW, m, species, 
-                  keggEntry1);
-            } else {
-              log.severe("Process: " + process.getModelInterface() + "-This should not happen!");
-              System.exit(1);
+              
+              if (r!=null) {
+                if (keggEntry1s.size()>0) {
+                  for (ValuePairUncomparable<EntryExtended, RelationType> vP : keggEntry1s) {
+                    if (vP.getB().equals(RelationType.maplink)) {
+                      for (ReactionComponent rc : r.getSubstrates()) {
+                        createKEGGRelation(keggPW, vP.getA().getId(), rc.getId(), vP.getB(), subtype, xrefs);
+                      }
+                    } else if (vP.getB().equals(RelationType.PPrel)) {
+                      vP.getA().appendReaction(r.getName());
+                    }  
+                  }
+                } else if (keggEntry1!=null) {
+                  for (ReactionComponent rc : r.getSubstrates()) {
+                    createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), RelationType.maplink, subtype, xrefs);
+                  }               
+                }
+              }
             }
-            // ControlType (0 or 1) - up to now ignored
-
-            // Cofactor = PhysicalEntity (0 or more) - up to now ignored
-
-            // CatalysisDirection - up to now ignored
+          } else if (transport.class.isAssignableFrom(con.getClass())) {
+            Reaction r = createKEGGReaction(((transport) con).getLEFT(),
+                ((transport) con).getRIGHT(), keggPW, m, species, ((transport)con).getXREF());
+            
+            if (r!=null) {
+              if (keggEntry1s.size()>0){
+                for (ValuePairUncomparable<EntryExtended, RelationType> vp : keggEntry1s) {
+                  if (vp.getB().equals(RelationType.maplink) && r!=null) {                  
+                    for (ReactionComponent rc : r.getSubstrates()) {
+                      createKEGGRelation(keggPW, vp.getA().getId(), rc.getId(), vp.getB(), subtype, xrefs);
+                    }
+                  } else if (vp.getB().equals(RelationType.PPrel) && r!=null) {
+                    vp.getA().appendReaction(r.getName());
+                  }
+                }
+              } else if (keggEntry1!=null && r!=null){
+                for (ReactionComponent rc : r.getSubstrates()) {
+                  createKEGGRelation(keggPW, keggEntry1.getId(), rc.getId(), RelationType.maplink, subtype, xrefs);
+                }  
+              }
+            }
+          } else if (conversion.class.isAssignableFrom(con.getClass())){
+              List<Relation> rels =  createKEGGRelations(con.getLEFT(), con.getRIGHT(), keggPW, m, species, 
+                RelationType.PPrel, getSubtype(con.getINTERACTION_TYPE()), xrefs);
+              if (rels!=null && rels.size()>0) {
+                if (keggEntry1s.size()>0){
+                  for (Relation rel : rels) {
+                    if (rel !=null){
+                      for (ValuePairUncomparable<EntryExtended, RelationType> vp : keggEntry1s) {
+                        createKEGGRelation(keggPW, vp.getA().getId(), rel.getEntry2(), vp.getB(), subtype, xrefs);
+                      }
+                    }
+                  }
+                } else if (keggEntry1!=null) {
+                  for (Relation rel : rels) {
+                    if (rel !=null){
+                      createKEGGRelation(keggPW, keggEntry1.getId(), rel.getEntry2(), RelationType.maplink, subtype, xrefs);
+                    }
+                  }
+                }
+              }
+          } else {
+            log.severe("Not programmed case: controlled interface '" + con.getModelInterface()
+                + "'");
+            System.exit(1);
           }
+        } else if (pathway.class.isAssignableFrom(process.getClass())) {
+          EntryExtended keggEntry2 = createKEGGEntry((pathway) process, keggPW, m, species,
+              EntryType.map, null, ",", null, null, null);
+          if (keggEntry2 !=null) {
+            if (keggEntry1s.size()<0){
+              for (ValuePairUncomparable<EntryExtended, RelationType> vp : keggEntry1s) {
+                createKEGGRelation(keggPW, vp.getA().getId(), keggEntry2.getId(),
+                  vp.getB(), subtype, xrefs);
+              }
+            } else if (keggEntry1!=null){
+              createKEGGRelation(keggPW, keggEntry1.getId(), keggEntry2.getId(),
+                  RelationType.maplink, subtype, xrefs);
+            }
+          }
+        } else if (interaction.class.isAssignableFrom(process.getClass())) { 
+          if (keggEntry1s.size()>0){
+            for (ValuePairUncomparable<EntryExtended, RelationType> vp : keggEntry1s) {
+              parseInteractionFromInteraction( ((interaction)process), keggPW, m, species, 
+                vp.getA());
+            }
+          } else {
+              parseInteractionFromInteraction( ((interaction)process), keggPW, m, species, 
+              keggEntry1);
+          }
+        } else {
+          log.severe("Process: " + process.getModelInterface() + "-This should not happen!");
+          System.exit(1);
         }
+        // ControlType (0 or 1) - up to now ignored
+
+        // Cofactor = PhysicalEntity (0 or more) - up to now ignored
+
+        // CatalysisDirection - up to now ignored
       }
     }
 
