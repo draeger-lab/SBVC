@@ -92,8 +92,8 @@ public class SBGN2KGML {
 	 * Method for validating a {@link Sbgn}-file
 	 * @param filename	the name of the file as {@link String}
 	 * @return {@link boolean}	<ul>
-	 * 								<li> <code>true</code> if the file is valid</li>
-	 * 								<li> <code>false</code> otherwise</li>
+	 * 								<li> {@code true} if the file is valid</li>
+	 * 								<li> {@code false} otherwise</li>
 	 * 							</ul>
 	 * @exception JAXBException
 	 * @exception SAXException

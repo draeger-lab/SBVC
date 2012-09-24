@@ -118,8 +118,8 @@ public class SBVC extends Launcher{
    * 
    * @param input <code>BioPAX</code> file.
    * @param outputFolderName Result folder in which the created file should be put.
-   * @param splitMode <code>TRUE</code> if separate files for each pathway should
-   * be created. <code>FALSE</code> to create a single output file.
+   * @param splitMode {@code true} if separate files for each pathway should
+   * be created. {@code false} to create a single output file.
    */
   public void convertBioPAXToSBML(String input, String outputFolderName, Species species) {
     // getting the KEGG Pathways of the model
