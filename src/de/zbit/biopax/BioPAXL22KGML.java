@@ -541,7 +541,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       List<Integer> components, openControlledVocabulary cv, String name) {
     EntryExtended keggEntry;
     String graphName = "";
-    String names = "";
+    String entryName = "";
     String keggname = "";
     Map<IdentifierDatabases, Collection<String>> identifiers = null;
     
@@ -551,26 +551,22 @@ public class BioPAXL22KGML extends BioPAX2KGML {
           
      
       // determine graph name and gene symbols   
-
-      names = entity.getNAME();
-      if (names != null) {      
-        names = names.trim();
-        names = names.replace(" ", "_");
+      entryName = entity.getNAME();
+      if (entryName != null) {      
+        entryName = entryName.trim();
+        entryName = entryName.replace(" ", "_");
       }
       
       if (entity.getSHORT_NAME()!=null && !entity.getSHORT_NAME().isEmpty())
           graphName = entity.getSHORT_NAME();
       else 
-        graphName = names;
+        graphName = entryName;
     
       keggname = BioPAX2KGML.getKEGGName(identifiers, species);
     } else if (name!=null && !name.isEmpty()){
-      names = name;
       graphName = name;
       keggname = getKEGGUnkownName();
     }
-
-    
 
 
     // create graphics
