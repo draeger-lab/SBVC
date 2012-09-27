@@ -697,14 +697,14 @@ public abstract class BioPAX2KGML {
     Iterator<String> it = ids.iterator();
     while (it.hasNext()) {
       String id = it.next();
-      if (!id.contains(":")) {
+      if (id!=null && !id.contains(":")) {
         id = KeggInfos.appendPrefix(id);
       }
       idsFixed.add(id);
     }
     
     // Implode and set name
-    String keggName = ArrayUtils.implode(idsFixed, " ");
+    String keggName = (idsFixed==null||idsFixed.size()<1) ? null: ArrayUtils.implode(idsFixed, " ");
     if (keggName==null) {
       keggName = getKEGGUnkownName();
     }
