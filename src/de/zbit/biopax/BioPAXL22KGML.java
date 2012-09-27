@@ -65,7 +65,6 @@ import org.biopax.paxtools.model.level2.transport;
 import org.biopax.paxtools.model.level2.transportWithBiochemicalReaction;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level2.xref;
-import org.biopax.paxtools.model.level3.BioSource;
 
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
@@ -85,7 +84,6 @@ import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
 import de.zbit.util.SortedArrayList;
 import de.zbit.util.Species;
 import de.zbit.util.Utils;
-import de.zbit.util.objectwrapper.ValuePair;
 import de.zbit.util.objectwrapper.ValuePairUncomparable;
 import de.zbit.util.progressbar.ProgressBar;
 
@@ -594,7 +592,9 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     }
     
     if (components != null) {      
-      keggEntry.addComponents(components);
+      keggEntry.setComponents(components);
+      components = BioPAX2KGML.getComplexContent(keggEntry, keggPW);
+      keggEntry.setComponents(components);
     } 
     
     if (cv!=null && cv.getTERM().size()>0) {
@@ -613,19 +613,23 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             }        
         }
       }      
-      // add entry to pathway
-      keggPW.addEntry(keggEntry);      
-    } else {
+               
       keggEntry=null;
       if (!keggname.startsWith(keggUnknownName)){
         // Search an existing kegg entry, that contains this keggname
-        Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(keggname);
-        keggEntry = (EntryExtended) de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);        
+        entries = keggPW.getEntriesForName(keggname);
+        keggEntry = (EntryExtended) de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);      
+        if (keggEntry!=null && !(keggEntry instanceof EntryExtended)) {
+          return new EntryExtended(keggEntry);
+        }
       }
+      
+      // add entry to pathway
+      keggPW.addEntry(keggEntry); 
     }        
 
     return keggEntry;
-  }
+  }  
 
   /**
    * add if available further entity information
@@ -1272,7 +1276,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         if (stoich >0 && stoich<Integer.MAX_VALUE) {
           rc.setStoichiometry(stoich);
         }
-        products.add(rc);
+        substrates.add(rc);
       }
     }
     
@@ -1281,12 +1285,19 @@ public class BioPAXL22KGML extends BioPAX2KGML {
       EntryExtended keggEntry = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
           species, right.getCELLULAR_LOCATION());
       if (keggEntry != null) {
+        
+        if (keggEntry.getType().equals(EntryType.group)){
+          List<Integer> complexEntries = getComplexContent(keggEntry, keggPW);
+          keggEntry.setComponents(complexEntries);
+        }
+
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());   
         Integer stoich = (int)right.getSTOICHIOMETRIC_COEFFICIENT();
         if (stoich >0 && stoich<Integer.MAX_VALUE) {
-          rc.setStoichiometry(stoich);
+           rc.setStoichiometry(stoich);
         }
-        substrates.add(rc);  
+       
+        products.add(rc);
       }
     }
 

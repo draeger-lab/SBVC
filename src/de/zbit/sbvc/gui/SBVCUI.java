@@ -32,6 +32,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -50,8 +51,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.sbml.jsbml.SBMLDocument;
-
 import de.zbit.AppConf;
 import de.zbit.graph.RestrictedEditMode;
 import de.zbit.graph.gui.TranslatorPanel;
@@ -67,7 +66,6 @@ import de.zbit.io.filefilter.SBFileFilter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.io.KEGG2jSBML;
 import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
-import de.zbit.sbml.io.OpenedFile;
 import de.zbit.sbvc.SBVC;
 import de.zbit.sbvc.io.SBVCIOOptions;
 import de.zbit.util.StringUtil;
@@ -767,6 +765,15 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
   public File saveFileAs() {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  /* (non-Javadoc)
+   * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    // TODO Auto-generated method stub
+    
   }
 
 }

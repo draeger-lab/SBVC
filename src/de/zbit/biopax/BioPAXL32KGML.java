@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -244,37 +243,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
 
     
     parseInnerPathway(m, pathway, species, keggPW);
-//    System.out.println(elementsNotRead.size());
-//    
-//    int depth = 2;
-//    
-//    while (elementsNotRead.size()>0 && depth >0){
-//      Map<String, Entity> helpMap = new HashMap<String, Entity>(elementsNotRead);
-//      
-//      elementsNotRead.clear();
-//      elementsRead.putAll(helpMap);
-//      
-//      for (String id : helpMap.keySet()) {
-//        Entity ent = helpMap.get(id);
-//        if (!elementsRead.containsKey(ent)){
-//          parseInnerPathway(m, (Pathway)ent, species, keggPW);
-//        }
-//      } 
-//      depth--;
-//    }
-//    
-    
-//    Map<String, Entity> helpMap = new HashMap<String, Entity>(elementsRead);
-//    
-//    helpMap.putAll(elementsNotRead);
-//    elementsNotRead.clear();
-//    
-//    for (String id : helpMap.keySet()) {
-//      Entity ent = helpMap.get(id);
-//      parseInnerPathway(m, (Pathway)ent, species, keggPW);
-//    }  
-    
-    System.out.println("Pathway contains " + keggPW.getEntries().size() + " entries.");
     
     return keggPW;
   }
@@ -430,12 +398,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     } else if (Interaction.class.isAssignableFrom(entity.getClass())) {
       parseInteraction((Interaction) entity, keggPW, m, species);
     } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
-//      System.out.println("Debug Me");//TODO: remove this line!
-//      if (!elementsRead.containsKey(entity)){
-//        Entity x = elementsNotRead.put(entity.getRDFId(), entity);
-//        if (x!=null)
-//          System.out.println(entity.getRDFId());
-//      }
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.map, null, ",", null, null);     
     } else if (Gene.class.isAssignableFrom(entity.getClass())) {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",", null, null);
@@ -682,13 +644,10 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       List<Integer> components, String name) {
     EntryExtended keggEntry;
     String keggname = "", graphName = "";
-
-    // get all availabe database identifiers of the entity
     Map<IdentifierDatabases, Collection<String>> identifiers = null;
-    
-    
+        
     if (entity!=null){
-      // get all availabe database identifiers of the entity
+      // get all available database identifiers of the entity
       identifiers = getDatabaseIdentifiers(entity, eType, gType);
       
       // determine graph name and gene symbols   
@@ -705,7 +664,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     
     } else if (name!=null && !name.isEmpty()){
       graphName = name;
-      keggname = getKEGGUnkownName();
+      keggname = name;
     }
     
     // create graphics
@@ -723,8 +682,10 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     }
 
     keggEntry = new EntryExtended(keggPW, getKeggEntryID(), keggname, eType, gType, graphics);
-    if (components != null) {         
-      keggEntry.addComponents(components);
+    if (components != null) {
+      keggEntry.setComponents(components);
+      components = BioPAX2KGML.getComplexContent(keggEntry, keggPW);
+      keggEntry.setComponents(components);
     } 
     
     // set further information to the entry
@@ -742,32 +703,31 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     }
 
     // checking if entry already exists
+
     if (!augmentOriginalKEGGpathway){
       Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntries();
       if (entries != null && entries.size() > 0) {
         for (de.zbit.kegg.parser.pathway.Entry entry : entries) {
-            // important to ignore id, because this can differ from file to file
-            if (((EntryExtended)entry).equalsWithoutIDNameReactionComparison(keggEntry)) {            
-              keggEntry = (EntryExtended) entry;
-              return keggEntry;
-            }        
+          // important to ignore id, because this can differ from file to file
+          if (((EntryExtended)entry).equalsWithoutIDNameReactionComparison(keggEntry)) {            
+            keggEntry = (EntryExtended) entry;
+            return keggEntry;
+          }        
         }
-      }  
-      
-      // add entry to pathway
-      keggPW.addEntry(keggEntry);      
-    } else {
-      keggEntry=null;
+      }            
+            
       if (!keggname.startsWith(keggUnknownName)){
         // Search an existing kegg entry, that contains this keggname
-        Collection<de.zbit.kegg.parser.pathway.Entry> entries = keggPW.getEntriesForName(keggname);
+        entries = keggPW.getEntriesForName(keggname);
         Entry ke = de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);
         if (ke!=null && !(ke instanceof EntryExtended)) {
-          ke = new EntryExtended(ke);
-        }
-        keggEntry = (EntryExtended) ke;
+          return new EntryExtended(ke);
+        }          
       }
-    }            
+      
+      // add entry to pathway
+      keggPW.addEntry(keggEntry);   
+    }  
 
     return keggEntry;
   }
@@ -887,12 +847,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     } else if (Conversion.class.isAssignableFrom(entity.getClass())) {
       parseConversion((Conversion) entity, keggPW, m, species);
     } else if (Pathway.class.isAssignableFrom(entity.getClass())) {
-//      System.out.println("Debug Me");//TODO: remove this line!
-//      if (!elementsRead.containsKey(entity)) {
-//        Entity x = elementsNotRead.put(entity.getRDFId(), entity);
-//        if (x!=null)
-//          System.out.println(entity.getRDFId());
-//      }
       createKEGGEntry((Pathway) entity, keggPW, m, species, EntryType.map, null, ",", null, null);
     } else if (GeneticInteraction.class.isAssignableFrom(entity.getClass())) {
       createKEGGRelationForParticipantList(
@@ -932,12 +886,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     if (participants.size() > 1) {
       for (int i = 0; i < participants.size(); i++) {
         if (Pathway.class.isAssignableFrom(participants.get(i).getClass())) {
-//          System.out.println("Debug Me");//TODO: remove this line!
-//          if (!elementsRead.containsKey(participants.get(i))){
-//            Entity x = elementsNotRead.put(participants.get(i).getRDFId(), participants.get(i));
-//            if (x!=null)
-//              System.out.println(participants.get(i).getRDFId());
-//          }
           keggEntry1 = parseEntity(((Pathway) participants.get(i)), keggPW, m, species);
         } else if (Entity.class.isAssignableFrom(participants.get(i).getClass())) {
           keggEntry1 = parseEntity(((Entity) participants.get(i)), keggPW, m, species);
@@ -969,12 +917,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       }
     } else if (participants.size() > 0) {
       if (Pathway.class.isAssignableFrom(participants.get(0).getClass())) {
-//        System.out.println("Debug Me");//TODO: remove this line!
-//        if (!elementsRead.containsKey(participants.get(0))){
-//          Entity x = elementsNotRead.put(participants.get(0).getRDFId(), participants.get(0));
-//          if (x!=null)
-//            System.out.println(participants.get(0).getRDFId());
-//        }
         keggEntry1 = parseEntity(((Pathway) participants.get(0)), keggPW, m, species);
       } else if (PhysicalEntity.class.isAssignableFrom(participants.get(0).getClass())) {
         keggEntry1 = parseEntity(((PhysicalEntity) participants.get(0)), keggPW, m, species);
@@ -1334,12 +1276,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           keggEntry1 = parsePhysicalEntity((PhysicalEntity) controller, keggPW, m, species);
           keggEntry1s.add(new ValuePairUncomparable<EntryExtended, RelationType>(keggEntry1, RelationType.PPrel));
         } else if (Pathway.class.isAssignableFrom(controller.getClass())) {
-//          System.out.println("Debug Me");//TODO: remove this line!
-//          if (!elementsRead.containsKey(controller)){
-//            Entity x = elementsNotRead.put(controller.getRDFId(), controller);
-//            if (x!=null)
-//              System.out.println(controller.getRDFId());
-//          }
           keggEntry1 = createKEGGEntry((Entity) controller, keggPW, m, species, EntryType.map,
               null, ",", null, null);
           keggEntry1s.add(new ValuePairUncomparable<EntryExtended, RelationType>(keggEntry1, RelationType.maplink));
@@ -1478,12 +1414,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
             // NEVER use system exit 1. Please throw an exception instead
           }
         } else if (Pathway.class.isAssignableFrom(process.getClass())) {
-//          System.out.println("Debug Me");//TODO: remove this line!
-//          if (!elementsRead.containsKey(process)){
-//            Entity x = elementsNotRead.put(process.getRDFId(), process);
-//            if (x!=null)
-//              System.out.println(process.getRDFId());
-//          }
           EntryExtended keggEntry2 = createKEGGEntry((Pathway) process, keggPW, m, species,
               EntryType.map, null, ",", null, null);
           if (keggEntry2 !=null){
@@ -1766,47 +1696,33 @@ public class BioPAXL32KGML extends BioPAX2KGML {
 
     for (PhysicalEntity right : rights) {
       EntryExtended keggEntry = parsePhysicalEntity(right, keggPW, m, species);
+
       if (keggEntry != null) {
-        if (keggEntry.getType().equals(EntryType.group)){
-          Integer complexStoich = null;
-          for (Stoichiometry stoichi : stoichiometry) {
-            if (stoichi.getPhysicalEntity()==null) continue;
-            if (stoichi.getPhysicalEntity().equals(right)) {
-              Integer stoich = (int)stoichi.getStoichiometricCoefficient();
-              if (stoich >0 && stoich<Integer.MAX_VALUE) {
-                complexStoich = stoich;
-              }
-              break;
-            }
-          }
-          
+        if (keggEntry.getType().equals(EntryType.group)) {
           List<Integer> complexEntries = getComplexContent(keggEntry, keggPW);
-          
-          
+
           keggEntry.setComponents(complexEntries);
-
-          ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
-
-          if (complexStoich != null)
-            rc.setStoichiometry(complexStoich);
-
-          products.add(rc);
-
-        } else {
-          ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
-
-          for (Stoichiometry stoichi : stoichiometry) {
-            if (stoichi.getPhysicalEntity()==null) continue;
-            if (stoichi.getPhysicalEntity().equals(right)) {
-              Integer stoich = (int)stoichi.getStoichiometricCoefficient();
-              if (stoich >0 && stoich<Integer.MAX_VALUE) {
-                rc.setStoichiometry(stoich);
-              }
-              break;
-            }
-          }
-          products.add(rc); 
         }
+        Integer complexStoich = null;
+        for (Stoichiometry stoichi : stoichiometry) {
+          if (stoichi.getPhysicalEntity() == null)
+            continue;
+          if (stoichi.getPhysicalEntity().equals(right)) {
+            Integer stoich = (int) stoichi.getStoichiometricCoefficient();
+            if (stoich > 0 && stoich < Integer.MAX_VALUE) {
+              complexStoich = stoich;
+            }
+            break;
+          }
+        }
+
+        ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
+
+        if (complexStoich != null)
+          rc.setStoichiometry(complexStoich);
+
+        products.add(rc);
+
       }
     }
 
@@ -1859,25 +1775,6 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     return r;
   }
 
-  /**
-   * @param keggEntry
-   * @param keggPW 
-   * @return
-   */
-  private List<Integer> getComplexContent(Entry keggEntry, 
-      de.zbit.kegg.parser.pathway.Pathway keggPW) {
-    List<Integer> complexEntries = new LinkedList<Integer>();
-    
-    List<Integer> components = keggEntry.getComponents();
-    for (Integer id : components) {
-      Entry entry = keggPW.getEntryForId(id);
-      if (entry.hasComponents()) {
-        complexEntries.addAll(getComplexContent(entry, keggPW));
-      } else {
-        complexEntries.add(id);
-      }
-    }
-    return complexEntries;
-  }
+  
 
 }

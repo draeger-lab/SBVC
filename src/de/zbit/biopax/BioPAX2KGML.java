@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +59,7 @@ import de.zbit.io.FileTools;
 import de.zbit.io.OpenFile;
 import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.api.KeggInfos;
+import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.mapper.GeneID2KeggIDMapper;
 import de.zbit.mapper.GeneSymbol2GeneIDMapper;
 import de.zbit.util.ArrayUtils;
@@ -866,5 +868,30 @@ public abstract class BioPAX2KGML {
       System.exit(1);
     }
     return null;
+  }
+  
+  
+  /**
+   * @param keggEntry
+   * @param keggPW 
+   * @return
+   */
+  public static List<Integer> getComplexContent(Entry keggEntry, 
+      de.zbit.kegg.parser.pathway.Pathway keggPW) {
+    List<Integer> complexEntries = new LinkedList<Integer>();
+    
+    if (keggEntry.getGraphics().getName().startsWith("EGF:EGFR dimer")){
+      System.out.println("jetzt");
+    }
+    List<Integer> components = keggEntry.getComponents();
+    for (Integer id : components) {
+      Entry entry = keggPW.getEntryForId(id);
+      if (entry.hasComponents()) {
+        complexEntries.addAll(getComplexContent(entry, keggPW));
+      } else {
+        complexEntries.add(id);
+      }
+    }
+    return complexEntries;
   }
 }
