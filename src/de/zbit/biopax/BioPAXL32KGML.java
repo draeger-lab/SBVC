@@ -92,7 +92,6 @@ import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
-import de.zbit.util.ArrayUtils;
 import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
@@ -1362,24 +1361,26 @@ public class BioPAXL32KGML extends BioPAX2KGML {
               || TransportWithBiochemicalReaction.class.isAssignableFrom(con.getClass())) {
             if (!augmentOriginalKEGGpathway) {
               Reaction r = null;
-              try {
+              if (con instanceof BiochemicalReaction) {
                 BiochemicalReaction br = (BiochemicalReaction) con; 
                 r = createKEGGReaction(br.getLeft(), br.getRight(),
                     Utils.iterableToList(br.getParticipantStoichiometry()), keggPW, m, species,
                         getReactionType(con.getConversionDirection()), br.getXref());
 
-              } catch (ClassCastException e) {
-                try {
-                  ComplexAssembly ca = (ComplexAssembly) con;
-                  r = createKEGGReaction(ca.getLeft(), ca.getRight(),
-                      Utils.iterableToList(ca.getParticipantStoichiometry()), keggPW, m, species,
-                          getReactionType(con.getConversionDirection()), ca.getXref());
-                } catch (ClassCastException e2) {
-                  TransportWithBiochemicalReaction tbr = (TransportWithBiochemicalReaction) con; 
-                  r = createKEGGReaction(tbr.getLeft(), tbr.getRight(),
-                      Utils.iterableToList(tbr.getParticipantStoichiometry()), keggPW, m, species,
-                          getReactionType(con.getConversionDirection()), tbr.getXref());
-                }
+              } else if (con instanceof ComplexAssembly) {
+                ComplexAssembly ca = (ComplexAssembly) con;
+                r = createKEGGReaction(ca.getLeft(), ca.getRight(),
+                    Utils.iterableToList(ca.getParticipantStoichiometry()), keggPW, m, species,
+                        getReactionType(con.getConversionDirection()), ca.getXref());
+
+              } else if (con instanceof TransportWithBiochemicalReaction) {
+                TransportWithBiochemicalReaction tbr = (TransportWithBiochemicalReaction) con; 
+                r = createKEGGReaction(tbr.getLeft(), tbr.getRight(),
+                    Utils.iterableToList(tbr.getParticipantStoichiometry()), keggPW, m, species,
+                        getReactionType(con.getConversionDirection()), tbr.getXref());
+
+              } else {
+                log.severe("Unknown conversion class " + con==null?"null":con.getClass().getName());
               }
 
               if (r!=null) {
@@ -1472,9 +1473,9 @@ public class BioPAXL32KGML extends BioPAX2KGML {
                 }
               }
           } else {
-            log.severe("Not programmed case: controlled interface '" + con.getModelInterface()
-                + "'");
-            System.exit(1);
+            log.severe("UNIMPLEMENTED case: controlled interface '" + con.getModelInterface() + "'");
+            //System.exit(1);
+            // NEVER use system exit 1. Please throw an exception instead
           }
         } else if (Pathway.class.isAssignableFrom(process.getClass())) {
 //          System.out.println("Debug Me");//TODO: remove this line!
