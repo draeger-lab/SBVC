@@ -200,7 +200,7 @@ public abstract class BioPAX2KGML {
    */
   protected static String mapGeneIDToKEGGID(Integer geneID, Species species) {
     String keggName = null;
-    if (geneIDKEGGmapper != null && !species.getKeggAbbr().isEmpty()){
+    if (geneIDKEGGmapper != null && species!=null && species.isSetKeggAbbr()){
       try {
         keggName = geneIDKEGGmapper.map(geneID);
       } catch (Exception e) {
@@ -689,7 +689,9 @@ public abstract class BioPAX2KGML {
       for (String geneID2: geneID) {
         if (Utils.isNumber(geneID2, true)) {
           String keggid = mapGeneIDToKEGGID(Integer.parseInt(geneID2), species);
-          ids.add(keggid);
+          if (keggid!=null) {
+            ids.add(keggid);
+          }
         }
       }
     }

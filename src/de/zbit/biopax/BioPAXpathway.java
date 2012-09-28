@@ -269,6 +269,7 @@ public class BioPAXpathway {
                 } catch (Exception ex) {
                   ex.printStackTrace();
                   // Not really important...
+                  ee.removeDatabaseIdentifier(IdentifierDatabases.EntrezGene, id);
                 }
               }
             }

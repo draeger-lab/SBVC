@@ -255,7 +255,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         parseEntity((Entity)interaction, keggPW, m, species);
       } else {
         log.severe("This should not happen! - '" + interaction.getModelInterface() + "'.");
-        System.exit(1);
+//        System.exit(1);
       }    
     }
     
@@ -403,7 +403,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       keggEntry = createKEGGEntry(entity, keggPW, m, species, EntryType.other, EntryTypeExtended.gene, ",", null, null);
     } else {
       log.severe("Unknonw entity type: " + entity.getModelInterface() + "-" + entity.getRDFId());
-      System.exit(1);
+//      System.exit(1);
     }
 
     return keggEntry;
@@ -719,10 +719,15 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       if (!keggname.startsWith(keggUnknownName)){
         // Search an existing kegg entry, that contains this keggname
         entries = keggPW.getEntriesForName(keggname);
-        Entry ke = de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);
-        if (ke!=null && !(ke instanceof EntryExtended)) {
-          return new EntryExtended(ke);
-        }          
+        EntryExtended keggEntry2 = (EntryExtended) de.zbit.kegg.parser.pathway.Pathway.getBestMatchingEntry(keggname, entries);      
+        if (keggEntry2!=null) {
+          if (!(keggEntry2 instanceof EntryExtended)) {
+            return new EntryExtended(keggEntry2);
+          } else {
+            return keggEntry2;
+          }
+        }
+        
       }
       
       // add entry to pathway
@@ -865,7 +870,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
       parseInteractionFromInteraction((Interaction)entity, keggPW, m, species, null);
     } else {      
       log.severe("Unknonw entity type: " + entity.getModelInterface() + "-" + entity.getRDFId());
-      System.exit(1);
+//      System.exit(1);
     }
   }
   
@@ -891,7 +896,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           keggEntry1 = parseEntity(((Entity) participants.get(i)), keggPW, m, species);
         } else {
           log.log(Level.SEVERE, "1 This should not happen: '" + participants.get(i).getModelInterface() + "'.");
-          System.exit(1);
+//          System.exit(1);
         }
         for (int j = 1; j < participants.size(); j++) {
           EntryExtended keggEntry2 = null;
@@ -901,7 +906,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
             keggEntry2 = parseEntity(((Entity) participants.get(j)), keggPW, m, species);
           } else {
             log.log(Level.SEVERE, "2 This should not happen: '"  + participants.get(j).getModelInterface() + "'.");
-            System.exit(1);
+//            System.exit(1);
           }
 
           if (keggEntry1!=null && keggEntry2!=null) {
@@ -922,7 +927,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         keggEntry1 = parseEntity(((PhysicalEntity) participants.get(0)), keggPW, m, species);
       } else {
         log.log(Level.SEVERE, "3 - This should not happen: '" + participants.get(0).getModelInterface() + "'.");
-        System.exit(1);
+//        System.exit(1);
       }
       if (baseEntry!=null && keggEntry1!=null) {
         createKEGGRelation(keggPW, baseEntry.getId(), keggEntry1.getId(), RelationType.maplink, 
@@ -1101,7 +1106,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         return (new SubType(SubType.INHIBITION));
       default:
         log.log(Level.SEVERE, "Unkown ControlType: '" + cType.toString() + "'.");
-        System.exit(1);
+//        System.exit(1);
         return null;
     }
     }
@@ -1281,7 +1286,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           keggEntry1s.add(new ValuePairUncomparable<EntryExtended, RelationType>(keggEntry1, RelationType.maplink));
         } else {
           log.severe("Controller: " + controller.getModelInterface() + "-This should not happen!");
-          System.exit(1);
+//          System.exit(1);
         }
       }
     } else if (name!=null && !name.isEmpty() && !name.equals("Unknown")){      
@@ -1445,7 +1450,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
           parseInteractionFromInteraction((Interaction)process, keggPW, m, species, keggEntry1);
         } else {
           log.severe("Process: " + process.getModelInterface() + "-This should not happen!");
-          System.exit(1);
+//          System.exit(1);
         }
         // ControlType (0 or 1) - up to now ignored
 
