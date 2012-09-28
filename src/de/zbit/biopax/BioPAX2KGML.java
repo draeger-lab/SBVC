@@ -882,16 +882,15 @@ public abstract class BioPAX2KGML {
       de.zbit.kegg.parser.pathway.Pathway keggPW) {
     List<Integer> complexEntries = new LinkedList<Integer>();
     
-    if (keggEntry.getGraphics().getName().startsWith("EGF:EGFR dimer")){
-      System.out.println("jetzt");
-    }
     List<Integer> components = keggEntry.getComponents();
     for (Integer id : components) {
       Entry entry = keggPW.getEntryForId(id);
-      if (entry.hasComponents()) {
-        complexEntries.addAll(getComplexContent(entry, keggPW));
-      } else {
-        complexEntries.add(id);
+      if (entry!=null) {
+        if (entry.hasComponents()) {
+          complexEntries.addAll(getComplexContent(entry, keggPW));
+        } else {
+          complexEntries.add(id);
+        }  
       }
     }
     return complexEntries;

@@ -36,6 +36,7 @@ import javax.swing.SwingWorker;
 import de.zbit.biopax.BioPAXpathway;
 import de.zbit.gui.GUITools;
 import de.zbit.gui.JLabeledComponent;
+import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.BatchKEGGtranslator;
@@ -138,7 +139,8 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       }
       
       // DEBUG output of KGML
-//      KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
+      // TODO: Uncomment the next line
+      KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
       
       // Reading done. Send some infos to the underlying listeners
       // Recommended name for this tab

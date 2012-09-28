@@ -60,6 +60,7 @@ import org.biopax.paxtools.model.level2.protein;
 import org.biopax.paxtools.model.level2.relationshipXref;
 import org.biopax.paxtools.model.level2.rna;
 import org.biopax.paxtools.model.level2.sequenceEntity;
+import org.biopax.paxtools.model.level2.sequenceParticipant;
 import org.biopax.paxtools.model.level2.smallMolecule;
 import org.biopax.paxtools.model.level2.transport;
 import org.biopax.paxtools.model.level2.transportWithBiochemicalReaction;
@@ -231,9 +232,6 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     
 
     for (pathwayComponent pathComp : pathway.getPATHWAY_COMPONENTS()) {
-      if (pathComp.getRDFId().contains("#pid_i_103142_condition_1")){
-        System.out.println("Los geht's");
-      }
       if (pathwayStep.class.isAssignableFrom(pathComp.getClass())){
         parsePathwayStep((pathwayStep)pathComp, keggPW, m, species);
       } else if (interaction.class.isAssignableFrom(pathComp.getClass())){
@@ -259,12 +257,18 @@ public class BioPAXL22KGML extends BioPAX2KGML {
   private void parsePathwayStep(pathwayStep pwStep, Pathway keggPW, Model m, Species species) {
     Set<process> interactions = pwStep.getSTEP_INTERACTIONS();
     for (process process : interactions) {
-      parseInteraction((interaction)process, keggPW, m, species);
+      if (interaction.class.isAssignableFrom(process.getClass())) {
+        parseInteraction((interaction)process, keggPW, m, species);
+      } else if (pathway.class.isAssignableFrom(process.getClass())) {
+        parseEntity((entity)process, keggPW, m, species, null);
+      } else {
+        log.severe("This should not happen!");
+      }
     }
-    Set<pathwayStep> nextSteps = pwStep.getNEXT_STEP();
-    for (pathwayStep pathwayStep : nextSteps) {
-      parsePathwayStep(pathwayStep, keggPW, m, species);
-    }
+//    Set<pathwayStep> nextSteps = pwStep.getNEXT_STEP();
+//    for (pathwayStep pathwayStep : nextSteps) {
+//      parsePathwayStep(pathwayStep, keggPW, m, species);
+//    }
   }
   /**
    * deteremines the gene ids of the elements in a pathway
@@ -1278,8 +1282,15 @@ public class BioPAXL22KGML extends BioPAX2KGML {
 
     for (physicalEntityParticipant left : lefts) {
       if (left.getPHYSICAL_ENTITY()==null) continue;
-      EntryExtended keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, left.getCELLULAR_LOCATION());
+      EntryExtended keggEntry = null;
+      if (sequenceParticipant.class.isAssignableFrom(left.getClass())) {
+        keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, 
+            species, left.getCELLULAR_LOCATION());
+        
+      } else if (physicalEntityParticipant.class.isAssignableFrom(left.getClass())) {
+        keggEntry =  parsePhysicalEntity(left.getPHYSICAL_ENTITY(), keggPW, m, 
+            species, left.getCELLULAR_LOCATION());        
+      }
          
       if (keggEntry != null) {
         ReactionComponent rc = new ReactionComponent(keggEntry.getId(), keggEntry.getName());
@@ -1293,8 +1304,16 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     
     for (physicalEntityParticipant right : rights) {
       if (right.getPHYSICAL_ENTITY()==null) continue;
-      EntryExtended keggEntry = parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
-          species, right.getCELLULAR_LOCATION());
+      EntryExtended keggEntry = null;
+      if (sequenceParticipant.class.isAssignableFrom(right.getClass())) {
+        keggEntry =  parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
+            species, right.getCELLULAR_LOCATION());
+        
+      } else if (physicalEntityParticipant.class.isAssignableFrom(right.getClass())) {
+        keggEntry =  parsePhysicalEntity(right.getPHYSICAL_ENTITY(), keggPW, m, 
+            species, right.getCELLULAR_LOCATION());        
+      }
+      
       if (keggEntry != null) {
         
         if (keggEntry.getType().equals(EntryType.group)){

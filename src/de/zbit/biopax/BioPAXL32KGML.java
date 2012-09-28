@@ -260,22 +260,12 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     }
     
     if (pathway.getPathwayOrder()!=null && pathway.getPathwayOrder().size()>0) {
-      Set<PathwayStep> psCollection = new HashSet<PathwayStep>(pathway.getPathwayOrder());
-
-      for (PathwayStep ps : pathway.getPathwayOrder()) {
-        for (PathwayStep ps2 : ps.getNextStep()) {
-          psCollection.add(ps2);
-        }
-
-        for (PathwayStep ps2 : ps.getNextStepOf()) {
-          psCollection.add(ps2);
-        }
-      }
+      Set<PathwayStep> psCollection = pathway.getPathwayOrder();
 
       for (PathwayStep ps : psCollection) {
         Pathway pw = ps.getPathwayOrderOf();
         if (pw!=null //&& !elementsRead.containsValue(pw)
-            ) {
+            && !pw.equals(pathway)) {
           //elementsNotRead.put(pw.getRDFId(), pw);
           createKEGGEntry(pw, keggPW, m, species, EntryType.map, null, null, null, null);
         }

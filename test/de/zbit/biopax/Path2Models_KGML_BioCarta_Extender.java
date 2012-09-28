@@ -25,7 +25,6 @@
 package de.zbit.biopax;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -156,8 +155,8 @@ public class Path2Models_KGML_BioCarta_Extender {
        * @see java.util.logging.Filter#isLoggable(java.util.logging.LogRecord)
        */
       public boolean isLoggable(LogRecord record) {
-        if ((record.getSourceClassName().equals(BioPax2KGMLTest.class.getName()) || record
-            .getLoggerName().equals(BioPax2KGMLTest.class.getName()))
+        if ((record.getSourceClassName().equals(Path2Models_KGML_BioCarta_Extender.class.getName()) || record
+            .getLoggerName().equals(Path2Models_KGML_BioCarta_Extender.class.getName()))
             && record.getLevel().equals(Level.INFO)) {
 
           return true;
@@ -180,7 +179,7 @@ public class Path2Models_KGML_BioCarta_Extender {
     
     Path2Models_KGML_BioCarta_Extender.createExtendedKGML(fileList, fileFolder + "BioCarta.bp3_utf8.owl", 
         "W:/non-metabolic/organisms/hsa", 
-        "V:/Path2models/2012-08-27-KEGG_NON-METABOLIC_Extended", true); 
+        "V:/Path2models/2012-09-27-KEGG_NON-METABOLIC_Extended", true); 
     
     
     
