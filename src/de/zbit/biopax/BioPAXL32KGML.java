@@ -30,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.BioPAXElement;
 import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.openControlledVocabulary;
 import org.biopax.paxtools.model.level3.BioSource;
 import org.biopax.paxtools.model.level3.BiochemicalReaction;
 import org.biopax.paxtools.model.level3.Catalysis;
@@ -91,6 +93,7 @@ import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
+import de.zbit.util.ArrayUtils;
 import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
@@ -1528,26 +1531,41 @@ public class BioPAXL32KGML extends BioPAX2KGML {
     }
   }
 
-  private SubType getSubtype(Set<InteractionVocabulary> iTypes) {
-    for (InteractionVocabulary iType : iTypes) {
+  /**
+   * Returns a {@link SubType} for a set of {@link InteractionVocabulary}s
+   * (in Level 3) and a set of {@link openControlledVocabulary}s (Level 2).
+   * @param iTypes
+   * @return
+   */
+  public static SubType getSubtype(Set<? extends BioPAXElement> iTypes) {
+    for (BioPAXElement iType : iTypes) {
       String type = iType.getRDFId(); 
-      if (type!=null)
-        if(type.toLowerCase().endsWith("activation")){
-          return new SubType(SubType.ACTIVATION);
-        } else if(type.toLowerCase().endsWith("inhibition")){
-          return new SubType(SubType.INHIBITION);
-        } else if(type.toLowerCase().endsWith("transcription")){
+      if (type!=null) {
+        String typeL = type.toLowerCase().trim();
+      
+        Enumeration<String> subtypes = SubType.asEnum();
+        while (subtypes.hasMoreElements()) {
+          String current = subtypes.nextElement();
+          if(typeL.endsWith(current.toLowerCase().trim())){
+            return new SubType(current);
+          }
+        }
+        
+        if(type.toLowerCase().endsWith("transcription")){
           return new SubType(SubType.EXPRESSION);
         } else if(type.toLowerCase().endsWith("translation")){
           return new SubType(SubType.EXPRESSION);
+        } else if(type.toLowerCase().endsWith("ubiquination")){
+          return new SubType(SubType.UBIQUITINATION);
         } else if(type.toLowerCase().endsWith("molecular_interaction")){
           return new SubType(SubType.BINDING);
         } else if(type.toLowerCase().endsWith("hedgehog_cleavage_and_lipidation")){
           return new SubType(SubType.INDIRECT_EFFECT);
         } else {
-          log.info("--- Type --- " + type);
+          log.warning("Unknown interaction type " + type);
           return new SubType(SubType.STATE_CHANGE);
-        }      
+        }
+      }
     }
     return null;
   }

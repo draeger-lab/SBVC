@@ -800,30 +800,6 @@ public class BioPAXL22KGML extends BioPAX2KGML {
     
     return null;    
   }
-  
-  private SubType getSubtype(Set<openControlledVocabulary> iTypes) {
-    for (openControlledVocabulary iType : iTypes) {
-      String type = iType.getRDFId(); 
-      if (type!=null)
-        if(type.toLowerCase().endsWith("activation")){
-          return new SubType(SubType.ACTIVATION);
-        } else if(type.toLowerCase().endsWith("inhibition")){
-          return new SubType(SubType.INHIBITION);
-        } else if(type.toLowerCase().endsWith("transcription")){
-          return new SubType(SubType.EXPRESSION);
-        } else if(type.toLowerCase().endsWith("translation")){
-          return new SubType(SubType.EXPRESSION);
-        } else if(type.toLowerCase().endsWith("molecular_interaction")){
-          return new SubType(SubType.BINDING);
-        } else if(type.toLowerCase().endsWith("hedgehog_cleavage_and_lipidation")){
-          return new SubType(SubType.INDIRECT_EFFECT);
-        } else {
-          log.info("--- Type --- " + type);
-          return new SubType(SubType.STATE_CHANGE);
-        }      
-    }
-    return null;
-  }
 
   /**
    * For a list of controllers and controlled elements the corresponding KEGG
@@ -926,7 +902,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
             }
           } else if (conversion.class.isAssignableFrom(con.getClass())){
               List<Relation> rels =  createKEGGRelations(con.getLEFT(), con.getRIGHT(), keggPW, m, species, 
-                RelationType.PPrel, getSubtype(con.getINTERACTION_TYPE()), xrefs);
+                RelationType.PPrel, BioPAXL32KGML.getSubtype(con.getINTERACTION_TYPE()), xrefs);
               if (rels!=null && rels.size()>0) {
                 if (keggEntry1s.size()>0){
                   for (Relation rel : rels) {
@@ -1146,7 +1122,7 @@ public class BioPAXL22KGML extends BioPAX2KGML {
           ((biochemicalReaction) entity).getXREF());
     } else if (conversion.class.isAssignableFrom(entity.getClass())){
       createKEGGRelations(((conversion)entity).getLEFT(), ((conversion)entity).getRIGHT(), keggPW, 
-          m, species, RelationType.PPrel, getSubtype(((conversion)entity).getINTERACTION_TYPE()),
+          m, species, RelationType.PPrel, BioPAXL32KGML.getSubtype(((conversion)entity).getINTERACTION_TYPE()),
           ((conversion)entity).getXREF());
     } else {
       log.log(Level.SEVERE, "Unknown kind of Conversion: " + entity.getModelInterface());
