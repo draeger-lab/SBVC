@@ -828,10 +828,12 @@ public class BioPAXL22KGML extends BioPAX2KGML {
         keggEntry1 = parseEntity(controller.getPHYSICAL_ENTITY(), keggPW, m, species, 
             controller.getCELLULAR_LOCATION());
         
-        if(keggEntry1!=null && keggEntry1.getType().equals(EntryType.map)){
-          keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.maplink));
-        } else {
-          keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.maplink));
+        if(keggEntry1!=null) {
+          if (keggEntry1.getType().equals(EntryType.map)){
+            keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.maplink));
+          } else {
+            keggEntry1s.add(new ValuePairUncomparable(keggEntry1, RelationType.PPrel));
+          }
         }
       }
     } else if (name!=null && !name.isEmpty()){
