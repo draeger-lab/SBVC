@@ -140,7 +140,7 @@ public class BioPAXImporter extends NotifyingWorker<Object, Void> {
       
       // DEBUG output of KGML
       // TODO: Uncomment the next line
-      KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
+//      KGMLWriter.writeKGML(keggPathway, false); // Can be used for debugging
       
       // Reading done. Send some infos to the underlying listeners
       // Recommended name for this tab
