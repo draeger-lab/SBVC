@@ -767,13 +767,9 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     return null;
   }
 
-  /* (non-Javadoc)
-   * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-   */
-  @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    // TODO Auto-generated method stub
-    
-  }
+public void propertyChange(PropertyChangeEvent evt) {
+	// TODO Auto-generated method stub
+	
+}
 
 }
