@@ -23,6 +23,7 @@ import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.parser.pathway.Entry;
 import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Graphics;
+import de.zbit.kegg.parser.pathway.GraphicsType;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.Reaction;
 import de.zbit.kegg.parser.pathway.ReactionComponent;
@@ -38,7 +39,7 @@ import de.zbit.sbvc.io.helper.SBGN2KGMLHelper;
  *
  * @author 	Manuel Ruff
  * @date 	2012-06-03
- * @version $Rev: 138$
+ * @version $Rev: 165$
  * @since	$Rev: 99$
  *
  */
@@ -344,18 +345,24 @@ public class SBGN2KGML {
 			// set the reaction names for all invovled substrates and products
 			for(ReactionComponent rc : r.getSubstrates()){
 				Entry e = rc.getCorrespondingEntry();
-				if(e.isSetReaction())
-					e.setReaction(e.getReactionString() + " " + r.getName());
-				else
-					e.setReaction(r.getName());
+				// compounds dont need to be set as part of the reaction
+				if(!e.getType().equals(EntryType.compound)){
+					if(e.isSetReaction())
+						e.setReaction(e.getReactionString() + " " + r.getName());
+					else
+						e.setReaction(r.getName());
+				}
 			}
 			
 			for(ReactionComponent rc : r.getProducts()){
 				Entry e = rc.getCorrespondingEntry();
-				if(e.isSetReaction())
-					e.setReaction(e.getReactionString() + " " + r.getName());
-				else
-					e.setReaction(r.getName());
+				// compounds dont need to be set as part of the reaction
+				if(!!e.getType().equals(EntryType.compound)){
+					if(e.isSetReaction())
+						e.setReaction(e.getReactionString() + " " + r.getName());
+					else
+						e.setReaction(r.getName());
+				}
 			}
 			
 			// if there are reaction modifiers i.e. enzymes update the reaction where they are involved
@@ -455,6 +462,7 @@ public class SBGN2KGML {
 //		String filename = "glycolysis.sbgn";
 //		String filename = "mapk_cascade.sbgn";
 		String filename = "files/SBGNExamples/test.sbgn";
+//		String filename = "test.sbgn";
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
 		Sbgn sbgn = sbgn2kgml.read(filename);
 		
