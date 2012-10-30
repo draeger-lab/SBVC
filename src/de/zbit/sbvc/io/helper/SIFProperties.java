@@ -26,7 +26,6 @@ package de.zbit.sbvc.io.helper;
 
 import java.util.logging.Logger;
 
-import de.zbit.graph.io.def.SBGNProperties.GlyphType;
 import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.RelationType;
@@ -54,6 +53,15 @@ public class SIFProperties {
 	 * <li>gl (genetic lethal relationship)</li>
 	 * <li>pm (protein-metabolite interaction)</li>
 	 * <li>mp (metabolite-protein interaction)</li>
+	 * 
+	 * <li>COMPONENT_OF</li>
+	 * <li>CO_CONTROL</li>
+	 * <li>INTERACTS_WITH</li>
+	 * <li>IN_SAME_COMPONENT</li>
+	 * <li>METABOLIC_CATALYSIS</li>
+	 * <li>REACTS_WITH</li>
+	 * <li>SEQUENTIAL_CATALYSIS</li>
+	 * <li>STATE_CHANGE</li>
 	 * </ul>
 	 */
 	public static enum InteractionType
@@ -65,7 +73,45 @@ public class SIFProperties {
 		cr,
 		gl,
 		pm,
-		mp;
+		mp,
+		COMPONENT_OF,
+		CO_CONTROL,
+		INTERACTS_WITH,
+		IN_SAME_COMPONENT,
+		METABOLIC_CATALYSIS,
+		REACTS_WITH,
+		SEQUENTIAL_CATALYSIS,
+		STATE_CHANGE;
+		
+		/**
+		 * Check if the {@link InteractionType} belongs to the two letter code
+		 * @return {@link Boolean}
+		 */
+		public boolean isShortInteractionType(){
+			return (   this.equals(pp) 
+					|| this.equals(pd) 
+					|| this.equals(pr) 
+					|| this.equals(rc) 
+					|| this.equals(cr) 
+					|| this.equals(gl) 
+					|| this.equals(pm) 
+					|| this.equals(mp));
+		}
+		
+		/**
+		 * Check if the {@link InteractionType} belongs to the long version code
+		 * @return {@link Boolean}
+		 */
+		public boolean isLongInteractionType(){
+			return (   this.equals(COMPONENT_OF) 
+					|| this.equals(CO_CONTROL) 
+					|| this.equals(INTERACTS_WITH) 
+					|| this.equals(IN_SAME_COMPONENT) 
+					|| this.equals(METABOLIC_CATALYSIS) 
+					|| this.equals(REACTS_WITH) 
+					|| this.equals(SEQUENTIAL_CATALYSIS) 
+					|| this.equals(STATE_CHANGE));
+		}
 	}
 	
 	/**
@@ -79,42 +125,59 @@ public class SIFProperties {
 		if(firstComponent){
 			switch(iType) {
 			case pp:
-				return EntryType.gene;
 			case pd:
-				return EntryType.gene;
 			case pr:
 				return EntryType.gene;
 			case rc:
+			case pm:
 				return EntryType.reaction;
 			case cr:
 				return EntryType.compound;
-			case gl:
-				return EntryType.other;
-			case pm:
-				return EntryType.gene;
-			case mp:
-				return EntryType.other;
+//			case COMPONENT_OF:
+//				return null;
+//			case CO_CONTROL:
+//				return null;
+//			case INTERACTS_WITH:
+//				return null;
+//			case IN_SAME_COMPONENT:
+//				return null;
+//			case METABOLIC_CATALYSIS:
+//				return null;
+//			case REACTS_WITH:
+//				return null;
+//			case SEQUENTIAL_CATALYSIS:
+//				return null;
+//			case STATE_CHANGE:
+//				return null;
 			default:
 				return EntryType.other;
 			}
 		} else {
 			switch(iType) {
 			case pp:
+			case mp:
 				return EntryType.gene;
-			case pd:
-				return EntryType.other;
 			case pr:
+			case cr:
 				return EntryType.reaction;
 			case rc:
 				return EntryType.compound;
-			case cr:
-				return EntryType.reaction;
-			case gl:
-				return EntryType.other;
-			case pm:
-				return EntryType.other;
-			case mp:
-				return EntryType.gene;
+//			case COMPONENT_OF:
+//				return null;
+//			case CO_CONTROL:
+//				return null;
+//			case INTERACTS_WITH:
+//				return null;
+//			case IN_SAME_COMPONENT:
+//				return null;
+//			case METABOLIC_CATALYSIS:
+//				return null;
+//			case REACTS_WITH:
+//				return null;
+//			case SEQUENTIAL_CATALYSIS:
+//				return null;
+//			case STATE_CHANGE:
+//				return null;
 			default:
 				return EntryType.other;
 			}
@@ -140,9 +203,26 @@ public class SIFProperties {
 //				return null;
 //			case mp:
 //				return null;
+//			case COMPONENT_OF:
+//				return null;
+//			case CO_CONTROL:
+//				return null;
+//			case INTERACTS_WITH:
+//				return null;
+//			case IN_SAME_COMPONENT:
+//				return null;
+//			case METABOLIC_CATALYSIS:
+//				return null;
+//			case REACTS_WITH:
+//				return null;
+//			case SEQUENTIAL_CATALYSIS:
+//				return null;
+//			case STATE_CHANGE:
+//				return null;
 			default:
 				return RelationType.other;
 		}
 		
 	}
+	
 }

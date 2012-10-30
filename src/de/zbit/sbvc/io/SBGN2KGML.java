@@ -357,7 +357,7 @@ public class SBGN2KGML {
 			for(ReactionComponent rc : r.getProducts()){
 				Entry e = rc.getCorrespondingEntry();
 				// compounds dont need to be set as part of the reaction
-				if(!!e.getType().equals(EntryType.compound)){
+				if(!e.getType().equals(EntryType.compound)){
 					if(e.isSetReaction())
 						e.setReaction(e.getReactionString() + " " + r.getName());
 					else
@@ -461,8 +461,8 @@ public class SBGN2KGML {
 	public static void main(String args[]) {
 //		String filename = "glycolysis.sbgn";
 //		String filename = "mapk_cascade.sbgn";
-		String filename = "files/SBGNExamples/test.sbgn";
-//		String filename = "test.sbgn";
+//		String filename = "files/SBGNExamples/test.sbgn";
+		String filename = "test.sbgn";
 		SBGN2KGML sbgn2kgml = new SBGN2KGML();
 		Sbgn sbgn = sbgn2kgml.read(filename);
 		

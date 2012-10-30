@@ -67,7 +67,7 @@ public class SIFPathway {
 	 * Method for setting the {@link SIFPathway#relations} element
 	 * @param relations {@link ArrayList<SIFRelation>}
 	 */
-	public void addRelations(ArrayList<SIFRelation> relations) {
+	public void setRelations(ArrayList<SIFRelation> relations) {
 		this.relations = relations;
 	}
 
