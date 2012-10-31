@@ -36,7 +36,6 @@ import javax.swing.SwingWorker;
 import de.zbit.biopax.BioPAXpathway;
 import de.zbit.gui.GUITools;
 import de.zbit.gui.JLabeledComponent;
-import de.zbit.kegg.KGMLWriter;
 import de.zbit.kegg.Translator;
 import de.zbit.kegg.io.AbstractKEGGtranslator;
 import de.zbit.kegg.io.BatchKEGGtranslator;

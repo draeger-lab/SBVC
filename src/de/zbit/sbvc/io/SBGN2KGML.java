@@ -342,29 +342,6 @@ public class SBGN2KGML {
 				}
 			}
 			
-			// set the reaction names for all invovled substrates and products
-			for(ReactionComponent rc : r.getSubstrates()){
-				Entry e = rc.getCorrespondingEntry();
-				// compounds dont need to be set as part of the reaction
-				if(!e.getType().equals(EntryType.compound)){
-					if(e.isSetReaction())
-						e.setReaction(e.getReactionString() + " " + r.getName());
-					else
-						e.setReaction(r.getName());
-				}
-			}
-			
-			for(ReactionComponent rc : r.getProducts()){
-				Entry e = rc.getCorrespondingEntry();
-				// compounds dont need to be set as part of the reaction
-				if(!e.getType().equals(EntryType.compound)){
-					if(e.isSetReaction())
-						e.setReaction(e.getReactionString() + " " + r.getName());
-					else
-						e.setReaction(r.getName());
-				}
-			}
-			
 			// if there are reaction modifiers i.e. enzymes update the reaction where they are involved
 			if(reactionModifiers.containsKey(processGlyph.getId())){
 				ArrayList<String> rmIDs = reactionModifiers.get(processGlyph.getId());
