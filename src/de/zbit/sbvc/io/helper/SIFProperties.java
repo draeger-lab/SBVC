@@ -124,62 +124,30 @@ public class SIFProperties {
 		
 		if(firstComponent){
 			switch(iType) {
-			case pp:
-			case pd:
-			case pr:
-				return EntryType.gene;
-			case rc:
-			case pm:
-				return EntryType.reaction;
-			case cr:
-				return EntryType.compound;
-//			case COMPONENT_OF:
-//				return null;
-//			case CO_CONTROL:
-//				return null;
-//			case INTERACTS_WITH:
-//				return null;
-//			case IN_SAME_COMPONENT:
-//				return null;
-//			case METABOLIC_CATALYSIS:
-//				return null;
-//			case REACTS_WITH:
-//				return null;
-//			case SEQUENTIAL_CATALYSIS:
-//				return null;
-//			case STATE_CHANGE:
-//				return null;
-			default:
-				return EntryType.other;
+				case pp:
+				case pd:
+				case pr:
+				case pm:
+					return EntryType.gene;
+				case rc:
+					return EntryType.reaction;
+				case cr:
+					return EntryType.compound;
+				default:
+					return EntryType.other;
 			}
 		} else {
 			switch(iType) {
-			case pp:
-			case mp:
-				return EntryType.gene;
-			case pr:
-			case cr:
-				return EntryType.reaction;
-			case rc:
-				return EntryType.compound;
-//			case COMPONENT_OF:
-//				return null;
-//			case CO_CONTROL:
-//				return null;
-//			case INTERACTS_WITH:
-//				return null;
-//			case IN_SAME_COMPONENT:
-//				return null;
-//			case METABOLIC_CATALYSIS:
-//				return null;
-//			case REACTS_WITH:
-//				return null;
-//			case SEQUENTIAL_CATALYSIS:
-//				return null;
-//			case STATE_CHANGE:
-//				return null;
-			default:
-				return EntryType.other;
+				case pp:
+				case mp:
+					return EntryType.gene;
+				case pr:
+				case cr:
+					return EntryType.reaction;
+				case rc:
+					return EntryType.compound;
+				default:
+					return EntryType.other;
 			}
 		}
 		

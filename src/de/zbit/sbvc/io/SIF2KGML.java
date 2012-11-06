@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,8 +15,10 @@ import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Graphics;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.Reaction;
+import de.zbit.kegg.parser.pathway.ReactionComponent;
 import de.zbit.kegg.parser.pathway.ReactionType;
 import de.zbit.kegg.parser.pathway.Relation;
+import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.sbvc.io.helper.SIFPathway;
 import de.zbit.sbvc.io.helper.SIFProperties;
@@ -125,11 +128,32 @@ public class SIF2KGML {
 		// create a new pathway
 		Pathway p = new Pathway("unknown", "unknown", 10000, sif.getName());
 		
+		// Entry lookup
+		HashMap<String, Entry> entryLookup = new HashMap<String, Entry>();
+		
 		for(SIFRelation relation : sif.getRelations()) {
+						
+			// initialize entries
+			Entry source = null;
+			Entry target = null;
 			
-			// create entries
-			Entry source = new EntryExtended(p, ++entryID, relation.getSource());
-			Entry target = new EntryExtended(p, ++entryID, relation.getTarget());
+			// check if entries already exists
+			if(entryLookup.containsKey(relation.getSource()))
+				source = entryLookup.get(relation.getSource());
+			
+			if(entryLookup.containsKey(relation.getTarget()))
+				target = entryLookup.get(relation.getTarget());
+			
+			// if not create them
+			if(source == null) {
+				source = new EntryExtended(p, ++entryID, relation.getSource());
+				entryLookup.put(relation.getSource(), source);
+			}
+		
+			if(target == null) {
+				target = new EntryExtended(p, ++entryID, relation.getTarget());
+				entryLookup.put(relation.getTarget(), target);
+			}
 			
 			// set EntryTypes
 			source.setType(SIFProperties.getEntryTypeFromInteractionType(relation.getInteractionType(), true));
@@ -149,51 +173,102 @@ public class SIF2KGML {
 						sourceGraphic = Graphics.createGraphicsForProtein(source.getName());
 						targetGraphic = Graphics.createGraphicsForProtein(target.getName());
 						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.BINDING_ASSOCIATION));
 						break;
 					case pd:
 						sourceGraphic = Graphics.createGraphicsForProtein(source.getName());
 						targetGraphic = new Graphics(target.getName());
 						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.EXPRESSION));
 						break;
 					case pr:
 						sourceGraphic = Graphics.createGraphicsForProtein(source.getName());
 						targetGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
 						rea = new Reaction(p, "unknown_reaction:"+(++reactionID), ReactionType.irreversible);
-						source.setReaction(rea.getName());
-						target.setReaction(rea.getName());
+						rea.addSubstrate(new ReactionComponent(source));
+						rea.addProduct(new ReactionComponent(target));
 						break;
 					case rc:
 						sourceGraphic = Graphics.createGraphicsForPathwayReference(source.getName());
 						targetGraphic = Graphics.createGraphicsForCompound(target.getName());
 						rea = new Reaction(p, "unknown_reaction:"+(++reactionID), ReactionType.irreversible);
-						source.setReaction(rea.getName());
+						rea.addSubstrate(new ReactionComponent(source));
+						rea.addProduct(new ReactionComponent(target));
 						break;
 					case cr:
 						sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
 						targetGraphic = Graphics.createGraphicsForPathwayReference(target.getName());
 						rea = new Reaction(p, "unknown_reaction:"+(++reactionID), ReactionType.irreversible);
-						target.setReaction(rea.getName());
+						rea.addSubstrate(new ReactionComponent(source));
+						rea.addProduct(new ReactionComponent(target));
+						break;
+					case gl:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.MISSING_INTERACTION));
 						break;
 					case pm:
 						sourceGraphic = Graphics.createGraphicsForProtein(source.getName());
 						targetGraphic = Graphics.createGraphicsForCompound(target.getName());
 						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.MISSING_INTERACTION));
 						break;
 					case mp:
 						sourceGraphic = Graphics.createGraphicsForCompound(source.getName());
 						targetGraphic = Graphics.createGraphicsForProtein(target.getName());
 						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.MISSING_INTERACTION));
 						break;
 					case CO_CONTROL:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.ASSOCIATION));
+						break;
 					case COMPONENT_OF:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						target.addComponent(source.getId());
+						target.setType(EntryType.reaction); // not sure if this is correct
+						break;
 					case IN_SAME_COMPONENT:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.BINDING_ASSOCIATION));
+						break;
 					case METABOLIC_CATALYSIS:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.MISSING_INTERACTION));
+						break;
 					case REACTS_WITH:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rea = new Reaction(p, "unknown_reaction:"+(++reactionID), ReactionType.irreversible);
+						rea.addSubstrate(new ReactionComponent(source));
+						rea.addProduct(new ReactionComponent(target));
+						break;
 					case SEQUENTIAL_CATALYSIS:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.INDIRECT_EFFECT));
+						break;
 					case STATE_CHANGE:
-//						rel = new Relation(target.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
-//						rel.addSubtype(source);
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.STATE_CHANGE));
+						break;
 					case INTERACTS_WITH:
+						sourceGraphic = new Graphics(source.getName());
+						targetGraphic = new Graphics(target.getName());
+						rel = new Relation(source.getId(), target.getId(), SIFProperties.getRelationTypeFromInteractionType(relation.getInteractionType()));
+						rel.addSubtype(new SubType(SubType.MISSING_INTERACTION));
+						break;
 					default:
 						sourceGraphic = new Graphics(source.getName());
 						targetGraphic = new Graphics(target.getName());
@@ -242,15 +317,14 @@ public class SIF2KGML {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-//		String filename = "Test.sif";
 		String filename = "hsa00010.sif";
+//		String filename = "hsa04010.sif";
 		SIF2KGML sif2kgml = new SIF2KGML();
 		SIFPathway sifpathway = SIF2KGML.readSIF(filename);
-		System.out.println(sifpathway.getName());
-		System.out.println(sifpathway.getRelations().size());
-		for(SIFRelation sif : sifpathway.getRelations())
-			System.out.println(sif.getSource() + " " + sif.getInteractionType() + " " + sif.getTarget());
-//		Pathway p = sif2kgml.translate(sifpathway);
-//		sif2kgml.saveToFile(p, "SIFPathwayTest.xml");
+		// debug
+//		for(SIFRelation sif : sifpathway.getRelations())
+//			System.out.println(sif.getSource() + " " + sif.getInteractionType() + " " + sif.getTarget());
+		Pathway p = sif2kgml.translate(sifpathway);
+		sif2kgml.saveToFile(p, "SIFPathwayTest.xml");
 	}
 }
