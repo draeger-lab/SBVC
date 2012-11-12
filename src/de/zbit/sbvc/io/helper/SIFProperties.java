@@ -24,8 +24,6 @@
  */
 package de.zbit.sbvc.io.helper;
 
-import java.util.logging.Logger;
-
 import de.zbit.kegg.parser.pathway.EntryType;
 import de.zbit.kegg.parser.pathway.Pathway;
 import de.zbit.kegg.parser.pathway.RelationType;
@@ -132,6 +130,7 @@ public class SIFProperties {
 				case rc:
 					return EntryType.reaction;
 				case cr:
+	      case mp:
 					return EntryType.compound;
 				default:
 					return EntryType.other;
@@ -145,6 +144,7 @@ public class SIFProperties {
 				case cr:
 					return EntryType.reaction;
 				case rc:
+				case pm:
 					return EntryType.compound;
 				default:
 					return EntryType.other;
