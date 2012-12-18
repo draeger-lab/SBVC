@@ -144,7 +144,7 @@ public class BioPAXpathway {
   public Pathway getKGMLpathway(String pwName) {
     Pathway p = null;
     if (pwName == null){
-      Collection<Pathway> pathways = BioPAX2KGML.createPathwaysFromModel(model, biopaxFile.getPath(), false, null);
+      Collection<Pathway> pathways = BioPAX2KGML.createPathwaysFromModel(model, biopaxFile.getPath(), null);
       if (pathways!=null && pathways.size()>0){
           // That's possible because there is no pathway defined to be selected, following we return 
           // just one pathway object!

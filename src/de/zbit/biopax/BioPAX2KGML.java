@@ -390,13 +390,12 @@ public abstract class BioPAX2KGML {
    * Creates for an entered {@link Model} the corresponding KEGG pathways
    * @param fileName
    * @param destinationFolder
-   * @param writeEntryExtended
    * @return
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (String fileName, boolean writeEntryExtended, Species species) {
+    (String fileName, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
-    return createPathwaysFromModel(m, fileName, writeEntryExtended, species); 
+    return createPathwaysFromModel(m, fileName, species); 
   }
   
   
@@ -493,7 +492,7 @@ public abstract class BioPAX2KGML {
    * @param m
    */
   public static Collection<de.zbit.kegg.parser.pathway.Pathway> createPathwaysFromModel
-    (Model m, String fileName, boolean writeEntryExtended, Species species) {
+    (Model m, String fileName, Species species) {
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
       new ArrayList<de.zbit.kegg.parser.pathway.Pathway>(); 
        
@@ -566,7 +565,7 @@ public abstract class BioPAX2KGML {
       boolean writeEntryExtended, Species species) {
     Model m = BioPAX2KGML.getModel(fileName);
     Collection<de.zbit.kegg.parser.pathway.Pathway> keggPWs = 
-      BioPAX2KGML.createPathwaysFromModel(m, fileName, writeEntryExtended, species);
+      BioPAX2KGML.createPathwaysFromModel(m, fileName, species);
     BioPAX2KGML.writeKGMLsForPathways(m, destinationFolder, keggPWs, writeEntryExtended);
   }
   

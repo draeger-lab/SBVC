@@ -19,7 +19,6 @@ package de.zbit.biopax;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.FileHandler;
@@ -52,7 +51,7 @@ public class BioPax2KGMLTest {
 
   private void testCreateKGMLsFromBioCartaModel(String file, 
       boolean writeEntryExtended, Species species) {   
-    BioPAX2KGML.createPathwaysFromModel(file, writeEntryExtended, species);    
+    BioPAX2KGML.createPathwaysFromModel(file, species);    
   }  
   
   private void testCreateKGMLsFromDirectory(String fileFolder, String destinationFolder, 
@@ -61,7 +60,7 @@ public class BioPax2KGMLTest {
     if (f.isDirectory()) {
       String[] files = f.list();
       for (String file : files) {
-        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, writeEntryExtended, species);    
+        BioPAX2KGML.createPathwaysFromModel(fileFolder + file, species);    
       }      
     }       
   }
@@ -199,26 +198,10 @@ public class BioPax2KGMLTest {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
     
-//    String fileFolder = System.getenv("FILE_FOLDER");
-    String fileFolder = "V:/";
+   String fileFolder = System.getenv("FILE_FOLDER");
+   BioPax2KGMLTest bft = new BioPax2KGMLTest();
     
-    BioPax2KGMLTest bft = new BioPax2KGMLTest();
-    
-  
-    List<String> fileList = new ArrayList<String>();
-   
-    
-    
-    
-    if (true) return;
-    
-    
-    // writing of one pathway
-    bft.parseAndWritePathway(fileFolder, fileFolder, "ceramidepathway");
-    
-    
-    
-    
+      
     
     // Database testing of the parser
     
@@ -281,7 +264,6 @@ public class BioPax2KGMLTest {
 //        "nci-nature.owl", fileFolder + subPathwayCommons, true, false);
 //    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPathwayCommons + 
 //        "reactome.owl", fileFolder + subPathwayCommons, true, false);
-//  //TODO: just if I have time left overs
     
 //    // PhosphoSitePlus
 //    String subPhosphpSitePlus = "PhosphpSitePlus/";
@@ -291,25 +273,29 @@ public class BioPax2KGMLTest {
 //        "Kinase_substrates.owl");
    
     // PID 
-//    String subPID = "PID_Pathways/";
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "ceramidepathway.owl", 
-//        fileFolder + subPID, true, false);
-//    
-//    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "alk1_2pathway_changed.owl", fileFolder + subPID, true, false);    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "ceramidepathway.owl", fileFolder + subPID, true, false);  
+    // If I want to parse these files to SBML see -> "SBVCTest.java"
+    String subPID = "PID_Pathways/";
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "NCI-Nature_Curated.bp2.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "NCI-Nature_Curated.bp3.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
     
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "BioCarta.bp2_part.owl", fileFolder + subPID, false, false);    
-//    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
-//        "BioCarta.bp3.owl", fileFolder + subPID, true, false);
-//    bft.parseAndWritePathway(fileFolder + subPID + "BioCarta.bp3.owl", fileFolder + subPID, "ceramide signaling pathway");
-//    
-//    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp3.owl");
-//    bft.logUnificationXRefs(fileFolder + subPID + "BioCarta.bp2.owl");
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "BioCarta.bp2.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "BioCarta.bp3_utf8.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
+   
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "Reactome.bp2.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
+    bft.testCreateKGMLsFromBioCartaModel(fileFolder + subPID + 
+        "Reactome.bp3.owl", 
+        true, new Species("Homo sapiens", "_HUMAN", "Human", "hsa", 9606));
+    
     
 //    // Reactome
 //    String subReactomeL2 = "ReactomePathways/Level2/";
