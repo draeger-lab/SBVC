@@ -65,7 +65,7 @@ public class SBVCPanelTools {
 
     
     switch (outputFormat) {
-      case SBML: case SBML_QUAL: case SBML_CORE_AND_QUAL: /*case LaTeX: */
+      case SBML: case SBML_QUAL: case SBML_CORE_AND_QUAL: case SBML_L2V4: case SBML_L3V1: /*case LaTeX: */
         panel = new TranslatorSBMLPanel(inputFile, keggFormat, translationResult);
         break;
         
@@ -98,7 +98,7 @@ public class SBVCPanelTools {
       KEGGtranslatorIOOptions.Format.valueOf(outputFormat.toString());
     
     switch (outputFormat) {
-      case SBML: case SBML_QUAL: case SBML_CORE_AND_QUAL: /*case LaTeX: */
+      case SBML: case SBML_QUAL: case SBML_CORE_AND_QUAL: case SBML_L2V4: case SBML_L3V1: /*case LaTeX: */
         panel = new TranslatorSBMLPanel(pathwayID, keggFormat, translationResult);
         break;
         

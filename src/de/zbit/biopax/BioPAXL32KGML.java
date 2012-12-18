@@ -166,7 +166,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         }
       }
       
-      if (pwOrg.getName() != null) {
+      if (pwOrg.getName() != null && pwOrg.getName().size()>0) {
         String newSpecies = Utils.iterableToList(pwOrg.getName()).get(0);
         detSpecies = Species.search(allSpecies, newSpecies, Species.COMMON_NAME);
       } 
@@ -305,7 +305,7 @@ public class BioPAXL32KGML extends BioPAX2KGML {
         // determine the pathway organism
         BioSource pwOrg = pathway.getOrganism();  
         if (pwOrg != null) {
-          if (pwOrg.getName() != null) {
+          if (pwOrg.getName() != null && pwOrg.getName().size()>0) {
             String pathwaySpecies = Utils.iterableToList(pwOrg.getName()).get(0);
             if (pathwaySpecies.equals(species.getScientificName())) {
               for (org.biopax.paxtools.model.level3.Process interaction : pathway.getPathwayComponent()) {
