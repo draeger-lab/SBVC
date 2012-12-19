@@ -26,6 +26,7 @@ package de.zbit.biopax;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Filter;
@@ -35,11 +36,17 @@ import java.util.logging.Logger;
 
 import org.biopax.paxtools.model.Model;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 import de.zbit.io.DirectoryParser;
-import de.zbit.io.SerializableTools;
 import de.zbit.kegg.KGMLWriter;
+import de.zbit.kegg.Translator;
+import de.zbit.kegg.io.BatchKEGGtranslator;
+import de.zbit.kegg.io.KEGGtranslator;
+import de.zbit.kegg.io.KEGGtranslatorIOOptions.Format;
 import de.zbit.kegg.parser.KeggParser;
 import de.zbit.kegg.parser.pathway.Pathway;
+import de.zbit.util.Utils;
 import de.zbit.util.logging.LogUtil;
 import de.zbit.util.logging.OneLineFormatter;
 
@@ -58,7 +65,7 @@ public class Path2Models_KGML_BioCarta_Extender {
    * @param writeEntryExtended 
    */
   private static void createExtendedKGML(List<String> fileList, String informationFile,
-      String sourceDir, String destDir, boolean writeEntryExtended) {
+      String sourceDir, String destDir, boolean writeEntryExtended, boolean createInstantSBML) {
     log.info("fileList consists of " + fileList.size() + " entries, informationFile= '" + 
         informationFile + "', sourceDir= '" + sourceDir + "', destDir= '" + destDir + "', " +
             "writeExtended= '" + writeEntryExtended + "'.");
@@ -91,9 +98,31 @@ public class Path2Models_KGML_BioCarta_Extender {
 
     Model m = BioPAX2KGML.getModel(informationFile);    
     if(m!=null){
+      
+      // For direct translations 2 SBML-qual get and adjust KEGGtranslator
+      KEGGtranslator<?> t = null;
+      if (createInstantSBML) {
+        t = BatchKEGGtranslator.getTranslator(Format.SBML_QUAL, Translator.getManager());
+        
+        // Adjust options for p2m
+        Translator.adjustForPath2Models();
+        
+        // Pretend to be an original KEGGtranslator instance 
+        Translator copyValues = new Translator(null);
+        System.setProperty("app.name", copyValues.getAppName());
+        System.setProperty("app.version", copyValues.getVersionNumber());
+        if (copyValues.getCitation(true)!=null) {
+          System.setProperty("app.citation.html", copyValues.getCitation(true));
+        }
+        if (copyValues.getCitation(false)!=null) {
+          System.setProperty("app.citation", copyValues.getCitation(false));
+        }
+        
+      }
+      
       for (String filename : fileList) {
         List<Pathway> pathways = null;
-        String pw = sourceDir + "/" + filename;
+        String pw = Utils.ensureSlash(sourceDir) + filename;
         log.info("Parsing pathway '" + pw + "'.");
         try {
           pathways = KeggParser.parse(pw);
@@ -108,8 +137,14 @@ public class Path2Models_KGML_BioCarta_Extender {
               p.setAdditionalText("Pathway information was augmented with BioCarta information " +
               "(2010-08-10)");
               String fn = filename.replace(".xml", "_extended.xml");
-              KGMLWriter.writeKGML(p, destDir + "/" + fn, writeEntryExtended);
-              SerializableTools.saveObject(filename+".dat", p);
+              KGMLWriter.writeKGML(p, Utils.ensureSlash(destDir) + fn, writeEntryExtended);
+              // As of today, the KGML Pathway data structure is NOT SERIALIZABLE.
+              //SerializableTools.saveObject(filename+".dat", p);
+              
+              // Convert directly to Qual
+              if (t!=null) {
+                t.translate(p, Utils.ensureSlash(destDir) + filename.replace(".xml", ".sbml.xml"));
+              }
             }
           }  
         } else {
@@ -123,6 +158,7 @@ public class Path2Models_KGML_BioCarta_Extender {
       System.exit(1);
     }
   }
+
   
   /**
    * @param args
@@ -166,24 +202,26 @@ public class Path2Models_KGML_BioCarta_Extender {
     });
     LogUtil.addHandler(h, LogUtil.getInitializedPackages());
     
-
-    String fileFolder = "V:/";
-    
   
     List<String> fileList = new ArrayList<String>();
    
     // augment kgmls with BioCarta information
-    DirectoryParser d = new DirectoryParser("W:/non-metabolic/organisms/hsa/", "xml");
-    while (d.hasNext())
+    String KGMLinputDir = "W:/non-metabolic/organisms/hsa"; // "C:/Tools/hsa/";
+    KGMLinputDir = "C:/Tools/hsa/";
+    String outputFolder = "V:/";
+    outputFolder = "C:/Tools/p2m";
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+    
+    DirectoryParser d = new DirectoryParser(KGMLinputDir, "xml");
+    while (d.hasNext()) {
       fileList.add(d.next());
+    }
     
-    Path2Models_KGML_BioCarta_Extender.createExtendedKGML(fileList, fileFolder + "BioCarta.bp3_utf8.owl", 
-        "W:/non-metabolic/organisms/hsa", 
-        "V:/Path2models/2012-09-27-KEGG_NON-METABOLIC_Extended", true); 
+    Path2Models_KGML_BioCarta_Extender.createExtendedKGML(fileList, Utils.ensureSlash(outputFolder) + "BioCarta.bp3_utf8.owl", 
+      KGMLinputDir, 
+      String.format("%sPath2models/%s-KEGG_NON-METABOLIC_Extended", Utils.ensureSlash(outputFolder), sdf.format(new Date())), true, true);
     
     
-    
-    if (true) return;
   }
 
 }
