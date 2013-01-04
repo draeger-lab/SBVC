@@ -12,7 +12,7 @@
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
- * Copyright (C) 2012 by the University of Tuebingen, Germany.
+ * Copyright (C) 2012-2013 by the University of Tuebingen, Germany.
  *
  * SBVC is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU Lesser General Public License
@@ -25,7 +25,6 @@
 package de.zbit.sbvc.io.helper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Class for storing a SIF-Pathway
@@ -33,10 +32,9 @@ import java.util.HashMap;
  * @author 	Manuel Ruff
  * @date 	2012-08-08
  * @version $Rev: 138$
- * @since	$Rev: 135$
+ * @since	Revision 135
  *
  */
-
 public class SIFPathway {
 	
 	private String name;														// name of the Pathway (mainly this is the raw filename)

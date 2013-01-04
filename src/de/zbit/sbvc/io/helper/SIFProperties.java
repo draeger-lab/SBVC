@@ -12,7 +12,7 @@
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
- * Copyright (C) 2012 by the University of Tuebingen, Germany.
+ * Copyright (C) 2012-2013 by the University of Tuebingen, Germany.
  *
  * SBVC is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU Lesser General Public License
@@ -35,10 +35,9 @@ import de.zbit.kegg.parser.pathway.RelationType;
  * @author Clemens Wrzodek
  * @date 	2012-08-08
  * @version $Rev: 138$
- * @since	$Rev: 135$
+ * @since	Revision 135
  *
  */
-
 public class SIFProperties {
 	
 	/**

@@ -12,7 +12,7 @@
  * <http://www.cogsys.cs.uni-tuebingen.de/software/SBVC> to obtain the
  * latest version of SBVC.
  *
- * Copyright (C) 2012 by the University of Tuebingen, Germany.
+ * Copyright (C) 2012-2013 by the University of Tuebingen, Germany.
  *
  * SBVC is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU Lesser General Public License
@@ -93,7 +93,6 @@ import de.zbit.kegg.parser.pathway.RelationType;
 import de.zbit.kegg.parser.pathway.SubType;
 import de.zbit.kegg.parser.pathway.ext.EntryExtended;
 import de.zbit.kegg.parser.pathway.ext.EntryTypeExtended;
-import de.zbit.util.ArrayUtils;
 import de.zbit.util.DatabaseIdentifierTools;
 import de.zbit.util.DatabaseIdentifiers;
 import de.zbit.util.DatabaseIdentifiers.IdentifierDatabases;
