@@ -352,10 +352,11 @@ public class DatabasePathwaySelector extends JPanel {
           String idNum = pathways[i].getEntry_id();
           int pos = idNum.indexOf("map");
           if (pos>=0) idNum = idNum.substring(pos+3).trim();
+          
           //pathwayMap.put(idNum, pathways[i].getDefinition().replace(" - Reference pathway", ""));
-          int trimPos = pathways[i].getDefinition().lastIndexOf('-');
-          pathwayMap.put(idNum, pathways[i].getDefinition().substring(0, trimPos<0?
-              pathways[i].getDefinition().length():trimPos).trim());
+//        int trimPos = pathways[i].getDefinition().lastIndexOf('-');
+//        pathwayMap.put(idNum, pathways[i].getDefinition().substring(0, trimPos<0? pathways[i].getDefinition().length():trimPos).trim());
+        pathwayMap.put(idNum, pathways[i].getDefinition());
         }
         return pathwayMap;
         
