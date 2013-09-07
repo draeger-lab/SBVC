@@ -54,7 +54,6 @@ import de.zbit.resources.Resource;
 import de.zbit.sbvc.gui.SBVCUI;
 import de.zbit.sbvc.io.SBVCIOOptions;
 import de.zbit.util.Species;
-import de.zbit.util.StringUtil;
 import de.zbit.util.Utils;
 import de.zbit.util.logging.LogUtil;
 import de.zbit.util.prefs.KeyProvider;
