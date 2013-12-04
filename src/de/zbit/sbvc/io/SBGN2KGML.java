@@ -105,6 +105,7 @@ public class SBGN2KGML {
 		// try reading the file
 		try {
 			sbgn = SbgnUtil.readFromFile(f);
+			
 		} catch (JAXBException e) {
 			log.log(Level.SEVERE, String.format("Couldn't read in the the file: %s", f.getAbsoluteFile()), e);
 		}
