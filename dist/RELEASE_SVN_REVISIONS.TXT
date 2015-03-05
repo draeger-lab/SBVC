@@ -3,3 +3,7 @@
   KEGGtranslator XX
   SysBio XX
   JSBML XX
+* SBVC 1.0.1 (released finally in 2015-03-05)) is based on the following subversion revisions:
+  KEGGtranslator 407
+  SysBio 1368
+  JSBML lib from SysBio 1368

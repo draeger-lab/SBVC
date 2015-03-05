@@ -262,7 +262,7 @@ public class SBVC extends Launcher{
 
 	@Override
 	public String getVersionNumber() {
-		return "1.0";
+		return "1.0.1";
 	}
 
 	@Override
