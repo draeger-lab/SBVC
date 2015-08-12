@@ -24,6 +24,7 @@
  */
 package de.zbit.sbvc;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,9 +45,9 @@ public class SBVCTest {
     LogUtil.initializeLogging(Level.FINE);
     SBVC sbvc = new SBVC();
     
-    sbvc.convertBioPAXToSBML("test-data/BioCarta.bp3.owl",
-        "test-data/out/BioCarta.bp3.owl/", 
-        null);
+    String outDir = "test-data/out/BioCarta.bp3.owl/";
+    new File(outDir).mkdirs();
+    sbvc.convertBioPAXToSBML("test-data/BioCarta.bp3.owl", outDir, null);
     
 //    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
 //        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
