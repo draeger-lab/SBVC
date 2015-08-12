@@ -44,29 +44,28 @@ public class SBVCTest {
     LogUtil.initializeLogging(Level.FINE);
     SBVC sbvc = new SBVC();
     
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/pathway-biopax.owl",
-        "C:/Users/buechel/Downloads/res/", 
+    sbvc.convertBioPAXToSBML("test-data/BioCarta.bp3.owl",
+        "test-data/out/BioCarta.bp3.owl/", 
         null);
     
-    if(true)return;
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
-    
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp2.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
-    
-    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp3.owl",
-        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/BioCarta.bp3.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/BioCarta Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature_Curated.bp3.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/NCI-Nature Curated Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp2.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 2/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
+//    
+//    sbvc.convertBioPAXToSBML("C:/Users/buechel/Downloads/PID_Pathways/Reactome.bp3.owl",
+//        "C:/Users/buechel/Downloads/PID_Pathways/Reactome Level 3/", new Species("Homo sapiens", "_HUMAN", "human", "hsa",9606));
     
     
 //    sbvc.convertBioPAXToSBML("C:/Users/buechel/Desktop/workspace/SBVC/doc/Bioinformatics_paper/Comparision/Homarus americanus.owl",

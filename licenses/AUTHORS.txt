@@ -2,7 +2,7 @@
 # Core Developers #
 ###################
 
-Finja Büchel (1)
+Finja Wrzodek (1)
   finja.buechel@uni-tuebingen.de
 Clemens Wrzodek (1)
   clemens.wrzodek@uni-tuebingen.de
@@ -15,6 +15,8 @@ Andreas Dräger (1)
   andreas.draeger@uni-tuebingen.de
 Florian Mittag (1)
   florian.mittag@uni-tuebingen.de
+Michael R�mer (1)
+  michael.roemer@uni-tuebingen.de
 
 ###################
 #   Supervisor    #

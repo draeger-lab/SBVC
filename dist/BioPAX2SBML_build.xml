@@ -86,7 +86,7 @@
 			<filelist dir="${base}" files="libquaqua.jnilib,libquaqua64.jnilib" />
 
 			<!-- PaxTools -->
-			<zipfileset excludes="META-INF/*" src="${base}/lib/paxtools-4.1.1_customJenaFix.jar" />
+			<zipfileset excludes="META-INF/*" src="${base}/lib/paxtools-4.3.0.jar" />
 
 			<fileset dir="${SysBioPath}/bin">
 				<exclude name="de/zbit/resources/liftover/**/*" />
@@ -102,7 +102,7 @@
 			<zipfileset excludes="META-INF/*.SF" src="${SysBioPath}/lib/sysbio-osx-support.jar" />
 			<zipfileset excludes="META-INF/*" src="${SysBioPath}/lib/commons-cli-1.1.jar" />
       <zipfileset excludes="META-INF/*" src="${SysBioPath}/lib/argparser.jar" />
-			<zipfileset excludes="META-INF/*, javax/xml/**, org/apache/log4j/**, log4j.properties" src="${SysBioPath}/lib/jsbml-1.0-rc1-incl-libs.jar" />
+			<zipfileset excludes="META-INF/*, javax/xml/**, org/apache/log4j/**, log4j.properties" src="${base}/lib/jsbml-1.0-rc1-incl-libs.jar" />
 
 			<fileset dir="${KEGGtranslatorPath}/bin">
 				<exclude name="de/zbit/gui/prefs/PreferencePanels.class" />
