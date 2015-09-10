@@ -687,7 +687,7 @@ public abstract class BioPAX2KGML {
     if (geneID!=null && geneID.size()>0) {
       for (String geneID2: geneID) {
         if (Utils.isNumber(geneID2, true)) {
-          String keggid = mapGeneIDToKEGGID(Integer.parseInt(geneID2), species);
+          String keggid = mapGeneIDToKEGGID(Integer.parseInt(geneID2.trim()), species);
           if (keggid!=null) {
             ids.add(keggid);
           }
