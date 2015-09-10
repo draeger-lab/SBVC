@@ -1,7 +1,7 @@
 <!-- ANT build script for yfiles obfuscation           -->
 <!-- The java based ANT tool is available from         -->
 <!-- http://jakarta.apache.org/ant                     -->
-<project name="BioPAX2SBML with Obfuscation" default="sign" basedir=".">
+<project name="BioPAX2SBML with Obfuscation" default="obfuscate" basedir=".">
 
 	<target name="help">
 		<echo>
