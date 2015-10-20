@@ -12,3 +12,8 @@
   KEGGtranslator 408
   SysBio 1377
   JSBML lib from SysBio 1377
+* BioPAX2SBML 1.0.2 (released finally in 2015-10-20)) is based on the following subversion revisions:
+  SBVC 190
+  KEGGtranslator 412
+  SysBio 1380
+  JSBML lib from SysBio 1380

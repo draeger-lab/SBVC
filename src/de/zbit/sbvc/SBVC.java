@@ -166,6 +166,7 @@ public class SBVC extends Launcher{
 		k2s.setShowFormulaForCompounds(false);
 		k2s.setRemovePathwayReferences(false);
 		k2s.setAddLayoutExtension(false);
+		k2s.setUseGroupsExtension(false);
 		k2s.setCheckAtomBalance(false);
 
 		// Translate and write output
