@@ -53,8 +53,11 @@ import de.zbit.util.Species;
  * @version $Rev$
  */
 public class BioPAXImporter extends NotifyingWorker<Object> {
-	public static final transient Logger log = Logger.getLogger(BioPAXImporter.class.getName());
 
+	/**
+	 * A {@link Logger} for this class.
+	 */
+	public static final transient Logger log = Logger.getLogger(BioPAXImporter.class.getName());
 
 	/**
 	 * The original input file.
@@ -143,7 +146,7 @@ public class BioPAXImporter extends NotifyingWorker<Object> {
 
 			// Reading done. Send some infos to the underlying listeners
 			// Recommended name for this tab
-			String name = (keggPathway.getTitle()!=null && keggPathway.getTitle().trim().length()>0) ? keggPathway.getTitle() : biopaxFile.getName();
+			String name = (keggPathway.getTitle() != null && keggPathway.getTitle().trim().length()>0) ? keggPathway.getTitle() : biopaxFile.getName();
 			publish(new ActionEvent(this, 11, name));
 			// Recommended ToolTip for this tab
 			publish(new ActionEvent(this, 12, String.format("BioPAX pathway '%s' from file '%s'.", pwName, biopaxFile.getName())));
@@ -189,7 +192,7 @@ public class BioPAXImporter extends NotifyingWorker<Object> {
 
 	/**
 	 * Overwrite or implement this method to ask the
-	 * user for a species if none could be infered from
+	 * user for a species if none could be inferred from
 	 * the selected file.
 	 * @return
 	 */
@@ -209,4 +212,5 @@ public class BioPAXImporter extends NotifyingWorker<Object> {
 			return null;
 		}
 	}
+
 }

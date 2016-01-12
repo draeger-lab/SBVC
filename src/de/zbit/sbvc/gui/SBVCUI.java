@@ -14,7 +14,7 @@
  *
  * Copyright (C) 2012-2014 by the University of Tuebingen, Germany.
  *
- * SBVC is free software; you can redistribute it and/or 
+ * SBVC is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation. A copy of the license
  * agreement is provided in the file named "LICENSE.txt" included with
@@ -47,6 +47,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -116,15 +117,16 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
      * 
      * @see de.zbit.gui.ActionCommand#getName()
      */
+    @Override
     public String getName() {
       switch (this) {
-        // case TO_LATEX:
-        // return "Export to LaTeX";
-        case DOWNLOAD_PATHWAY:
-          return "Download pathway";
+      // case TO_LATEX:
+      // return "Export to LaTeX";
+      case DOWNLOAD_PATHWAY:
+        return "Download pathway";
 
-        default:
-          return StringUtil.firstLetterUpperCase(toString().toLowerCase().replace('_', ' '));
+      default:
+        return StringUtil.firstLetterUpperCase(toString().toLowerCase().replace('_', ' '));
       }
     }
 
@@ -133,14 +135,15 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
      * 
      * @see de.zbit.gui.ActionCommand#getToolTip()
      */
+    @Override
     public String getToolTip() {
       switch (this) {
-        // case TO_LATEX:
-        // return "Converts the currently opened model to a LaTeX report file.";
-        case DOWNLOAD_PATHWAY:
-          return "Downloads pathways from online servers.";
-        default:
-          return "";
+      // case TO_LATEX:
+      // return "Converts the currently opened model to a LaTeX report file.";
+      case DOWNLOAD_PATHWAY:
+        return "Downloads pathways from online servers.";
+      default:
+        return "";
       }
     }
   }
@@ -151,23 +154,23 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
   private static final long serialVersionUID = 6631262606716052915L;
 
   //TODO: icon erstellen
-//  static {
-//    
-//    String iconPaths[] = { "SBVCIcon_16.png", "SBVCIcon_32.png",
-//        "SBVCIcon_48.png", "SBVCIcon_128.png", "SBVCIcon_256.png" };
-//    for (String path : iconPaths) {
-//      URL url = TranslatorUI.class.getResource("img/" + path);
-//      if (url != null) {
-//        UIManager.put(path.substring(0, path.lastIndexOf('.')), new ImageIcon(url));
-//      }
-//    }
-//    try {
-//      org.sbml.tolatex.gui.LaTeXExportDialog.initImages();
-//    } catch (Throwable t) {
-//      // Also allow SBVC to compile without
-//      // SBML2LaTeX !
-//    }
-//  }
+  //  static {
+  //
+  //    String iconPaths[] = { "SBVCIcon_16.png", "SBVCIcon_32.png",
+  //        "SBVCIcon_48.png", "SBVCIcon_128.png", "SBVCIcon_256.png" };
+  //    for (String path : iconPaths) {
+  //      URL url = TranslatorUI.class.getResource("img/" + path);
+  //      if (url != null) {
+  //        UIManager.put(path.substring(0, path.lastIndexOf('.')), new ImageIcon(url));
+  //      }
+  //    }
+  //    try {
+  //      org.sbml.tolatex.gui.LaTeXExportDialog.initImages();
+  //    } catch (Throwable t) {
+  //      // Also allow SBVC to compile without
+  //      // SBML2LaTeX !
+  //    }
+  //  }
 
   /**
    * Default directory path's for saving and opening files. Only init them once.
@@ -184,8 +187,8 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
   private SBPreferences prefsIO;
 
   /**
- * 
- */
+   * 
+   */
   public SBVCUI() {
     this(null);
   }
@@ -203,15 +206,15 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     //TODO: Icon erstellen
     // Depending on the current OS, we should add the following image
     // icons: 16x16, 32x32, 48x48, 128x128 (MAC), 256x256 (Vista).
-//    int[] resolutions = new int[] { 16, 32, 48, 128, 256 };
-//    List<Image> icons = new LinkedList<Image>();
-//    for (int res : resolutions) {
-//      Object icon = UIManager.get("SBVCIcon_" + res);
-//      if ((icon != null) && (icon instanceof ImageIcon)) {
-//        icons.add(((ImageIcon) icon).getImage());
-//      }
-//    }
-//    setIconImages(icons);
+    //    int[] resolutions = new int[] { 16, 32, 48, 128, 256 };
+    //    List<Image> icons = new LinkedList<Image>();
+    //    for (int res : resolutions) {
+    //      Object icon = UIManager.get("SBVCIcon_" + res);
+    //      if ((icon != null) && (icon instanceof ImageIcon)) {
+    //        icons.add(((ImageIcon) icon).getImage());
+    //      }
+    //    }
+    //    setIconImages(icons);
   }
 
   /**
@@ -228,24 +231,27 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#createJToolBar()
    */
+  @Override
   protected JToolBar createJToolBar() {
     initPreferences();
     // final JPanel r = new JPanel(new VerticalLayout());
-    final JToolBar r = new JToolBar("Translate new file", JToolBar.HORIZONTAL);
+    final JToolBar r = new JToolBar("Translate new file", SwingConstants.HORIZONTAL);
 
     JComponent jc = PreferencesPanel.createJComponentForOption(SBVCIOOptions.INPUT,
-        prefsIO, this);
+      prefsIO, this);
     // Allow a change of Focus (important!)
-    if (jc instanceof FileSelector)
+    if (jc instanceof FileSelector) {
       ((FileSelector) jc).removeInputVerifier();
+    }
     r.add(jc);
     r.add(PreferencesPanel.createJComponentForOption(SBVCIOOptions.FORMAT, prefsIO, this));
 
     // Button and action
     JButton ok = new JButton("Translate now!", UIManager.getIcon("ICON_GEAR_16"));
     ok.setToolTipText(StringUtil
-        .toHTMLToolTip("Starts the conversion of the input file to the selected output format and displays the result on this workbench."));
+      .toHTMLToolTip("Starts the conversion of the input file to the selected output format and displays the result on this workbench."));
     ok.addActionListener(new ActionListener() {
+      @Override
       public void actionPerformed(ActionEvent e) {
         // Get selected file and format
         File inFile = getInputFile(r);
@@ -299,7 +305,10 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
       } else if (c.getName().equals(SBVCIOOptions.INPUT.getOptionName())
           && (FileSelector.class.isAssignableFrom(c.getClass()))) {
         try {
-          inFile = ((FileSelector) c).getSelectedFile();
+          FileSelector selector = (FileSelector) c;
+          if (selector.isFileSelected()) {
+            inFile = selector.getSelectedFile();
+          }
         } catch (IOException e1) {
           GUITools.showErrorMessage(r, e1);
           e1.printStackTrace();
@@ -344,7 +353,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
         message = '\'' + inFile.getName() + "' is no valid input file.";
       }
       JOptionPane.showMessageDialog(this, message, System.getProperty("app.name"),
-          JOptionPane.WARNING_MESSAGE);
+        JOptionPane.WARNING_MESSAGE);
     } else {
       Format f = null;
       try {
@@ -352,7 +361,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
       } catch (Throwable exc) {
         exc.printStackTrace();
         JOptionPane.showMessageDialog(this, '\'' + format + "' is no valid output format.",
-            System.getProperty("app.name"), JOptionPane.WARNING_MESSAGE);
+          System.getProperty("app.name"), JOptionPane.WARNING_MESSAGE);
       }
       if (f != null) {
         // Tanslate and add tab.
@@ -386,8 +395,9 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    */
   public void addSBVCTab(String tabName, TranslatorPanel<?> tp) {
     try {
-      if (tabName == null)
+      if (tabName == null) {
         tabName = tp.getTitle();
+      }
       tabbedPane.addTab(tabName, tp);
       tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
     } catch (Exception e1) {
@@ -401,27 +411,28 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * @see
    * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
    */
+  @Override
   public void actionPerformed(ActionEvent e) {
     try {
       Action action = Action.valueOf(e.getActionCommand());
       switch (action) {
-        case TRANSLATION_DONE:
-          TranslatorPanel<?> source = (TranslatorPanel<?>) e.getSource();
-          int index = tabbedPane.indexOfComponent(source);
-          if (index >= 0) {// ELSE: User closed the tab before completion
-            if (e.getID() != JOptionPane.OK_OPTION) {
-              // If translation failed, remove the tab. The error
-              // message has already been issued by the translator.
-              tabbedPane.removeTabAt(index);
-            } else {
-              // Do not change title here. Initial title is mostly
-              // better than this one ;-)
-              // tabbedPane.setTitleAt(index, source.getTitle());
-            }
+      case TRANSLATION_DONE:
+        TranslatorPanel<?> source = (TranslatorPanel<?>) e.getSource();
+        int index = tabbedPane.indexOfComponent(source);
+        if (index >= 0) {// ELSE: User closed the tab before completion
+          if (e.getID() != JOptionPane.OK_OPTION) {
+            // If translation failed, remove the tab. The error
+            // message has already been issued by the translator.
+            tabbedPane.removeTabAt(index);
+          } else {
+            // Do not change title here. Initial title is mostly
+            // better than this one ;-)
+            // tabbedPane.setTitleAt(index, source.getTitle());
           }
-          getStatusBar().hideProgress();
-          updateButtons();
-          break;
+        }
+        getStatusBar().hideProgress();
+        updateButtons();
+        break;
         /*
          * Moved to BaseFrame. case FILE_DROPPED: String format =
          * getOutputFileFormat(toolBar); if ((format == null) ||
@@ -431,23 +442,23 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
         // case TO_LATEX:
         // writeLaTeXReport();
         // break;
-        case DOWNLOAD_PATHWAY:
-          TranslatePathwayDialog.showAndEvaluateDialog(tabbedPane, this, (Format) null);           
-          break;
-        case NEW_PROGRESSBAR:
-          getStatusBar().showProgress((AbstractProgressBar) e.getSource());
-          break;
-        case OPEN_PATHWAY:
-          try {
-            addSBVCTab(e.getSource().toString(),
-                SBVCPanelTools.createPanel(e.getSource().toString(), Format.GraphML, this));
-          } catch (Exception e1) {
-            GUITools.showErrorMessage(this, e1);
-          }
-          break;
-        default:
-          System.out.println(action);
-          break;
+      case DOWNLOAD_PATHWAY:
+        TranslatePathwayDialog.showAndEvaluateDialog(tabbedPane, this, (Format) null);
+        break;
+      case NEW_PROGRESSBAR:
+        getStatusBar().showProgress((AbstractProgressBar) e.getSource());
+        break;
+      case OPEN_PATHWAY:
+        try {
+          addSBVCTab(e.getSource().toString(),
+            SBVCPanelTools.createPanel(e.getSource().toString(), Format.GraphML, this));
+        } catch (Exception e1) {
+          GUITools.showErrorMessage(this, e1);
+        }
+        break;
+      default:
+        System.out.println(action);
+        break;
       }
     } catch (Throwable exc) {
       GUITools.showErrorMessage(this, exc);
@@ -483,8 +494,8 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     // Check if document already has been saved
     if ((comp instanceof TranslatorPanel<?>) && !((TranslatorPanel<?>) comp).isSaved()) {
       if ((JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, StringUtil.toHTMLToolTip(
-          "Do you really want to close %s%s%s without saving?", KEGG2jSBML.quotStart, title,
-          KEGG2jSBML.quotEnd), "Close selected document", JOptionPane.YES_NO_OPTION))) {
+        "Do you really want to close %s%s%s without saving?", KEGG2jSBML.quotStart, title,
+        KEGG2jSBML.quotEnd), "Close selected document", JOptionPane.YES_NO_OPTION))) {
         return false;
       }
     }
@@ -500,13 +511,14 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#openFile(java.io.File[])
    */
+  @Override
   public File[] openFile(File... files) {
     boolean askOutputFormat = false;
 
     // Ask input file
     if ((files == null) || (files.length < 1)) {
       files = GUITools.openFileDialog(this, openDir, false, true, JFileChooser.FILES_ONLY,
-          SBFileFilter.createAllFileFilter()); //TODO: change file filter
+        SBFileFilter.createAllFileFilter()); //TODO: change file filter
 
       askOutputFormat = true;
     }
@@ -526,7 +538,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
           .createJComponentForOption(SBVCIOOptions.FORMAT, prefsIO, null);
       outputFormat.setTitle("Please select the output format");
       JOptionPane.showMessageDialog(this, outputFormat, System.getProperty("app.name"),
-          JOptionPane.QUESTION_MESSAGE);
+        JOptionPane.QUESTION_MESSAGE);
       format = outputFormat.getSelectedItem().toString();
     }
 
@@ -543,8 +555,8 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    */
   private void updateButtons() {
     GUITools.setEnabled(false, getJMenuBar(), BaseAction.FILE_SAVE_AS,
-    // Action.TO_LATEX,
-        BaseAction.FILE_CLOSE);
+      // Action.TO_LATEX,
+      BaseAction.FILE_CLOSE);
     TranslatorPanel<?> o = getCurrentlySelectedPanel();
     if (o != null) {
       o.updateButtons(getJMenuBar());
@@ -559,7 +571,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     if ((tabbedPane == null) || (tabbedPane.getSelectedIndex() < 0)) {
       return null;
     }
-    Object o = ((JTabbedPane) tabbedPane).getSelectedComponent();
+    Object o = tabbedPane.getSelectedComponent();
     if ((o == null) || !(o instanceof TranslatorPanel<?>)) {
       return null;
     }
@@ -571,6 +583,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#saveFile()
    */
+  @Override
   public File saveFile() {
     TranslatorPanel<?> o = getCurrentlySelectedPanel();
     if (o != null) {
@@ -584,6 +597,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
    */
+  @Override
   public void keyPressed(KeyEvent e) {
     // Preferences for the "input file"
     PreferencesPanel.setProperty(prefsIO, e.getSource(), true);
@@ -594,6 +608,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
    */
+  @Override
   public void keyReleased(KeyEvent e) {
     // Preferences for the "input file"
     PreferencesPanel.setProperty(prefsIO, e.getSource(), true);
@@ -604,6 +619,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
    */
+  @Override
   public void keyTyped(KeyEvent e) {
     // Preferences for the "input file"
     PreferencesPanel.setProperty(prefsIO, e.getSource(), true);
@@ -614,6 +630,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
    */
+  @Override
   public void itemStateChanged(ItemEvent e) {
     // Preferences for the "output format"
     PreferencesPanel.setProperty(prefsIO, e.getSource(), true);
@@ -627,12 +644,12 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
   @Override
   protected JMenuItem[] additionalFileMenuItems() {
     return new JMenuItem[] {
-    /*
-     * GUITools.createJMenuItem(this, Action.TO_LATEX,
-     * UIManager.getIcon("ICON_LATEX_16"), KeyStroke .getKeyStroke('E',
-     * InputEvent.CTRL_DOWN_MASK), 'E', false),
-     */
-    GUITools.createJMenuItem(this, Action.DOWNLOAD_PATHWAY, UIManager.getIcon("ICON_GEAR_16"),
+      /*
+       * GUITools.createJMenuItem(this, Action.TO_LATEX,
+       * UIManager.getIcon("ICON_LATEX_16"), KeyStroke .getKeyStroke('E',
+       * InputEvent.CTRL_DOWN_MASK), 'E', false),
+       */
+      GUITools.createJMenuItem(this, Action.DOWNLOAD_PATHWAY, UIManager.getIcon("ICON_GEAR_16"),
         KeyStroke.getKeyStroke('D', InputEvent.CTRL_DOWN_MASK), 'D', true) };
   }
 
@@ -641,6 +658,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#closeFile()
    */
+  @Override
   public boolean closeFile() {
     if (tabbedPane.getSelectedIndex() < 0) {
       return false;
@@ -653,6 +671,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#createMainComponent()
    */
+  @Override
   protected Component createMainComponent() {
     // If you encounter an exception here PUT THE RESOURCES FOLDER ON YOUR CLASS
     // PATH!
@@ -667,6 +686,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     tabbedPane = new JTabbedLogoPane(logo);
     // Change active buttons, based on selection.
     tabbedPane.addChangeListener(new ChangeListener() {
+      @Override
       public void stateChanged(ChangeEvent e) {
         updateButtons();
       }
@@ -679,6 +699,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#exit()
    */
+  @Override
   public void exit() {
     // Close all tab. If user want's to save a tab first, cancel the closing
     // process.
@@ -696,7 +717,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
       SBProperties props = new SBProperties();
       { // Save SBVCIOOptions
         File f = getInputFile(toolBar);
-        if (f != null && SBVCIOOptions.INPUT.getRange().isInRange(f, props)) {
+        if ((f != null) && f.exists() && SBVCIOOptions.INPUT.getRange().isInRange(f, props)) {
           props.put(SBVCIOOptions.INPUT, f);
         }
         props.put(SBVCIOOptions.FORMAT, getOutputFileFormat(toolBar));
@@ -730,6 +751,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#getURLAboutMessage()
    */
+  @Override
   public URL getURLAboutMessage() {
     // return getClass().getResource("../html/about.html");
     // "../" does not work inside a jar.
@@ -741,6 +763,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#getURLLicense()
    */
+  @Override
   public URL getURLLicense() {
     // return getClass().getResource("../html/license.html");
     // "../" does not work inside a jar.
@@ -752,6 +775,7 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
    * 
    * @see de.zbit.gui.BaseFrame#getURLOnlineHelp()
    */
+  @Override
   public URL getURLOnlineHelp() {
     // return getClass().getResource("../html/help.html");
     // "../" does not work inside a jar.
@@ -767,9 +791,10 @@ public class SBVCUI extends BaseFrame implements ActionListener, KeyListener, It
     return null;
   }
 
-public void propertyChange(PropertyChangeEvent evt) {
-	// TODO Auto-generated method stub
-	
-}
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    // TODO Auto-generated method stub
+
+  }
 
 }
