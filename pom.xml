@@ -15,19 +15,19 @@
   <!-- =================================================================== -->
   
   <name>${project.artifactId}</name>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <url>https://github.com/cogsys-tuebingen/SBVC/</url>
   <description>The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) belong to the most popular modeling and data exchange languages in systems biology. The focus of SBML is quantitative modeling and dynamic simulation of models, whereas the BioPAX specification concentrates mainly on visualization and qualitative analysis of pathway maps. BioPAX describes reactions and relations. In contrast, reactions are the only type of interaction in core SBML. With the SBML Qualitative Models extension (qual), it has recently also become possible to describe relations in SBML. Before the qual creation, relations could not be translated into SBML at all or were erroneously converted to reactions. Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations. Here we present the webtool BioPAX2SBML. It is capable of properly translating BioPAX formats (Level 2 and 3) into SBML format (Level 3 Version 1 with qual) including reactions and relations in one model. We demonstrate the functionality of BioPAX2SBML by converting the whole Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute, from BioPAX Level 2 and Level 3 formats to the SBML format, including the qual extension. The translated SBML models are freely available at http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/.</description>
   <inceptionYear>2012</inceptionYear>
   
   <properties>
-    <jdk.version>1.6</jdk.version>
+    <jdk.version>1.8</jdk.version>
     <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
     <year>${maven.build.timestamp}</year><!-- This property is used for filtering the variable ${year} in some resource files -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.license.url>http://www.gnu.org/licenses/lgpl-3.0-standalone.html</project.license.url>
     <junit.version>4.11</junit.version>
-    <paxtools.version>4.3.1</paxtools.version>
+    <paxtools.version>4.3.0</paxtools.version>
     <y.version>2.8</y.version>
   </properties>
   
@@ -49,21 +49,20 @@
     </license>
   </licenses>
   
-   <developers>
+  <developers>
     <developer>
       <name>Finja Wrzodek</name>
+      <email>finja@wrzodek.com</email>
       <timezone>Europe/Berlin</timezone>
       <roles>
+        <role>architect</role>
         <role>developer</role>
-        <role>tester</role>
       </roles>
     </developer>
     <developer>
       <name>Clemens Wrzodek</name>
       <email>clemens@germancafe.de</email>
-      <!--<id>wrzodek</id>-->
-      <organization>University of Tuebingen</organization>
-      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <id>Clemens82</id>
       <timezone>Europe/Berlin</timezone>
       <roles>
         <role>architect</role>
@@ -72,6 +71,7 @@
     </developer>
     <developer>
       <name>Florian Mittag</name>
+      <email>florian.mittag@verwaltung.uni-tuebingen.de</email>
       <organization>University of Tuebingen</organization>
       <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
       <timezone>Europe/Berlin</timezone>
@@ -94,7 +94,20 @@
       </roles>
     </developer>
     <developer>
+      <name>Michael Römer</name>
+      <id>mroemer</id>
+      <email>michael.roemer@uni-tuebingen.de</email>
+      <url>http://www.cogsys.cs.uni-tuebingen.de/mitarb/roemer/</url>
+      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </developer>
+    <developer>
       <name>Johannes Eichner</name>
+      <email>johannes.eichner@gmail.com</email>
       <timezone>Europe/Berlin</timezone>
       <roles>
         <role>developer</role>
@@ -103,6 +116,7 @@
     </developer>
     <developer>
       <name>Nicolas Rodriguez</name>
+      <email>niko.rodrigue@gmail.com</email>
     </developer>
     <developer>
       <name>Nicolas Le Novère</name>
@@ -121,12 +135,66 @@
   </developers>
 
   <!-- =================================================================== -->
+  <!-- Repositories                                                        -->
+  <!-- =================================================================== -->
+  <repositories>
+    <repository>
+      <id>in-project</id>
+      <name>In project repository</name>
+      <url>file://${project.basedir}/lib</url>
+    </repository>
+  </repositories>
+  
+  <!-- =================================================================== -->
   <!-- Dependencies                                                        -->
   <!-- =================================================================== -->
   
   <dependencies>
-  </dependencies>
+    <!-- To update or install local non-MAVEN JAR files run the command in the comments -->
+    <dependency>
+      <!-- mvn install:install-file -Dfile=./lib/org.sbgn-with-dependencies.jar -DgroupId=org -DartifactId=sbgn -Dversion=0.2 -Dpackaging=jar -DlocalRepositoryPath=./lib/ -->
+      <groupId>org</groupId>
+      <artifactId>sbgn</artifactId>
+      <version>0.2</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <!-- mvn install:install-file -Dfile=/path/to/jsbml.jar -DgroupId=org.sbml -DartifactId=JSBML -Dversion=REVISION_NUMBER -Dpackaging=jar -->
+      <groupId>org.sbml</groupId>
+      <artifactId>JSBML-incl-libs</artifactId>
+      <version>2498</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <!-- mvn install:install-file -Dfile=./lib/sysbio.jar -DgroupId=de.zbit -DartifactId=SysBio -Dversion=REVISION_NUMBER -Dpackaging=jar -DlocalRepositoryPath=./lib/ && rm ./lib/sysbio.jar -->
+      <groupId>de.zbit</groupId>
+      <artifactId>SysBio</artifactId>
+      <version>1390</version> <!-- SVN revision -->
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.biopax.paxtools</groupId>
+      <artifactId>paxtools-archetype</artifactId>
+      <version>${paxtools.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>de.zbit</groupId>
+      <artifactId>KEGGtranslator</artifactId>
+      <version>2.6</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
   
+  </dependencies>  
 
   <!-- =================================================================== -->
   <!-- Building                                                            -->
@@ -136,6 +204,21 @@
   <!-- mvn clean compile package assembly:single -->
   
   <build>
+  
+    <finalName>${project.artifactId}-${project.version}</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  
   </build>
-    
-</pom>
+  
+</project>

@@ -1,0 +1,8 @@
+/target/
+/.settings/
+/.classpath
+/.project
+/${obfuscationLog}
+/${shrinkLog}
+/minimalSysBio.xml
+/yguard.jar
