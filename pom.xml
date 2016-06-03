@@ -29,6 +29,9 @@
     <junit.version>4.11</junit.version>
     <paxtools.version>4.3.0</paxtools.version>
     <y.version>2.8</y.version>
+    <sbgn.version>0.2</sbgn.version>
+    <jsbml.version>2498</jsbml.version>
+    <keggtranslator.version>2.6</keggtranslator.version>
     <sysbio.version>1391</sysbio.version>
   </properties>
   
@@ -134,38 +137,26 @@
       </roles>
     </developer>
   </developers>
-
-  <!-- =================================================================== -->
-  <!-- Repositories                                                        -->
-  <!-- =================================================================== -->
-  <repositories>
-    <repository>
-      <id>in-project</id>
-      <name>In project repository</name>
-      <url>file://${project.basedir}/lib</url>
-    </repository>
-  </repositories>
   
   <!-- =================================================================== -->
   <!-- Dependencies                                                        -->
   <!-- =================================================================== -->
   
   <dependencies>
-    <!-- To update or install local non-MAVEN JAR files run the command in the comments -->
     <dependency>
-      <!-- mvn install:install-file -Dfile=./lib/org.sbgn-with-dependencies.jar -DgroupId=org -DartifactId=sbgn -Dversion=0.2 -Dpackaging=jar -DlocalRepositoryPath=./lib/ -->
       <groupId>org</groupId>
       <artifactId>sbgn</artifactId>
-      <version>0.2</version>
-      <scope>compile</scope>
+      <systemPath>${project.basedir}/lib/org.sbgn.jar</systemPath>
+      <version>${sbgn.version}</version>
+      <scope>system</scope>
     </dependency>
     
     <dependency>
-      <!-- mvn install:install-file -Dfile=/path/to/jsbml.jar -DgroupId=org.sbml -DartifactId=JSBML -Dversion=REVISION_NUMBER -Dpackaging=jar -->
       <groupId>org.sbml</groupId>
-      <artifactId>JSBML-incl-libs</artifactId>
-      <version>2498</version>
-      <scope>compile</scope>
+      <artifactId>JSBML</artifactId>
+      <systemPath>${project.basedir}/lib/JSBML-${jsbml.version}-incl-libs.jar</systemPath>
+      <version>${jsbml.version}</version>
+      <scope>system</scope>
     </dependency>
     
     <dependency>
@@ -179,13 +170,17 @@
     <dependency>
       <groupId>org.biopax.paxtools</groupId>
       <artifactId>paxtools-archetype</artifactId>
+      <systemPath>${project.basedir}/lib/paxtools-${paxtools.version}.jar</systemPath>
       <version>${paxtools.version}</version>
+      <scope>system</scope>
     </dependency>
     
     <dependency>
       <groupId>de.zbit</groupId>
       <artifactId>KEGGtranslator</artifactId>
-      <version>2.6</version>
+      <systemPath>${project.basedir}/lib/KEGGtranslator-${keggtranslator.version}.jar</systemPath>
+      <version>${keggtranslator.version}</version>
+      <scope>system</scope>
     </dependency>
     
     <dependency>
@@ -193,6 +188,14 @@
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>y</groupId>
+      <artifactId>y</artifactId>
+      <systemPath>${project.basedir}/lib/y.jar</systemPath>
+      <version>${y.version}</version>
+      <scope>system</scope>
     </dependency>
   
   </dependencies>  
