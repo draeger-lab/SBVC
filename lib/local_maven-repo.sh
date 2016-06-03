@@ -19,9 +19,6 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # JSBML
 mvn install:install-file -DgroupId=org.sbml -DartifactId=JSBML-incl-libs -Dversion=${JSBML_VERSION} -Dfile=$DIR/JSBML-${JSBML_VERSION}-incl-libs.jar -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=$DIR -DcreateChecksum=true
 
-# SysBio
-mvn install:install-file -DgroupId=de.zbit -DartifactId=SysBio -Dversion=${SYSBIO_VERSION} -Dfile=$DIR/SysBio-${SYSBIO_VERSION}.jar -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=$DIR -DcreateChecksum=true
-
 # SBGN
 mvn install:install-file -Dfile=${DIR}/org.sbgn.jar -DgroupId=org -DartifactId=sbgn -Dversion=${SBGN_VERSION} -Dpackaging=jar -DlocalRepositoryPath=${DIR}/
 

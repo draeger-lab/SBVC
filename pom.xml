@@ -29,6 +29,7 @@
     <junit.version>4.11</junit.version>
     <paxtools.version>4.3.0</paxtools.version>
     <y.version>2.8</y.version>
+    <sysbio.version>1391</sysbio.version>
   </properties>
   
   <organization>
@@ -168,11 +169,11 @@
     </dependency>
     
     <dependency>
-      <!-- mvn install:install-file -Dfile=./lib/sysbio.jar -DgroupId=de.zbit -DartifactId=SysBio -Dversion=REVISION_NUMBER -Dpackaging=jar -DlocalRepositoryPath=./lib/ && rm ./lib/sysbio.jar -->
       <groupId>de.zbit</groupId>
       <artifactId>SysBio</artifactId>
-      <version>1390</version> <!-- SVN revision -->
-      <scope>compile</scope>
+      <systemPath>${project.basedir}/lib/SysBio-${sysbio.version}.jar</systemPath>
+      <version>${sysbio.version}</version> <!-- SVN revision -->
+      <scope>system</scope>
     </dependency>
     
     <dependency>
