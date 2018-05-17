@@ -1,0 +1,228 @@
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.zbit</groupId>
+  <artifactId>SBVC</artifactId>
+  
+  <!-- Output to jar format -->
+  <packaging>jar</packaging>
+  
+  <!-- =================================================================== -->
+  <!-- General project information                                         -->
+  <!-- =================================================================== -->
+  
+  <name>${project.artifactId}</name>
+  <version>1.0.3-SNAPSHOT</version>
+  <url>https://github.com/cogsys-tuebingen/SBVC/</url>
+  <description>The Biological Pathway Exchange Language (BioPAX) and the Systems Biology Markup Language (SBML) belong to the most popular modeling and data exchange languages in systems biology. The focus of SBML is quantitative modeling and dynamic simulation of models, whereas the BioPAX specification concentrates mainly on visualization and qualitative analysis of pathway maps. BioPAX describes reactions and relations. In contrast, reactions are the only type of interaction in core SBML. With the SBML Qualitative Models extension (qual), it has recently also become possible to describe relations in SBML. Before the qual creation, relations could not be translated into SBML at all or were erroneously converted to reactions. Until now, there exists no BioPAX to SBML converter that is fully capable of translating both reactions and relations. Here we present the webtool BioPAX2SBML. It is capable of properly translating BioPAX formats (Level 2 and 3) into SBML format (Level 3 Version 1 with qual) including reactions and relations in one model. We demonstrate the functionality of BioPAX2SBML by converting the whole Nature Pathway Interaction Database (PID), which includes pathways from BioCarta, Reactome, and from the National Cancer Institute, from BioPAX Level 2 and Level 3 formats to the SBML format, including the qual extension. The translated SBML models are freely available at http://www.cogsys.cs.uni-tuebingen.de/downloads/Qualitative-Models/.</description>
+  <inceptionYear>2012</inceptionYear>
+  
+  <properties>
+    <jdk.version>1.8</jdk.version>
+    <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+    <year>${maven.build.timestamp}</year><!-- This property is used for filtering the variable ${year} in some resource files -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.license.url>http://www.gnu.org/licenses/lgpl-3.0-standalone.html</project.license.url>
+    <junit.version>4.11</junit.version>
+    <paxtools.version>4.3.0</paxtools.version>
+    <y.version>2.8</y.version>
+    <sbgn.version>0.2</sbgn.version>
+    <jsbml.version>2498</jsbml.version>
+    <keggtranslator.version>2.6</keggtranslator.version>
+    <sysbio.version>1391</sysbio.version>
+  </properties>
+  
+  <organization>
+    <name>Center for Bioinformatics Tuebingen (ZBIT)</name>
+    <url>http://www.zbit.uni-tuebingen.de</url>
+  </organization>
+  
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/cogsys-tuebingen/SBVC/issues</url>
+  </issueManagement>
+  
+  <licenses>
+    <license>
+      <name>LGPL Version 3</name>
+      <url>${project.license.url}</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <name>Finja Wrzodek</name>
+      <email>finja@wrzodek.com</email>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Clemens Wrzodek</name>
+      <email>clemens@germancafe.de</email>
+      <id>Clemens82</id>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Florian Mittag</name>
+      <email>florian.mittag@verwaltung.uni-tuebingen.de</email>
+      <organization>University of Tuebingen</organization>
+      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Andreas Dräger</name>
+      <email>andreas.draeger@uni-tuebingen.de</email>
+      <url>https://github.com/draeger</url>
+      <id>draeger</id>
+      <organization>University of Tuebingen</organization>
+      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Michael Römer</name>
+      <id>mroemer</id>
+      <email>michael.roemer@uni-tuebingen.de</email>
+      <url>http://www.cogsys.cs.uni-tuebingen.de/mitarb/roemer/</url>
+      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Johannes Eichner</name>
+      <email>johannes.eichner@gmail.com</email>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Nicolas Rodriguez</name>
+      <email>niko.rodrigue@gmail.com</email>
+    </developer>
+    <developer>
+      <name>Nicolas Le Novère</name>
+    </developer>
+    <developer>
+      <name>Andreas Zell</name>
+      <email>andreas.zell@uni-tuebingen.de</email>
+      <!--<id>zell</id>-->
+      <organization>University of Tuebingen</organization>
+      <organizationUrl>http://www.cogsys.cs.uni-tuebingen.de</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>coordinator</role>
+      </roles>
+    </developer>
+  </developers>
+  
+  <!-- =================================================================== -->
+  <!-- Dependencies                                                        -->
+  <!-- =================================================================== -->
+  
+  <dependencies>
+    <dependency>
+      <groupId>org</groupId>
+      <artifactId>sbgn</artifactId>
+      <systemPath>${project.basedir}/lib/org.sbgn.jar</systemPath>
+      <version>${sbgn.version}</version>
+      <scope>system</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.sbml</groupId>
+      <artifactId>JSBML</artifactId>
+      <systemPath>${project.basedir}/lib/JSBML-${jsbml.version}-incl-libs.jar</systemPath>
+      <version>${jsbml.version}</version>
+      <scope>system</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>de.zbit</groupId>
+      <artifactId>SysBio</artifactId>
+      <systemPath>${project.basedir}/lib/SysBio-${sysbio.version}.jar</systemPath>
+      <version>${sysbio.version}</version> <!-- SVN revision -->
+      <scope>system</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.biopax.paxtools</groupId>
+      <artifactId>paxtools-archetype</artifactId>
+      <systemPath>${project.basedir}/lib/paxtools-${paxtools.version}.jar</systemPath>
+      <version>${paxtools.version}</version>
+      <scope>system</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>de.zbit</groupId>
+      <artifactId>KEGGtranslator</artifactId>
+      <systemPath>${project.basedir}/lib/KEGGtranslator-${keggtranslator.version}.jar</systemPath>
+      <version>${keggtranslator.version}</version>
+      <scope>system</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>y</groupId>
+      <artifactId>y</artifactId>
+      <systemPath>${project.basedir}/lib/y.jar</systemPath>
+      <version>${y.version}</version>
+      <scope>system</scope>
+    </dependency>
+  
+  </dependencies>  
+
+  <!-- =================================================================== -->
+  <!-- Building                                                            -->
+  <!-- =================================================================== -->
+  
+  <!-- To build the project run: -->
+  <!-- mvn clean compile package assembly:single -->
+  
+  <build>
+  
+    <finalName>${project.artifactId}-${project.version}</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  
+  </build>
+  
+</project>

@@ -1,0 +1,2 @@
+- PaxTools is under LGPL 2.0
+  See http://biopax.sourceforge.net/paxtools_v3/license.html
